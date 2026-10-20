@@ -1,0 +1,450 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta content="width=device-width, initial-scale=1.0" name="viewport"><meta content="web_dashboard" name="shell-type"><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = {darkMode: "class", theme: {extend: {"colors": {"on-surface": "#191d17", "primary": "#0b3326", "secondary-container": "#ceeace", "surface-container": "#ecefe6", "primary-fixed-dim": "#a6d0bc", "background": "#f8faf1", "surface-tint": "#406656", "surface": "#f8faf1", "primary-fixed": "#c2ecd7", "error-container": "#ffdad6", "on-background": "#191d17", "error": "#ba1a1a", "secondary": "#4c644f", "primary-container": "#244a3b", "tertiary-fixed": "#ffdcbd", "surface-container-highest": "#e0e4db", "on-secondary-fixed-variant": "#344c38", "surface-container-low": "#f2f5ec", "surface-variant": "#e0e4db", "inverse-surface": "#2e322c", "outline": "#717974", "secondary-fixed-dim": "#b2ceb3", "inverse-on-surface": "#eff2e9", "on-surface-variant": "#414844", "on-primary-fixed-variant": "#284e3f", "on-primary": "#ffffff", "on-error-container": "#93000a", "on-tertiary-fixed-variant": "#59422b", "surface-dim": "#d8dbd2", "surface-container-high": "#e6e9e0", "on-primary-container": "#90b9a5", "on-secondary-container": "#526a54", "on-primary-fixed": "#002116", "secondary-fixed": "#ceeace", "surface-bright": "#f8faf1", "tertiary": "#3d2914", "tertiary-fixed-dim": "#e1c1a2", "on-tertiary": "#ffffff", "on-tertiary-container": "#caab8d", "tertiary-container": "#553f28", "surface-container-lowest": "#ffffff", "on-tertiary-fixed": "#291805", "inverse-primary": "#a6d0bc", "on-secondary": "#ffffff", "on-secondary-fixed": "#09200f", "on-error": "#ffffff", "outline-variant": "#c1c8c3"}, "borderRadius": {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"}, "spacing": {"gutter-mobile": "0.75rem", "margin": "1.5rem", "margin-mobile": "1rem", "space-xs": "0.25rem", "space-xl": "2rem", "space-lg": "1.25rem", "space-sm": "0.5rem", "space-md": "0.75rem", "gutter": "1rem"}, "fontFamily": {"headline-sm": ["Inter"], "label-md": ["Inter"], "data-mono": ["Inter"], "headline-md": ["Inter"], "body-sm": ["Inter"], "body-lg": ["Inter"], "body-md": ["Inter"], "headline-xl-mobile": ["Inter"], "headline-lg": ["Inter"], "label-sm": ["Inter"], "headline-xl": ["Inter"]}, "fontSize": {"headline-sm": ["15px", {"lineHeight": "22px", "letterSpacing": "-0.005em", "fontWeight": "600"}], "label-md": ["13px", {"lineHeight": "18px", "letterSpacing": "0.01em", "fontWeight": "500"}], "data-mono": ["13px", {"lineHeight": "18px", "letterSpacing": "-0.01em", "fontWeight": "500"}], "headline-md": ["18px", {"lineHeight": "26px", "letterSpacing": "-0.01em", "fontWeight": "600"}], "body-sm": ["12px", {"lineHeight": "18px", "letterSpacing": "0.01em", "fontWeight": "400"}], "body-lg": ["16px", {"lineHeight": "24px", "letterSpacing": "0em", "fontWeight": "400"}], "body-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0em", "fontWeight": "400"}], "headline-xl-mobile": ["26px", {"lineHeight": "34px", "letterSpacing": "-0.015em", "fontWeight": "600"}], "headline-lg": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.015em", "fontWeight": "600"}], "label-sm": ["11px", {"lineHeight": "16px", "letterSpacing": "0.04em", "fontWeight": "600"}], "headline-xl": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "600"}]}}}};</script></head><body class="bg-background text-on-surface font-body-md text-body-md"><aside class="fixed left-0 top-0 h-full w-64 bg-surface-container-low border-r border-outline-variant/50 z-50 flex flex-col justify-between pt-space-lg pb-space-md"><div class="flex flex-col gap-space-lg px-space-md"><div class="flex items-center gap-space-sm px-space-xs py-space-xs"><img alt="PlaceTrack Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1Xp_a6cbwYDNkgJsBXSKkY5isjCAp70Qa4ERENkvnk6u60M1Y-bQdbT7AFwch4IvN0uz45N_42aaBncCRtBhbg7UOqKozWI4lwg46Qcn9dRCs1DOkJHiRx_l1Zd5Z-QOIxl0Y3NVC0EVbs_Wm6nJDxfeYqGXpVAGXaDu5iHpAYFLTgEpgMHEjibr-2Fh1nR3ezZi22FYrFAAxajbRm97ogvgiePNxtTFlnkf0ljPJUbV2y30A1sch9gCp_e"><div class="flex flex-col"><span class="font-headline-sm text-headline-sm text-primary tracking-tight font-semibold">PlaceTrack</span><span class="font-label-sm text-label-sm text-outline uppercase tracking-wider">Admin Workspace</span></div></div><div class="h-px bg-outline-variant/60 w-full"></div><nav class="flex flex-col gap-1" data-active-classes="bg-primary-container text-on-primary font-semibold shadow-[0_1px_3px_rgba(0,0,0,0.06)]"><a class="flex items-center px-space-md py-space-sm rounded-lg font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all cursor-pointer" data-path="dashboard" href="#" onclick="window.location.hash='#faculty-dashboard'; return false;"><span class="">Dashboard</span></a><a aria-current="page" class="flex items-center px-space-md py-space-sm rounded-lg transition-all bg-primary-container text-on-primary font-semibold shadow-[0_1px_3px_rgba(0,0,0,0.06)] cursor-pointer" data-path="student-directory" href="#" onclick="return false;"><span class="">Student Directory</span></a><a class="flex items-center px-space-md py-space-sm rounded-lg font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all cursor-pointer" data-path="eligibility-checker" href="#" onclick="window.location.hash='#eligibility-checker'; return false;"><span class="">Eligibility Checker</span></a><a class="flex items-center px-space-md py-space-sm rounded-lg font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all cursor-pointer" data-path="documents" href="#" onclick="window.location.hash='#documents'; return false;"><span class="">Documents</span></a><a class="flex items-center px-space-md py-space-sm rounded-lg font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all cursor-pointer" data-path="settings" href="#" onclick="window.location.hash='#settings'; return false;"><span class="">Settings</span></a></nav></div><div class="flex flex-col gap-space-sm px-space-md"><div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-space-md flex flex-col gap-space-xs shadow-[0_1px_3px_rgba(0,0,0,0.02)]"><div class="flex items-center gap-space-sm"><img alt="Profile" class="w-8 h-8 rounded-full object-cover border border-outline-variant" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDAUKJE00MGTLOALNxpXzV9Td9UNRTqEgxtAMvNpdCHGAN-N_vB4XJfgr5drJPP9kOtJTvsxsEkVKYYFD4yq-72gx8u5H9y5pvPx-M9v0kyTKixjxEg5VhdNsIhXcMVcrTsrW_8xdXBTqcEeA1lMCzIF-zqF-3hel0DYh-2bR4bad20xtnH9CR3v9T5yB4_Lyqd9vmfCdeNHhlMJHunv3yp0TEdLpesNxmyMqaKcNlP83bU3FhPrU6B-A"><div class="flex flex-col min-w-0 flex-1"><span class="font-label-md text-label-md text-on-surface font-semibold truncate leading-tight">Dr. S. K. Ramanathan</span><span class="font-label-sm text-label-sm text-outline truncate leading-tight">Placement In-Charge</span></div></div><span class="inline-block font-label-sm text-label-sm text-secondary bg-surface-container-low px-space-xs py-0.5 rounded border border-outline-variant/40 mt-1 truncate">Dept. of Placement &amp; Training</span></div><a class="flex items-center justify-center gap-space-sm px-space-md py-space-sm rounded-lg font-label-md text-label-md text-error hover:bg-error-container hover:text-on-error-container border border-transparent hover:border-error-container transition-all" data-path="login" href="#" onclick="window.location.hash='#login'; return false;"><span class="material-symbols-outlined text-[18px]">logout</span><span class="">Sign Out</span></a></div></aside><div class="pl-64"><header class="fixed top-0 left-64 right-0 h-16 bg-surface/90 backdrop-blur-md border-b border-outline-variant/50 z-40 flex items-center justify-between px-space-xl"><div class="flex items-center gap-space-md"><span class="inline-flex items-center px-space-sm py-0.5 rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-label-sm uppercase font-semibold border border-secondary/20">Placement Faculty Portal</span><span class="h-4 w-px bg-outline-variant"></span><div class="flex items-center gap-1.5 font-label-md text-label-md text-outline"><span class="material-symbols-outlined text-[16px]">calendar_today</span><span class="font-data-mono text-data-mono text-on-surface font-medium">AY 2024–25</span></div></div><div class="flex items-center gap-space-md"><div class="flex items-center bg-surface-container-lowest border border-outline-variant rounded-lg px-space-sm py-1.5 gap-space-sm text-outline w-64"><span class="material-symbols-outlined text-[18px]">search</span><span class="font-body-sm text-body-sm text-outline select-none">Search registry, roll no...</span></div><div class="h-4 w-px bg-outline-variant"></div><button aria-label="Notifications" class="w-8 h-8 rounded-lg flex items-center justify-center text-outline hover:text-primary hover:bg-surface-container transition-colors" type="button"><span class="material-symbols-outlined text-[20px]">notifications</span></button><button aria-label="System Help &amp; Audit Logs" class="w-8 h-8 rounded-lg flex items-center justify-center text-outline hover:text-primary hover:bg-surface-container transition-colors" type="button"><span class="material-symbols-outlined text-[20px]">help_outline</span></button><div class="flex items-center gap-space-xs pl-space-xs"><img alt="Profile" class="w-8 h-8 rounded-full object-cover border border-outline-variant" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDAUKJE00MGTLOALNxpXzV9Td9UNRTqEgxtAMvNpdCHGAN-N_vB4XJfgr5drJPP9kOtJTvsxsEkVKYYFD4yq-72gx8u5H9y5pvPx-M9v0kyTKixjxEg5VhdNsIhXcMVcrTsrW_8xdXBTqcEeA1lMCzIF-zqF-3hel0DYh-2bR4bad20xtnH9CR3v9T5yB4_Lyqd9vmfCdeNHhlMJHunv3yp0TEdLpesNxmyMqaKcNlP83bU3FhPrU6B-A"></div></div></header><main class="w-full pt-16 bg-background min-h-screen"><div class="flex flex-col w-full">
+<div class="max-w-[1440px] w-full mx-auto px-space-xl py-space-lg flex flex-col gap-space-lg">
+<!-- PAGE HEADER -->
+<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-space-md pb-space-sm border-b border-outline-variant/60">
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-space-sm">
+<h1 class="font-headline-lg text-headline-lg text-primary tracking-tight font-semibold">Student Directory</h1>
+<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-secondary-container/80 text-on-secondary-fixed-variant font-label-sm text-label-sm font-semibold tracking-wider uppercase border border-outline-variant/50">
+            DIRECTORY V4.2
+          </span>
+<span class="hidden md:inline-flex items-center gap-1 font-data-mono text-data-mono text-outline text-[12px] bg-surface-container-low px-2 py-0.5 rounded border border-outline-variant/40">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+            AY 2024–25
+          </span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant">Browse, audit, and manage central student placement profiles and verification records.</p>
+</div>
+<!-- Action Utility Buttons -->
+<div class="flex items-center gap-space-sm shrink-0">
+<button class="inline-flex items-center gap-space-xs px-space-md py-2 rounded-lg bg-surface-container-lowest text-on-surface font-label-md text-label-md border border-outline-variant hover:bg-surface-container-low hover:border-outline transition-all shadow-[0_1px_2px_rgba(0,0,0,0.03)]" type="button">
+<span class="material-symbols-outlined text-[18px] text-outline">download</span>
+<span class="">Export Directory</span>
+</button>
+<button class="inline-flex items-center gap-space-xs px-space-md py-2 rounded-lg bg-primary-container text-on-primary font-label-md text-label-md font-semibold hover:bg-primary transition-all shadow-[0_1px_3px_rgba(11,51,38,0.2)]" type="button" onclick="window.location.hash='#eligibility-checker';">
+<span class="material-symbols-outlined text-[18px]">verified_user</span>
+<span class="">Quick Eligibility Check</span>
+</button>
+</div>
+</div>
+<!-- MULTI-ATTRIBUTE FILTER BAR -->
+<section class="bg-surface-container-lowest border border-outline-variant rounded-xl p-space-lg shadow-[0_1px_3px_rgba(52,56,50,0.03)] flex flex-col gap-space-md">
+<!-- Filter Inputs Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-space-md items-end">
+<!-- Search Input -->
+<div class="lg:col-span-2 flex flex-col gap-1.5">
+<label class="font-label-md text-label-md text-on-surface font-semibold flex items-center justify-between" for="filter-search">
+<span class="">Search Registry</span>
+<span class="text-outline font-normal text-[11px]">Name, Roll No., Email</span>
+</label>
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-3 text-[18px] text-outline pointer-events-none">search</span>
+<input class="w-full h-[38px] pl-9 pr-3 rounded-lg border border-outline-variant bg-surface-container-lowest font-body-sm text-body-sm text-on-surface placeholder:text-outline focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container/20 transition-all" id="filter-search" placeholder="Search by name, roll number, or college email..." type="text" value="" oninput="(function(){ const q = document.getElementById('filter-search').value.toLowerCase(); const dept = document.getElementById('filter-dept').value; const ay = document.getElementById('filter-ay').value; const minCgpa = parseFloat(document.getElementById('filter-cgpa').value) || 0; const maxBacklogVal = document.getElementById('filter-backlogs').value; const maxBacklogs = maxBacklogVal === 'all' ? 999 : parseInt(maxBacklogVal, 10); let matched = 0; document.querySelectorAll('tr.student-row').forEach(row =&gt; { const text = row.getAttribute('data-search') || ''; const rowDept = row.getAttribute('data-dept'); const rowCohort = row.getAttribute('data-cohort'); const rowCgpa = parseFloat(row.getAttribute('data-cgpa')) || 0; const rowBacklogs = parseInt(row.getAttribute('data-backlogs'), 10) || 0; const matchesSearch = !q || text.includes(q); const matchesDept = dept === 'all' || rowDept === dept; const matchesCohort = ay === 'all' || rowCohort === ay; const matchesCgpa = rowCgpa &gt;= minCgpa; const matchesBacklogs = rowBacklogs &lt;= maxBacklogs; if(matchesSearch &amp;&amp; matchesDept &amp;&amp; matchesCohort &amp;&amp; matchesCgpa &amp;&amp; matchesBacklogs){ row.style.display = ''; matched++; } else { row.style.display = 'none'; } }); const countEl = document.querySelector('strong.text-on-surface.font-semibold.font-data-mono'); if(countEl) countEl.textContent = matched; })()">
+</div>
+</div>
+<!-- Department Dropdown -->
+<div class="flex flex-col gap-1.5">
+<label class="font-label-md text-label-md text-on-surface font-semibold" for="filter-dept">Department</label>
+<div class="relative">
+<select class="w-full h-[38px] pl-3 pr-8 rounded-lg border border-outline-variant bg-surface-container-lowest font-body-sm text-body-sm text-on-surface appearance-none focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container/20 transition-all cursor-pointer" id="filter-dept" onchange="document.getElementById('filter-search').dispatchEvent(new Event('input'));">
+<option selected="" value="all">All Departments</option>
+<option value="cse">Computer Engineering</option>
+<option value="it">Information Technology</option>
+<option value="ece">Electronics Engineering</option>
+<option value="mech">Mechanical Engineering</option>
+</select>
+<span class="material-symbols-outlined absolute right-2.5 top-1/2 -translate-y-1/2 text-[18px] text-outline pointer-events-none">expand_more</span>
+</div>
+</div>
+<!-- Academic Year Dropdown -->
+<div class="flex flex-col gap-1.5">
+<label class="font-label-md text-label-md text-on-surface font-semibold" for="filter-ay">Academic Cohort</label>
+<div class="relative">
+<select class="w-full h-[38px] pl-3 pr-8 rounded-lg border border-outline-variant bg-surface-container-lowest font-body-sm text-body-sm text-on-surface appearance-none focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container/20 transition-all cursor-pointer" id="filter-ay" onchange="document.getElementById('filter-search').dispatchEvent(new Event('input'));">
+<option selected="" value="2024-25">AY 2024–25 (Final)</option>
+<option value="2023-24">AY 2023–24</option>
+<option value="all">All Cohorts</option>
+</select>
+<span class="material-symbols-outlined absolute right-2.5 top-1/2 -translate-y-1/2 text-[18px] text-outline pointer-events-none">expand_more</span>
+</div>
+</div>
+<!-- Min CGPA Dropdown -->
+<div class="flex flex-col gap-1.5">
+<label class="font-label-md text-label-md text-on-surface font-semibold" for="filter-cgpa">Min CGPA</label>
+<div class="relative">
+<select class="w-full h-[38px] pl-3 pr-8 rounded-lg border border-outline-variant bg-surface-container-lowest font-body-sm text-body-sm text-on-surface appearance-none focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container/20 transition-all cursor-pointer" id="filter-cgpa" onchange="document.getElementById('filter-search').dispatchEvent(new Event('input'));">
+<option value="any">All CGPA Scores</option>
+<option value="7.0">Min CGPA: 7.0+</option>
+<option value="7.5">Min CGPA: 7.5+</option>
+<option value="8.0">Min CGPA: 8.0+</option>
+<option value="8.5">Min CGPA: 8.5+</option>
+</select>
+<span class="material-symbols-outlined absolute right-2.5 top-1/2 -translate-y-1/2 text-[18px] text-outline pointer-events-none">expand_more</span>
+</div>
+</div>
+<!-- Max Backlogs & Clear Filters Group -->
+<div class="flex flex-col gap-1.5">
+<label class="font-label-md text-label-md text-on-surface font-semibold" for="filter-backlogs">Max Backlogs</label>
+<div class="relative">
+<select class="w-full h-[38px] pl-3 pr-8 rounded-lg border border-outline-variant bg-surface-container-lowest font-body-sm text-body-sm text-on-surface appearance-none focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container/20 transition-all cursor-pointer" id="filter-backlogs" onchange="document.getElementById('filter-search').dispatchEvent(new Event('input'));">
+<option value="all">Any Backlogs</option>
+<option selected="" value="0">Max Backlogs: 0</option>
+<option value="1">Max Backlogs: 1</option>
+<option value="2">Max Backlogs: 2</option>
+</select>
+<span class="material-symbols-outlined absolute right-2.5 top-1/2 -translate-y-1/2 text-[18px] text-outline pointer-events-none">expand_more</span>
+</div>
+</div>
+</div>
+<!-- Active Filter Strip & Record Count -->
+<div class="pt-space-sm border-t border-outline-variant/60 flex flex-wrap items-center justify-between gap-space-sm">
+<div class="flex flex-wrap items-center gap-space-xs">
+<span class="font-label-sm text-label-sm text-outline uppercase tracking-wider mr-1">Active Criteria:</span>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-surface-container text-on-surface-variant font-label-sm text-label-sm border border-outline-variant">
+<span class="">Dept: All</span>
+</span>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-surface-container text-on-surface-variant font-label-sm text-label-sm border border-outline-variant">
+<span class="">AY: 2024–25</span>
+</span>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-surface-container text-on-surface-variant font-label-sm text-label-sm border border-outline-variant">
+<span class="">Backlogs: 0 Max</span>
+<button aria-label="Remove backlog filter" class="text-outline hover:text-error transition-colors flex items-center" type="button">
+<span class="material-symbols-outlined text-[14px]">close</span>
+</button>
+</span>
+<button class="inline-flex items-center gap-1 font-label-sm text-label-sm text-outline hover:text-primary transition-colors ml-2 py-0.5" type="button" onclick="document.getElementById('filter-search').value = ''; document.getElementById('filter-dept').value = 'all'; document.getElementById('filter-ay').value = '2024-25'; document.getElementById('filter-cgpa').value = 'any'; document.getElementById('filter-backlogs').value = 'all'; document.getElementById('filter-search').dispatchEvent(new Event('input'));">
+<span class="material-symbols-outlined text-[15px]">restart_alt</span>
+<span class="">Clear Filters</span>
+</button>
+</div>
+<div class="flex items-center gap-2 text-outline font-label-md text-label-md">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<span class="">Showing <strong class="text-on-surface font-semibold font-data-mono">4</strong> of <span class="font-data-mono">248</span> active registry records</span>
+</div>
+</div>
+</section>
+<!-- STUDENT DIRECTORY TABLE -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden shadow-[0_1px_3px_rgba(52,56,50,0.02)]">
+<div class="w-full overflow-x-auto">
+<table class="w-full text-left border-collapse min-w-[980px]">
+<thead>
+<tr class="bg-surface-container-low border-b border-outline-variant h-[38px]">
+<th class="px-space-md py-2 font-label-sm text-label-sm text-outline uppercase tracking-wider font-semibold w-72" scope="col">Student</th>
+<th class="px-space-md py-2 font-label-sm text-label-sm text-outline uppercase tracking-wider font-semibold w-28" scope="col">Roll Number</th>
+<th class="px-space-md py-2 font-label-sm text-label-sm text-outline uppercase tracking-wider font-semibold w-48" scope="col">Department</th>
+<th class="px-space-md py-2 font-label-sm text-label-sm text-outline uppercase tracking-wider font-semibold w-24" scope="col">CGPA</th>
+<th class="px-space-md py-2 font-label-sm text-label-sm text-outline uppercase tracking-wider font-semibold w-28" scope="col">Backlogs</th>
+<th class="px-space-md py-2 font-label-sm text-label-sm text-outline uppercase tracking-wider font-semibold w-36" scope="col">Documents</th>
+<th class="px-space-md py-2 font-label-sm text-label-sm text-outline uppercase tracking-wider font-semibold w-44" scope="col">Profile Completion</th>
+<th class="px-space-md py-2 font-label-sm text-label-sm text-outline uppercase tracking-wider font-semibold w-36" scope="col">Status</th>
+<th class="px-space-md py-2 font-label-sm text-label-sm text-outline uppercase tracking-wider font-semibold text-right w-28" scope="col">Action</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/60 font-body-sm text-body-sm text-on-surface"><!-- RECORD 1: AANYA SHARMA -->
+<tr class="student-row h-[52px] hover:bg-surface-container-low/70 transition-colors group cursor-pointer" data-dept="cse" data-cohort="2024-25" data-cgpa="8.70" data-backlogs="0" data-search="aanya sharma 21cs014 aanya.sharma@dept.edu computer engineering" onclick="window.location.hash='#student-detail';">
+  <td class="px-space-md py-2">
+    <div class="flex items-center gap-space-sm">
+      <div class="w-8 h-8 rounded-full bg-secondary-container text-on-secondary-fixed-variant flex items-center justify-center font-headline-sm text-headline-sm font-semibold shrink-0 border border-outline-variant/40">
+        AS
+      </div>
+      <div class="flex flex-col min-w-0">
+        <span class="font-label-md text-label-md text-on-surface font-semibold truncate group-hover:text-primary transition-colors">Aanya Sharma</span>
+        <span class="font-body-sm text-body-sm text-outline truncate leading-tight">aanya.sharma@dept.edu</span>
+      </div>
+    </div>
+  </td>
+  <td class="px-space-md py-2">
+    <span class="font-data-mono text-data-mono font-medium text-on-surface px-1.5 py-0.5 rounded bg-surface-container-high/40 border border-outline-variant/50">21CS014</span>
+  </td>
+  <td class="px-space-md py-2 text-on-surface-variant font-medium truncate">
+    Computer Engineering
+  </td>
+  <td class="px-space-md py-2">
+    <span class="font-data-mono text-data-mono font-semibold text-primary">8.70</span>
+  </td>
+  <td class="px-space-md py-2">
+    <span class="inline-flex items-center px-2 py-0.5 rounded-full bg-secondary-container text-on-secondary-fixed-variant font-label-sm text-label-sm font-semibold border border-secondary/20">
+      0 Clear
+    </span>
+  </td>
+  <td class="px-space-md py-2">
+    <div class="inline-flex items-center gap-1.5 text-on-surface-variant font-label-md text-label-md">
+      <span class="material-symbols-outlined text-[16px] text-secondary">task_alt</span>
+      <span class="">5/5 Verified</span>
+    </div>
+  </td>
+  <td class="px-space-md py-2">
+    <div class="flex items-center gap-2">
+      <div class="flex-1 h-1.5 w-24 bg-surface-container-highest rounded-full overflow-hidden">
+        <div class="h-full bg-secondary rounded-full" style="width: 100%"></div>
+      </div>
+      <span class="font-data-mono text-data-mono text-[11px] font-semibold text-secondary">100%</span>
+    </div>
+  </td>
+  <td class="px-space-md py-2">
+    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-secondary-container text-on-secondary-fixed-variant font-label-sm text-label-sm font-semibold border border-secondary/20">
+      <span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+      Verified / Complete
+    </span>
+  </td>
+  <td class="px-space-md py-2 text-right">
+    <a class="inline-flex items-center gap-0.5 font-label-md text-label-md text-primary font-semibold hover:text-primary-container transition-colors py-1" href="#student-detail" onclick="event.stopPropagation(); window.location.hash='#student-detail'; return false;">
+      <span class="">View Profile</span>
+      <span class="material-symbols-outlined text-[16px]">chevron_right</span>
+    </a>
+  </td>
+</tr>
+<!-- RECORD 2: ROHAN MEHTA -->
+<tr class="student-row h-[52px] hover:bg-surface-container-low/70 transition-colors group cursor-pointer" data-dept="it" data-cohort="2024-25" data-cgpa="7.90" data-backlogs="1" data-search="rohan mehta 21it022 rohan.mehta@dept.edu information technology" onclick="window.location.hash='#student-detail';">
+  <td class="px-space-md py-2">
+    <div class="flex items-center gap-space-sm">
+      <div class="w-8 h-8 rounded-full bg-tertiary-fixed text-on-tertiary-fixed-variant flex items-center justify-center font-headline-sm text-headline-sm font-semibold shrink-0 border border-outline-variant/40">
+        RM
+      </div>
+      <div class="flex flex-col min-w-0">
+        <span class="font-label-md text-label-md text-on-surface font-semibold truncate group-hover:text-primary transition-colors">Rohan Mehta</span>
+        <span class="font-body-sm text-body-sm text-outline truncate leading-tight">rohan.mehta@dept.edu</span>
+      </div>
+    </div>
+  </td>
+  <td class="px-space-md py-2">
+    <span class="font-data-mono text-data-mono font-medium text-on-surface px-1.5 py-0.5 rounded bg-surface-container-high/40 border border-outline-variant/50">21IT022</span>
+  </td>
+  <td class="px-space-md py-2 text-on-surface-variant font-medium truncate">
+    Information Technology
+  </td>
+  <td class="px-space-md py-2">
+    <span class="font-data-mono text-data-mono font-semibold text-primary">7.90</span>
+  </td>
+  <td class="px-space-md py-2">
+    <span class="inline-flex items-center px-2 py-0.5 rounded-full bg-tertiary-fixed/70 text-on-tertiary-fixed-variant font-label-sm text-label-sm font-semibold border border-tertiary-fixed-dim">
+      1 Active
+    </span>
+  </td>
+  <td class="px-space-md py-2">
+    <div class="inline-flex items-center gap-1.5 text-on-surface-variant font-label-md text-label-md">
+      <span class="material-symbols-outlined text-[16px] text-tertiary-container">schedule</span>
+      <span class="">4/5 Pending 1</span>
+    </div>
+  </td>
+  <td class="px-space-md py-2">
+    <div class="flex items-center gap-2">
+      <div class="flex-1 h-1.5 w-24 bg-surface-container-highest rounded-full overflow-hidden">
+        <div class="h-full bg-tertiary-container rounded-full" style="width: 80%"></div>
+      </div>
+      <span class="font-data-mono text-data-mono text-[11px] font-semibold text-on-surface-variant">80%</span>
+    </div>
+  </td>
+  <td class="px-space-md py-2">
+    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-tertiary-fixed/70 text-on-tertiary-fixed-variant font-label-sm text-label-sm font-semibold border border-tertiary-fixed-dim">
+      <span class="w-1.5 h-1.5 rounded-full bg-tertiary-container"></span>
+      Pending Docs
+    </span>
+  </td>
+  <td class="px-space-md py-2 text-right">
+    <a class="inline-flex items-center gap-0.5 font-label-md text-label-md text-primary font-semibold hover:text-primary-container transition-colors py-1" href="#student-detail" onclick="event.stopPropagation(); window.location.hash='#student-detail'; return false;">
+      <span class="">View Profile</span>
+      <span class="material-symbols-outlined text-[16px]">chevron_right</span>
+    </a>
+  </td>
+</tr>
+<!-- RECORD 3: ISHA PATEL -->
+<tr class="student-row h-[52px] hover:bg-surface-container-low/70 transition-colors group cursor-pointer" data-dept="cse" data-cohort="2024-25" data-cgpa="8.40" data-backlogs="0" data-search="isha patel 21cs031 isha.patel@dept.edu computer engineering" onclick="window.location.hash='#student-detail';">
+  <td class="px-space-md py-2">
+    <div class="flex items-center gap-space-sm">
+      <div class="w-8 h-8 rounded-full bg-secondary-container text-on-secondary-fixed-variant flex items-center justify-center font-headline-sm text-headline-sm font-semibold shrink-0 border border-outline-variant/40">
+        IP
+      </div>
+      <div class="flex flex-col min-w-0">
+        <span class="font-label-md text-label-md text-on-surface font-semibold truncate group-hover:text-primary transition-colors">Isha Patel</span>
+        <span class="font-body-sm text-body-sm text-outline truncate leading-tight">isha.patel@dept.edu</span>
+      </div>
+    </div>
+  </td>
+  <td class="px-space-md py-2">
+    <span class="font-data-mono text-data-mono font-medium text-on-surface px-1.5 py-0.5 rounded bg-surface-container-high/40 border border-outline-variant/50">21CS031</span>
+  </td>
+  <td class="px-space-md py-2 text-on-surface-variant font-medium truncate">
+    Computer Engineering
+  </td>
+  <td class="px-space-md py-2">
+    <span class="font-data-mono text-data-mono font-semibold text-primary">8.40</span>
+  </td>
+  <td class="px-space-md py-2">
+    <span class="inline-flex items-center px-2 py-0.5 rounded-full bg-secondary-container text-on-secondary-fixed-variant font-label-sm text-label-sm font-semibold border border-secondary/20">
+      0 Clear
+    </span>
+  </td>
+  <td class="px-space-md py-2">
+    <div class="inline-flex items-center gap-1.5 text-on-surface-variant font-label-md text-label-md">
+      <span class="material-symbols-outlined text-[16px] text-secondary">task_alt</span>
+      <span class="">5/5 Verified</span>
+    </div>
+  </td>
+  <td class="px-space-md py-2">
+    <div class="flex items-center gap-2">
+      <div class="flex-1 h-1.5 w-24 bg-surface-container-highest rounded-full overflow-hidden">
+        <div class="h-full bg-secondary rounded-full" style="width: 100%"></div>
+      </div>
+      <span class="font-data-mono text-data-mono text-[11px] font-semibold text-secondary">100%</span>
+    </div>
+  </td>
+  <td class="px-space-md py-2">
+    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-secondary-container text-on-secondary-fixed-variant font-label-sm text-label-sm font-semibold border border-secondary/20">
+      <span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+      Verified / Complete
+    </span>
+  </td>
+  <td class="px-space-md py-2 text-right">
+    <a class="inline-flex items-center gap-0.5 font-label-md text-label-md text-primary font-semibold hover:text-primary-container transition-colors py-1" href="#student-detail" onclick="event.stopPropagation(); window.location.hash='#student-detail'; return false;">
+      <span class="">View Profile</span>
+      <span class="material-symbols-outlined text-[16px]">chevron_right</span>
+    </a>
+  </td>
+</tr>
+<!-- RECORD 4: ARJUN NAIR -->
+<tr class="student-row h-[52px] hover:bg-surface-container-low/70 transition-colors group cursor-pointer" data-dept="ece" data-cohort="2024-25" data-cgpa="7.20" data-backlogs="2" data-search="arjun nair 21ec018 arjun.nair@dept.edu electronics engineering" onclick="window.location.hash='#student-detail';">
+  <td class="px-space-md py-2">
+    <div class="flex items-center gap-space-sm">
+      <div class="w-8 h-8 rounded-full bg-error-container/70 text-on-error-container flex items-center justify-center font-headline-sm text-headline-sm font-semibold shrink-0 border border-outline-variant/40">
+        AN
+      </div>
+      <div class="flex flex-col min-w-0">
+        <span class="font-label-md text-label-md text-on-surface font-semibold truncate group-hover:text-primary transition-colors">Arjun Nair</span>
+        <span class="font-body-sm text-body-sm text-outline truncate leading-tight">arjun.nair@dept.edu</span>
+      </div>
+    </div>
+  </td>
+  <td class="px-space-md py-2">
+    <span class="font-data-mono text-data-mono font-medium text-on-surface px-1.5 py-0.5 rounded bg-surface-container-high/40 border border-outline-variant/50">21EC018</span>
+  </td>
+  <td class="px-space-md py-2 text-on-surface-variant font-medium truncate">
+    Electronics Engineering
+  </td>
+  <td class="px-space-md py-2">
+    <span class="font-data-mono text-data-mono font-semibold text-primary">7.20</span>
+  </td>
+  <td class="px-space-md py-2">
+    <span class="inline-flex items-center px-2 py-0.5 rounded-full bg-error-container text-on-error-container font-label-sm text-label-sm font-semibold border border-error/20">
+      2 Active
+    </span>
+  </td>
+  <td class="px-space-md py-2">
+    <div class="inline-flex items-center gap-1.5 text-on-surface-variant font-label-md text-label-md">
+      <span class="material-symbols-outlined text-[16px] text-error">warning</span>
+      <span class="">3/5 Missing 2</span>
+    </div>
+  </td>
+  <td class="px-space-md py-2">
+    <div class="flex items-center gap-2">
+      <div class="flex-1 h-1.5 w-24 bg-surface-container-highest rounded-full overflow-hidden">
+        <div class="h-full bg-error rounded-full" style="width: 60%"></div>
+      </div>
+      <span class="font-data-mono text-data-mono text-[11px] font-semibold text-on-surface-variant">60%</span>
+    </div>
+  </td>
+  <td class="px-space-md py-2">
+    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-error-container text-on-error-container font-label-sm text-label-sm font-semibold border border-error/20">
+      <span class="w-1.5 h-1.5 rounded-full bg-error"></span>
+      Under Review
+    </span>
+  </td>
+  <td class="px-space-md py-2 text-right">
+    <a class="inline-flex items-center gap-0.5 font-label-md text-label-md text-primary font-semibold hover:text-primary-container transition-colors py-1" href="#student-detail" onclick="event.stopPropagation(); window.location.hash='#student-detail'; return false;">
+      <span class="">View Profile</span>
+      <span class="material-symbols-outlined text-[16px]">chevron_right</span>
+    </a>
+  </td>
+</tr></tbody>
+</table>
+</div>
+<!-- TABLE FOOTER & PAGINATION -->
+<div class="px-space-lg py-3 border-t border-outline-variant bg-surface-container-low/40 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-space-md">
+<span class="font-body-sm text-body-sm text-on-surface-variant">
+          Showing <span class="font-data-mono font-medium text-on-surface">1</span> to <span class="font-data-mono font-medium text-on-surface">4</span> of <span class="font-data-mono font-semibold text-on-surface">248</span> records (Page 1 of 62)
+        </span>
+<div class="flex items-center gap-1 font-label-md text-label-md">
+<button class="inline-flex items-center gap-1 px-2.5 py-1 rounded border border-outline-variant/60 text-outline cursor-not-allowed bg-surface-container-low font-medium" disabled="" type="button">
+<span class="material-symbols-outlined text-[16px]">chevron_left</span>
+<span class="">Previous</span>
+</button>
+<button class="w-8 h-8 rounded bg-primary-container text-on-primary font-semibold flex items-center justify-center font-data-mono text-data-mono shadow-sm" type="button">
+            1
+          </button>
+<button class="w-8 h-8 rounded hover:bg-surface-container-high text-on-surface flex items-center justify-center font-data-mono text-data-mono transition-colors" type="button">
+            2
+          </button>
+<button class="w-8 h-8 rounded hover:bg-surface-container-high text-on-surface flex items-center justify-center font-data-mono text-data-mono transition-colors" type="button">
+            3
+          </button>
+<span class="w-6 text-center text-outline font-data-mono">...</span>
+<button class="w-8 h-8 rounded hover:bg-surface-container-high text-on-surface flex items-center justify-center font-data-mono text-data-mono transition-colors" type="button">
+            62
+          </button>
+<button class="inline-flex items-center gap-1 px-2.5 py-1 rounded border border-outline-variant text-on-surface hover:bg-surface-container-high transition-colors font-medium" type="button">
+<span class="">Next</span>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+<!-- AUDIT NOTE & COLLAPSIBLE EMPTY STATE REFERENCE -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-space-lg">
+<!-- Fast Eligibility Check Callout Card -->
+<div class="lg:col-span-2 bg-surface-container-lowest border border-outline-variant rounded-xl p-space-lg flex flex-col justify-between gap-space-md">
+<div class="flex items-start gap-space-md">
+<div class="w-10 h-10 rounded-lg bg-surface-container-low border border-outline-variant flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined text-[22px]">policy</span>
+</div>
+<div class="flex flex-col gap-1">
+<h2 class="font-headline-sm text-headline-sm text-on-surface font-semibold">Institutional Compliance &amp; Verification Protocol</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+              Profiles with backlogs or missing 10th/12th/B.Tech grade dossiers are automatically flagged as <span class="font-semibold text-tertiary-container">Pending Docs</span> or <span class="font-semibold text-error">Under Review</span>. Verification status syncs with the central university ERP repository every 24 hours at 00:00 IST.
+            </p>
+</div>
+</div>
+<div class="pt-space-sm border-t border-outline-variant/60 flex items-center justify-between text-outline font-label-sm text-label-sm">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[15px]">history</span>
+            Last database reconciliation: Today at 04:30 AM
+          </span>
+<a class="text-primary font-semibold hover:underline flex items-center gap-0.5" href="#">
+<span class="">View Verification Rules</span>
+<span class="material-symbols-outlined text-[14px]">arrow_outward</span>
+</a>
+</div>
+</div>
+<!-- Collapsible Empty State Preview Panel -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-space-lg flex flex-col gap-space-sm">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-1.5 font-label-md text-label-md text-on-surface font-semibold">
+<span class="material-symbols-outlined text-[18px] text-outline">search_off</span>
+<span class="">Zero-Match Condition</span>
+</div>
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-outline bg-surface-container px-2 py-0.5 rounded">Ledger Spec</span>
+</div>
+<div class="bg-surface-container-low/70 border border-dashed border-outline-variant rounded-lg p-space-md flex flex-col items-center text-center gap-2 my-auto">
+<div class="w-8 h-8 rounded-full bg-surface-container-high flex items-center justify-center text-outline">
+<span class="material-symbols-outlined text-[18px]">person_search</span>
+</div>
+<div class="flex flex-col gap-0.5">
+<span class="font-label-md text-label-md text-on-surface font-semibold">No Matching Profiles</span>
+<span class="font-body-sm text-body-sm text-outline text-[11px] leading-tight max-w-[210px]">
+              Refine your CGPA threshold, department filter, or active backlogs criteria.
+            </span>
+</div>
+<button class="mt-1 font-label-sm text-label-sm text-primary font-semibold hover:underline" type="button">
+            Reset to Default Filter Preset
+          </button>
+</div>
+<div class="text-[11px] text-outline font-data-mono text-center">
+          ERR_CODE: LEDGER_NULL_CRITERIA_MATCH
+        </div>
+</div>
+</div>
+</div>
+</div></main></div>
+
+<div class="fixed bottom-4 right-4 z-50 flex items-center gap-2 bg-surface-container-lowest/95 backdrop-blur-md px-3 py-2 rounded-full border border-outline-variant shadow-lg text-[12px] font-label-md text-on-surface"><span class="flex items-center gap-1 font-semibold text-primary px-1"><span class="w-2 h-2 rounded-full bg-secondary animate-pulse"></span><span class="">Demo Nav:</span></span><button class="px-2.5 py-1 rounded-full bg-surface-container text-on-surface-variant hover:bg-surface-container-high transition-colors" onclick="window.location.hash='#faculty-dashboard';">Dashboard (S1)</button><button class="px-2.5 py-1 rounded-full bg-primary-container text-on-primary font-semibold shadow-sm">Directory (S16)</button><button class="px-2.5 py-1 rounded-full bg-surface-container text-on-surface-variant hover:bg-surface-container-high transition-colors" onclick="window.location.hash='#eligibility-checker';">Eligibility (S8)</button><button class="px-2.5 py-1 rounded-full bg-surface-container text-on-surface-variant hover:bg-surface-container-high transition-colors" onclick="window.location.hash='#student-detail';">Aanya Sharma (S3)</button><button class="px-2.5 py-1 rounded-full bg-surface-container text-on-surface-variant hover:bg-surface-container-high transition-colors" onclick="window.location.hash='#documents';">Documents (S4)</button></div></body></html>
