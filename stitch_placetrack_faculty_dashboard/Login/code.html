@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - PlaceTrack Student Placement Data Management System</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #F7F5EF;
+      color: #343832;
+    }
+
+    .focus-ring:focus {
+      outline: none;
+      border-color: #244A3B;
+      box-shadow: 0 0 0 3px rgba(36, 74, 59, 0.12);
+    }
+
+    button:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+  </style>
+</head>
+
+<body class="min-h-screen flex flex-col antialiased">
+
+  <!-- Header -->
+  <header class="w-full px-6 py-4 flex items-center justify-between border-b border-[#E6E2D9] bg-white">
+    <div class="flex items-center space-x-3">
+      <div class="w-9 h-9 rounded-lg bg-[#244A3B] flex items-center justify-center text-white font-bold">
+        PT
+      </div>
+      <div>
+        <div class="font-bold text-sm text-[#343832]">PlaceTrack</div>
+        <div class="text-[10px] tracking-wider uppercase text-[#777A73]">
+          Placement Gateway
+        </div>
+      </div>
+    </div>
+
+    <div class="hidden sm:flex items-center space-x-2 text-xs text-[#777A73]">
+      <span class="px-2 py-1 rounded-full bg-[#EDF2EA] text-[#244A3B] border border-[#d2dfcf]">
+        Institutional Secure Access
+      </span>
+      <span>AY 2024–25</span>
+    </div>
+  </header>
+
+  <!-- Main -->
+  <main class="flex-1 flex items-center justify-center p-4 sm:p-6">
+    <div class="w-full max-w-md">
+
+      <div class="bg-white border border-[#E6E2D9] rounded-xl shadow-sm p-6 sm:p-9">
+
+        <!-- Branding -->
+        <div class="text-center mb-8">
+          <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-[#244A3B] text-white font-bold text-xl mb-4">
+            PT
+          </div>
+
+          <h1 class="text-2xl font-bold text-[#343832]">
+            Welcome to PlaceTrack
+          </h1>
+
+          <p class="text-sm text-[#777A73] mt-2">
+            Your student placement portal
+          </p>
+        </div>
+
+        <!-- Role Selector -->
+        <div class="mb-6">
+          <label class="block text-xs font-semibold text-[#777A73] uppercase tracking-wider mb-2">
+            Portal Access Role
+          </label>
+
+          <div class="grid grid-cols-2 gap-2 p-1 bg-[#F7F5EF] border border-[#E6E2D9] rounded-lg">
+
+            <button
+              id="roleStudentBtn"
+              type="button"
+              onclick="selectRole('student')"
+              class="py-2 px-3 rounded-md text-sm font-semibold bg-[#244A3B] text-white">
+              Student
+            </button>
+
+            <button
+              id="roleFacultyBtn"
+              type="button"
+              onclick="selectRole('faculty')"
+              class="py-2 px-3 rounded-md text-sm font-medium text-[#777A73]">
+              Placement Faculty
+            </button>
+
+          </div>
+
+          <p class="text-[11px] text-[#777A73] mt-2">
+            Redirects to
+            <span id="targetPortalLabel" class="font-semibold text-[#343832]">
+              Student Dashboard
+            </span>
+          </p>
+        </div>
+
+        <!-- Feedback Banner -->
+        <div id="stateBanner" class="hidden mb-5 p-3 rounded-lg text-xs border">
+          <div class="flex items-start justify-between gap-2">
+            <p id="stateBannerText" class="font-medium flex-1"></p>
+            <button type="button" onclick="hideStateBanner()" aria-label="Dismiss message">
+              ✕
+            </button>
+          </div>
+        </div>
+
+        <!-- Login Form -->
+        <form id="loginForm" onsubmit="handleFormSubmit(event)" class="space-y-4">
+
+          <!-- Email -->
+          <div>
+            <div class="flex justify-between items-center mb-1.5">
+              <label for="collegeEmail" class="text-xs font-semibold">
+                College Email
+              </label>
+
+              <button
+                type="button"
+                onclick="quickFillDemo()"
+                class="text-[11px] text-[#244A3B] hover:underline font-medium">
+                Quick Fill Sample
+              </button>
+            </div>
+
+            <input
+              type="email"
+              id="collegeEmail"
+              name="collegeEmail"
+              value="aanya.sharma@dept.edu"
+              placeholder="Enter your college email"
+              autocomplete="username"
+              required
+              class="w-full px-3 py-2.5 text-sm bg-white border border-[#E6E2D9] rounded-lg focus-ring">
+
+            <p id="emailError" class="hidden text-[11px] text-[#B84033] mt-1">
+              Please enter a valid institutional email address.
+            </p>
+          </div>
+
+          <!-- Password -->
+          <div>
+            <div class="flex justify-between items-center mb-1.5">
+              <label for="password" class="text-xs font-semibold">
+                Password
+              </label>
+
+              <button
+                type="button"
+                onclick="triggerForgotPassword()"
+                class="text-[11px] text-[#777A73] hover:text-[#244A3B]">
+                Forgot Password?
+              </button>
+            </div>
+
+            <div class="relative">
+              <input
+                type="password"
+                id="password"
+                name="password"
+                value="PlaceTrack2024!"
+                placeholder="Enter your password"
+                autocomplete="current-password"
+                required
+                class="w-full px-3 pr-16 py-2.5 text-sm bg-white border border-[#E6E2D9] rounded-lg focus-ring">
+
+              <button
+                type="button"
+                id="togglePasswordBtn"
+                onclick="togglePasswordVisibility()"
+                class="absolute inset-y-0 right-3 text-xs text-[#244A3B] font-medium">
+                Show
+              </button>
+            </div>
+
+            <p id="passwordError" class="hidden text-[11px] text-[#B84033] mt-1">
+              Password is required.
+            </p>
+          </div>
+
+          <!-- Remember Me -->
+          <div class="flex items-center justify-between pt-1 gap-2">
+            <label class="flex items-center gap-2 text-xs cursor-pointer">
+              <input
+                type="checkbox"
+                id="rememberMe"
+                checked
+                class="accent-[#244A3B]">
+              Remember Me
+            </label>
+
+            <span class="text-[10px] text-[#777A73]">
+              PlaceTrack Demo
+            </span>
+          </div>
+
+          <!-- Submit -->
+          <button
+            type="submit"
+            id="submitBtn"
+            class="w-full py-2.5 px-4 bg-[#244A3B] hover:bg-[#1b382d] text-white text-sm font-semibold rounded-lg transition-colors">
+            <span id="btnText">Sign In</span>
+          </button>
+
+        </form>
+
+        <!-- Prototype Testing -->
+        <div class="mt-7 pt-5 border-t border-[#E6E2D9]">
+
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-[10px] font-semibold text-[#777A73] uppercase tracking-wider">
+              Prototype State Preview
+            </span>
+            <span class="text-[10px] text-[#78927A]">
+              Demo Controls
+            </span>
+          </div>
+
+          <div class="grid grid-cols-3 gap-2 text-[11px]">
+            <button
+              type="button"
+              onclick="simulateState('success')"
+              class="p-2 bg-[#EDF2EA] text-[#244A3B] border border-[#d3e2d0] rounded">
+              Valid Auth
+            </button>
+
+            <button
+              type="button"
+              onclick="simulateState('error')"
+              class="p-2 bg-[#F8E5E2] text-[#B84033] border border-[#f0cec8] rounded">
+              Invalid Auth
+            </button>
+
+            <button
+              type="button"
+              onclick="simulateState('empty')"
+              class="p-2 bg-[#FFF0D9] text-[#915B17] border border-[#fae2c1] rounded">
+              Empty Fields
+            </button>
+          </div>
+        </div>
+
+        <!-- Quick Navigation -->
+        <div class="mt-5 pt-4 border-t border-[#E6E2D9]">
+
+          <div class="text-[10px] font-semibold text-[#777A73] uppercase tracking-wider mb-3">
+            Prototype Quick Navigation
+          </div>
+
+          <div class="flex flex-wrap gap-2 text-[11px]">
+
+            <button type="button" onclick="navigateTo('faculty-dashboard')"
+              class="px-2 py-1.5 rounded bg-[#EDF2EA] text-[#244A3B] border border-[#d2dfcf]">
+              Faculty Dashboard
+            </button>
+
+            <button type="button" onclick="navigateTo('student-directory')"
+              class="px-2 py-1.5 rounded bg-[#F7F5EF] border border-[#E6E2D9]">
+              Student Directory
+            </button>
+
+            <button type="button" onclick="navigateTo('student-detail')"
+              class="px-2 py-1.5 rounded bg-[#F7F5EF] border border-[#E6E2D9]">
+              Student Detail
+            </button>
+
+            <button type="button" onclick="navigateTo('faculty-documents')"
+              class="px-2 py-1.5 rounded bg-[#F7F5EF] border border-[#E6E2D9]">
+              Faculty Documents
+            </button>
+
+            <button type="button" onclick="navigateTo('eligibility-checker')"
+              class="px-2 py-1.5 rounded bg-[#F7F5EF] border border-[#E6E2D9]">
+              Eligibility Checker
+            </button>
+
+            <button type="button" onclick="navigateTo('student-dashboard')"
+              class="px-2 py-1.5 rounded bg-[#EDF2EA] text-[#244A3B] border border-[#d2dfcf]">
+              Student Dashboard
+            </button>
+
+            <button type="button" onclick="navigateTo('my-profile')"
+              class="px-2 py-1.5 rounded bg-[#F7F5EF] border border-[#E6E2D9]">
+              My Profile
+            </button>
+
+            <button type="button" onclick="navigateTo('my-documents')"
+              class="px-2 py-1.5 rounded bg-[#F7F5EF] border border-[#E6E2D9]">
+              My Documents
+            </button>
+
+            <button type="button" onclick="navigateTo('settings')"
+              class="px-2 py-1.5 rounded bg-[#F7F5EF] border border-[#E6E2D9]">
+              Settings
+            </button>
+
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Security Note -->
+      <div class="mt-4 px-4 py-3 rounded-lg bg-[#EDF2EA]/60 border border-[#E6E2D9] text-[11px] text-[#777A73]">
+        Authorized Department Placement &amp; Career Cell gateway.
+        This is a demonstration interface; authentication is not connected to a backend.
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="w-full py-4 px-6 border-t border-[#E6E2D9] bg-white text-center text-xs text-[#777A73]">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
+      <div>
+        <span class="font-semibold text-[#343832]">
+          Student Placement Data Management System
+        </span>
+        <span class="mx-1">•</span>
+        <span>PlaceTrack Institutional Platform</span>
+      </div>
+
+      <div class="text-[11px]">
+        Student Placement Portal
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    let currentRole = "student";
+
+    // Page paths are relative to the Login folder.
+    const pagePaths = {
+      "faculty-dashboard": "../Faculty Dashboard/code.html",
+      "student-directory": "../Student Directory/code.html",
+      "student-detail": "../Student Detail/code.html",
+      "faculty-documents": "../Faculty Documents/code.html",
+      "eligibility-checker": "../Eligibility Checker/code.html",
+      "student-dashboard": "../Student Dashboard/code.html",
+      "my-profile": "../My Profile/code.html",
+      "my-documents": "../My Documents/code.html",
+      "settings": "../Settings/code.html",
+      "login": "../Login/code.html"
+    };
+
+    function navigateTo(page) {
+      const destination = pagePaths[page];
+
+      if (!destination) {
+        showBanner("error", "The requested page could not be found.");
+        return;
+      }
+
+      window.location.href = destination;
+    }
+
+    function selectRole(role) {
+      currentRole = role;
+
+      const studentBtn = document.getElementById("roleStudentBtn");
+      const facultyBtn = document.getElementById("roleFacultyBtn");
+      const targetLabel = document.getElementById("targetPortalLabel");
+      const emailInput = document.getElementById("collegeEmail");
+
+      if (role === "student") {
+        studentBtn.className =
+          "py-2 px-3 rounded-md text-sm font-semibold bg-[#244A3B] text-white";
+
+        facultyBtn.className =
+          "py-2 px-3 rounded-md text-sm font-medium text-[#777A73]";
+
+        targetLabel.textContent = "Student Dashboard";
+
+        if (emailInput.value === "dr.ramanathan@dept.edu") {
+          emailInput.value = "aanya.sharma@dept.edu";
+        }
+      } else {
+        facultyBtn.className =
+          "py-2 px-3 rounded-md text-sm font-semibold bg-[#244A3B] text-white";
+
+        studentBtn.className =
+          "py-2 px-3 rounded-md text-sm font-medium text-[#777A73]";
+
+        targetLabel.textContent = "Faculty Dashboard";
+
+        if (emailInput.value === "aanya.sharma@dept.edu") {
+          emailInput.value = "dr.ramanathan@dept.edu";
+        }
+      }
+
+      clearErrors();
+      hideStateBanner();
+    }
+
+    function togglePasswordVisibility() {
+      const passwordInput = document.getElementById("password");
+      const toggleButton = document.getElementById("togglePasswordBtn");
+
+      if (passwordInput.type === "password") {
+        passwordInput.type = "text";
+        toggleButton.textContent = "Hide";
+      } else {
+        passwordInput.type = "password";
+        toggleButton.textContent = "Show";
+      }
+    }
+
+    function quickFillDemo() {
+      const emailInput = document.getElementById("collegeEmail");
+      const passwordInput = document.getElementById("password");
+
+      if (currentRole === "student") {
+        emailInput.value = "aanya.sharma@dept.edu";
+      } else {
+        emailInput.value = "dr.ramanathan@dept.edu";
+      }
+
+      passwordInput.value = "PlaceTrack2024!";
+
+      clearErrors();
+
+      showBanner(
+        "success",
+        "Sample credentials filled. This prototype does not verify passwords."
+      );
+    }
+
+    function clearErrors() {
+      document.getElementById("emailError").classList.add("hidden");
+      document.getElementById("passwordError").classList.add("hidden");
+
+      document.getElementById("collegeEmail").classList.remove(
+        "border-[#B84033]"
+      );
+
+      document.getElementById("password").classList.remove(
+        "border-[#B84033]"
+      );
+    }
+
+    function showBanner(type, message) {
+      const banner = document.getElementById("stateBanner");
+      const bannerText = document.getElementById("stateBannerText");
+
+      banner.className = "mb-5 p-3 rounded-lg text-xs border";
+
+      if (type === "success") {
+        banner.classList.add(
+          "bg-[#EDF2EA]",
+          "border-[#d3e2d0]",
+          "text-[#244A3B]"
+        );
+      } else if (type === "error") {
+        banner.classList.add(
+          "bg-[#F8E5E2]",
+          "border-[#f0cec8]",
+          "text-[#B84033]"
+        );
+      } else {
+        banner.classList.add(
+          "bg-[#FFF0D9]",
+          "border-[#fae2c1]",
+          "text-[#915B17]"
+        );
+      }
+
+      bannerText.textContent = message;
+    }
+
+    function hideStateBanner() {
+      const banner = document.getElementById("stateBanner");
+      banner.classList.add("hidden");
+    }
+
+    function simulateState(state) {
+      const emailInput = document.getElementById("collegeEmail");
+      const passwordInput = document.getElementById("password");
+
+      clearErrors();
+
+      if (state === "success") {
+        quickFillDemo();
+
+        showBanner(
+          "success",
+          "Demo success state shown. Use Sign In to open the selected dashboard."
+        );
+      } else if (state === "error") {
+        emailInput.value = "unknown.user@external.com";
+        passwordInput.value = "wrong_password";
+
+        showBanner(
+          "error",
+          "Simulated authentication failure. Real credential verification requires a backend."
+        );
+      } else if (state === "empty") {
+        emailInput.value = "";
+        passwordInput.value = "";
+
+        document.getElementById("emailError").classList.remove("hidden");
+        document.getElementById("passwordError").classList.remove("hidden");
+
+        emailInput.classList.add("border-[#B84033]");
+        passwordInput.classList.add("border-[#B84033]");
+
+        showBanner(
+          "warning",
+          "Please fill in all required fields."
+        );
+      }
+    }
+
+    function handleFormSubmit(event) {
+      event.preventDefault();
+      clearErrors();
+
+      const emailInput = document.getElementById("collegeEmail");
+      const passwordInput = document.getElementById("password");
+
+      const email = emailInput.value.trim();
+      const password = passwordInput.value.trim();
+
+      if (!email) {
+        document.getElementById("emailError").classList.remove("hidden");
+        emailInput.classList.add("border-[#B84033]");
+
+        showBanner("warning", "Please enter your institutional email.");
+        return;
+      }
+
+      if (!password) {
+        document.getElementById("passwordError").classList.remove("hidden");
+        passwordInput.classList.add("border-[#B84033]");
+
+        showBanner("warning", "Please enter your password.");
+        return;
+      }
+
+      const submitButton = document.getElementById("submitBtn");
+      const buttonText = document.getElementById("btnText");
+
+      submitButton.disabled = true;
+      buttonText.textContent = "Opening Portal...";
+
+      const destination =
+        currentRole === "student"
+          ? pagePaths["student-dashboard"]
+          : pagePaths["faculty-dashboard"];
+
+      // Demo navigation only; this does not authenticate credentials.
+      window.setTimeout(() => {
+        window.location.href = destination;
+      }, 500);
+    }
+
+    function triggerForgotPassword() {
+      showBanner(
+        "warning",
+        "Password recovery is not configured in this prototype. Please contact your placement office."
+      );
+    }
+  </script>
+
+</body>
+</html>

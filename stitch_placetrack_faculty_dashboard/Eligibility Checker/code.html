@@ -1,0 +1,1195 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eligibility Checker | PlaceTrack</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ivory: #F7F5EF;
+      --white: #FFFFFF;
+      --forest: #244A3B;
+      --forest-dark: #18382C;
+      --sage: #78927A;
+      --sage-light: #EDF2EA;
+      --terracotta: #D8B89A;
+      --text: #343832;
+      --muted: #777A73;
+      --border: #E6E2D9;
+      --red: #A5423C;
+      --red-light: #F8E9E6;
+      --amber: #8A642D;
+      --amber-light: #FBF1DF;
+      --shadow: 0 5px 20px rgba(36, 74, 59, 0.045);
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--ivory);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+    }
+    button, input, select { font: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    button { cursor: pointer; }
+    a { color: inherit; text-decoration: none; }
+    .icon {
+      width: 19px;
+      height: 19px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 18px;
+      line-height: 1;
+    }
+    .sidebar {
+      position: fixed;
+      inset: 0 auto 0 0;
+      z-index: 20;
+      width: 248px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background: var(--white);
+      border-right: 1px solid var(--border);
+    }
+    .brand {
+      height: 76px;
+      padding: 0 22px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .brand-mark {
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      background: var(--forest);
+      color: white;
+      border-radius: 11px;
+      font-weight: 700;
+      font-size: 19px;
+    }
+    .brand-name { font-size: 18px; font-weight: 700; letter-spacing: -.5px; }
+    .brand-caption {
+      color: var(--muted);
+      font-size: 10px;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      margin-top: 4px;
+    }
+    .nav-section { padding: 24px 13px; }
+    .nav-label {
+      padding: 0 11px;
+      margin-bottom: 12px;
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+    }
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 13px;
+      margin-bottom: 5px;
+      border-radius: 9px;
+      color: #646961;
+      font-size: 13px;
+      transition: .18s ease;
+    }
+    .nav-link:hover { background: var(--sage-light); color: var(--forest); }
+    .nav-link.active { background: var(--forest); color: white; font-weight: 600; }
+    .sidebar-bottom { padding: 17px; border-top: 1px solid var(--border); }
+    .profile-mini { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+    .avatar {
+      width: 37px;
+      height: 37px;
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+      border-radius: 50%;
+      background: var(--sage-light);
+      color: var(--forest);
+      font-weight: 700;
+      font-size: 12px;
+    }
+    .profile-mini strong { display: block; font-size: 12px; }
+    .profile-mini small { display: block; margin-top: 4px; color: var(--muted); font-size: 10px; }
+    .signout {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+      padding: 10px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: white;
+      color: var(--muted);
+    }
+    .signout:hover { color: var(--red); border-color: #e5c3bd; }
+    .main-area { margin-left: 248px; min-height: 100vh; }
+    .topbar {
+      height: 68px;
+      padding: 0 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(255,255,255,.94);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(10px);
+    }
+    .top-context { color: var(--muted); font-size: 12px; }
+    .top-context strong { color: var(--forest); }
+    .top-actions { display: flex; align-items: center; gap: 13px; }
+    .top-icon {
+      width: 35px;
+      height: 35px;
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      background: white;
+      color: var(--muted);
+      display: grid;
+      place-items: center;
+    }
+    .top-icon:hover { background: var(--sage-light); color: var(--forest); }
+    .top-avatar {
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      color: white;
+      background: var(--forest);
+      font-weight: 600;
+    }
+    main { max-width: 1500px; margin: 0 auto; padding: 30px; }
+    .page-heading {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 20px;
+      padding-bottom: 23px;
+      margin-bottom: 23px;
+      border-bottom: 1px solid var(--border);
+    }
+    .eyebrow {
+      color: var(--sage);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+      margin-bottom: 9px;
+    }
+    h1 { font-size: 29px; letter-spacing: -1px; margin: 0; font-weight: 600; }
+    .subtitle { color: var(--muted); margin: 9px 0 0; line-height: 1.6; }
+    .heading-actions { display: flex; flex-wrap: wrap; gap: 9px; }
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 14px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: white;
+      color: var(--text);
+      font-size: 12px;
+      font-weight: 600;
+      transition: .18s ease;
+    }
+    .button:hover { border-color: var(--sage); background: var(--sage-light); }
+    .button-primary { background: var(--forest); color: white; border-color: var(--forest); }
+    .button-primary:hover { background: var(--forest-dark); color: white; }
+    .button:disabled { opacity: .6; cursor: wait; }
+    .card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 13px;
+      box-shadow: var(--shadow);
+      margin-bottom: 22px;
+      overflow: hidden;
+    }
+    .card-header {
+      padding: 18px 22px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+    }
+    .card-title { font-size: 14px; font-weight: 700; }
+    .card-description { margin-top: 5px; font-size: 11px; color: var(--muted); line-height: 1.5; }
+    .preset {
+      padding: 7px 10px;
+      border-radius: 7px;
+      background: var(--sage-light);
+      color: var(--forest);
+      font-size: 10px;
+      font-weight: 700;
+    }
+    .criteria-grid {
+      padding: 22px;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 19px;
+    }
+    .field label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 9px;
+    }
+    .field-hint { display: block; margin-top: 6px; color: var(--muted); font-size: 10px; }
+    .field input, .field select, .search-box input {
+      width: 100%;
+      height: 40px;
+      padding: 0 11px;
+      background: white;
+      border: 1px solid #DCDDD5;
+      border-radius: 8px;
+      outline: none;
+      color: var(--text);
+    }
+    .field input:focus, .field select:focus, .search-box input:focus {
+      border-color: var(--sage);
+      box-shadow: 0 0 0 3px rgba(120,146,122,.12);
+    }
+    .toggles {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 13px;
+      padding: 0 22px 22px;
+    }
+    .toggle-row {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      background: #FCFCFA;
+    }
+    .toggle-row strong { display: block; font-size: 12px; font-weight: 600; }
+    .toggle-row small { display: block; color: var(--muted); font-size: 10px; line-height: 1.5; margin-top: 5px; }
+    .switch { position: relative; display: inline-block; width: 39px; height: 22px; flex-shrink: 0; }
+    .switch input { opacity: 0; width: 0; height: 0; }
+    .slider {
+      position: absolute;
+      inset: 0;
+      cursor: pointer;
+      border-radius: 20px;
+      background: #D8D9D2;
+      transition: .2s;
+    }
+    .slider:before {
+      content: "";
+      position: absolute;
+      height: 16px;
+      width: 16px;
+      left: 3px;
+      bottom: 3px;
+      border-radius: 50%;
+      background: white;
+      transition: .2s;
+      box-shadow: 0 1px 3px #0002;
+    }
+    .switch input:checked + .slider { background: var(--forest); }
+    .switch input:checked + .slider:before { transform: translateX(17px); }
+    .criteria-footer {
+      padding: 15px 22px;
+      border-top: 1px solid var(--border);
+      background: #FBFAF7;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+    }
+    .criteria-summary { color: var(--muted); font-size: 11px; line-height: 1.8; }
+    .criteria-summary strong { color: var(--forest); }
+    .criteria-actions { display: flex; gap: 8px; flex-shrink: 0; }
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      margin-bottom: 22px;
+    }
+    .metric {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      box-shadow: var(--shadow);
+    }
+    .metric-label {
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .metric-value { font-size: 30px; font-weight: 600; letter-spacing: -1px; margin: 9px 0 6px; }
+    .metric-note { color: var(--muted); font-size: 11px; line-height: 1.5; }
+    .metric-icon {
+      width: 41px;
+      height: 41px;
+      display: grid;
+      place-items: center;
+      border-radius: 10px;
+      background: var(--sage-light);
+      color: var(--forest);
+    }
+    .metric.good .metric-value, .metric.good .metric-icon { color: var(--forest); }
+    .metric.bad .metric-value, .metric.bad .metric-icon { color: var(--red); }
+    .metric.bad .metric-icon { background: var(--red-light); }
+    .table-toolbar {
+      padding: 17px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+      flex-wrap: wrap;
+      border-bottom: 1px solid var(--border);
+    }
+    .table-toolbar h2 { font-size: 14px; margin: 0; }
+    .table-toolbar p { font-size: 11px; color: var(--muted); margin: 5px 0 0; }
+    .toolbar-right { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+    .filter-chips {
+      display: inline-flex;
+      padding: 3px;
+      gap: 3px;
+      border-radius: 8px;
+      background: var(--ivory);
+      border: 1px solid var(--border);
+    }
+    .filter-chip {
+      border: 0;
+      background: transparent;
+      color: var(--muted);
+      padding: 8px 10px;
+      border-radius: 6px;
+      font-size: 10px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .filter-chip.active { background: white; color: var(--forest); box-shadow: 0 1px 4px #0000000c; }
+    .search-box { position: relative; width: 235px; }
+    .search-box input { padding-left: 35px; font-size: 11px; }
+    .search-box .icon { position: absolute; top: 11px; left: 10px; color: var(--muted); }
+    .table-wrap { width: 100%; overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; min-width: 980px; }
+    th {
+      text-align: left;
+      background: #FAF9F5;
+      color: var(--muted);
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: .8px;
+      text-transform: uppercase;
+      padding: 14px 15px;
+      white-space: nowrap;
+      border-bottom: 1px solid var(--border);
+    }
+    td { padding: 14px 15px; border-bottom: 1px solid #F0EEE8; font-size: 11px; vertical-align: middle; }
+    tbody tr:last-child td { border-bottom: 0; }
+    tbody tr:hover { background: #FCFCF8; }
+    .student-cell { display: flex; align-items: center; gap: 10px; min-width: 155px; }
+    .student-cell strong { display: block; font-size: 11px; font-weight: 600; white-space: nowrap; }
+    .student-cell small { display: block; color: var(--muted); font-size: 10px; margin-top: 4px; }
+    .roll {
+      display: inline-block;
+      background: #F7F6F1;
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      padding: 5px 7px;
+      font-size: 10px;
+      white-space: nowrap;
+    }
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 6px 8px;
+      border-radius: 6px;
+      font-size: 9px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .status::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+    .status.eligible { color: var(--forest); background: var(--sage-light); }
+    .status.ineligible { color: var(--red); background: var(--red-light); }
+    .status.incomplete { color: var(--amber); background: var(--amber-light); }
+    .reason { display: block; max-width: 175px; margin-top: 5px; color: var(--red); font-size: 9px; line-height: 1.5; }
+    .view-link { color: var(--forest); font-size: 11px; font-weight: 700; white-space: nowrap; }
+    .view-link:hover { text-decoration: underline; }
+    .empty-state { padding: 40px 15px; text-align: center; color: var(--muted); }
+    .empty-state strong { display: block; color: var(--text); margin-bottom: 7px; }
+    .table-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+      flex-wrap: wrap;
+      padding: 15px 20px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 11px;
+    }
+    .policy-note {
+      display: flex;
+      gap: 13px;
+      padding: 18px;
+      border-radius: 11px;
+      background: #F0F0E8;
+      border: 1px solid var(--border);
+      margin-bottom: 70px;
+    }
+    .policy-icon {
+      width: 37px;
+      height: 37px;
+      display: grid;
+      place-items: center;
+      border-radius: 9px;
+      background: white;
+      color: var(--forest);
+      flex-shrink: 0;
+    }
+    .policy-note strong { font-size: 12px; }
+    .policy-note p { margin: 6px 0 0; font-size: 11px; color: var(--muted); line-height: 1.7; }
+    .toast {
+      position: fixed;
+      right: 24px;
+      bottom: 24px;
+      z-index: 50;
+      max-width: calc(100vw - 32px);
+      background: var(--forest);
+      color: white;
+      border-radius: 10px;
+      padding: 13px 17px;
+      box-shadow: 0 8px 30px #0002;
+      opacity: 0;
+      transform: translateY(10px);
+      pointer-events: none;
+      transition: .22s ease;
+      font-size: 12px;
+    }
+    .toast.show { opacity: 1; transform: translateY(0); }
+    .prototype-dock {
+      position: fixed;
+      z-index: 15;
+      bottom: 12px;
+      left: calc(248px + (100% - 248px) / 2);
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 10px 15px;
+      border-radius: 50px;
+      background: #263B31;
+      color: #F7F5EF;
+      box-shadow: 0 4px 18px #0002;
+      font-size: 10px;
+      white-space: nowrap;
+    }
+    .prototype-dock a { color: #F7F5EF; opacity: .85; }
+    .prototype-dock a:hover { opacity: 1; }
+    .dock-current { color: #C5DFC7; font-weight: 700; }
+    .dock-label { color: #C5DFC7; font-weight: 700; letter-spacing: .7px; }
+    .dock-divider { height: 15px; width: 1px; background: #ffffff30; }
+    @media (max-width: 1200px) {
+      .criteria-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .prototype-dock { gap: 9px; }
+      .dock-label { display: none; }
+    }
+    @media (max-width: 900px) {
+      .sidebar { width: 70px; }
+      .brand { justify-content: center; padding: 0; }
+      .brand-text, .nav-label, .nav-link span:not(.icon), .profile-mini > div:last-child, .signout span:last-child { display: none; }
+      .nav-section { padding: 20px 9px; }
+      .nav-link { justify-content: center; padding: 13px 8px; }
+      .sidebar-bottom { padding: 12px 8px; }
+      .profile-mini { justify-content: center; }
+      .signout { padding: 10px 0; }
+      .main-area { margin-left: 70px; }
+      .topbar { left: 70px; padding: 0 20px; }
+      .prototype-dock { left: calc(70px + (100% - 70px) / 2); }
+      main { padding: 22px; }
+      .metrics { gap: 10px; }
+      .metric { padding: 15px; }
+    }
+    @media (max-width: 650px) {
+      .topbar { height: 58px; padding: 0 13px; }
+      .top-context { font-size: 10px; }
+      .top-actions { gap: 7px; }
+      main { padding: 18px 13px; }
+      .page-heading { align-items: flex-start; flex-direction: column; }
+      h1 { font-size: 25px; }
+      .heading-actions { width: 100%; }
+      .heading-actions .button { flex: 1; }
+      .criteria-grid { grid-template-columns: 1fr; padding: 16px; }
+      .toggles { grid-template-columns: 1fr; padding: 0 16px 16px; }
+      .criteria-footer { align-items: stretch; flex-direction: column; padding: 15px 16px; }
+      .criteria-actions { justify-content: flex-end; }
+      .metrics { grid-template-columns: 1fr; }
+      .metric { padding: 17px; }
+      .card-header { padding: 15px; }
+      .table-toolbar { padding: 15px; }
+      .toolbar-right { width: 100%; }
+      .filter-chips { width: 100%; }
+      .filter-chip { flex: 1; }
+      .search-box { width: 100%; }
+      .prototype-dock { left: 50%; gap: 12px; max-width: calc(100vw - 20px); overflow-x: auto; }
+      .prototype-dock a:nth-of-type(4) { display: none; }
+      .dock-divider { display: none; }
+      .policy-note { margin-bottom: 80px; }
+    }
+    @media print {
+      .sidebar, .topbar, .heading-actions, .criteria-actions, .toggles,
+      .filter-chips, .search-box, .prototype-dock, .view-link { display: none !important; }
+      .main-area { margin: 0; }
+      main { padding: 0; max-width: none; }
+      body { background: white; }
+      .card, .metric { box-shadow: none; break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <aside class="sidebar">
+    <div>
+      <a class="brand" href="../Faculty Dashboard/code.html">
+        <div class="brand-mark">P</div>
+        <div class="brand-text">
+          <div class="brand-name">PlaceTrack</div>
+          <div class="brand-caption">Faculty Portal</div>
+        </div>
+      </a>
+
+      <nav class="nav-section" aria-label="Main navigation">
+        <div class="nav-label">Workspace</div>
+        <a class="nav-link" href="../Faculty Dashboard/code.html"><span class="icon">▦</span><span>Dashboard</span></a>
+        <a class="nav-link" href="../Student Directory/code.html"><span class="icon">♙</span><span>Student Directory</span></a>
+        <a class="nav-link active" aria-current="page" href="../Eligibility Checker/code.html"><span class="icon">☑</span><span>Eligibility Checker</span></a>
+        <a class="nav-link" href="../Faculty Documents/code.html"><span class="icon">▤</span><span>Documents</span></a>
+        <a class="nav-link" href="../Settings/code.html"><span class="icon">⚙</span><span>Settings</span></a>
+      </nav>
+    </div>
+
+    <div class="sidebar-bottom">
+      <div class="profile-mini">
+        <div class="avatar">SK</div>
+        <div>
+          <strong>Dr. S. K. Ramanathan</strong>
+          <small>Placement &amp; Training</small>
+        </div>
+      </div>
+      <a class="signout" href="../Login/code.html"><span class="icon">↪</span><span>Sign Out</span></a>
+    </div>
+  </aside>
+
+  <div class="main-area">
+    <header class="topbar">
+      <div class="top-context"><strong>Placement Faculty Portal</strong> &nbsp; / &nbsp; Academic Audit</div>
+      <div class="top-actions">
+        <button class="top-icon" type="button" id="help-btn" aria-label="Help" title="Help">?</button>
+        <a class="top-avatar" href="../Settings/code.html" aria-label="Open settings">SK</a>
+      </div>
+    </header>
+
+    <main>
+      <section class="page-heading">
+        <div>
+          <div class="eyebrow">Academic audit &amp; verification · AY 2024–25</div>
+          <h1>Eligibility Checker</h1>
+          <p class="subtitle">Find students who meet the selected academic criteria.</p>
+        </div>
+        <div class="heading-actions">
+          <button class="button" id="print-btn" type="button"><span class="icon">▧</span> Print Results</button>
+          <button class="button button-primary" id="export-btn" type="button"><span class="icon">↓</span> Export Filtered Cohort</button>
+        </div>
+      </section>
+
+      <section class="card" aria-labelledby="criteria-title">
+        <div class="card-header">
+          <div>
+            <div class="card-title" id="criteria-title">Rule-Based Evaluation Parameters</div>
+            <div class="card-description">Set the academic thresholds and profile requirements for this evaluation.</div>
+          </div>
+          <span class="preset">DEFAULT PLACEMENTS</span>
+        </div>
+
+        <div class="criteria-grid">
+          <div class="field">
+            <label for="dept-select">Department</label>
+            <select id="dept-select">
+              <option value="all">All Departments</option>
+              <option value="Computer Engineering">Computer Engineering</option>
+              <option value="Information Technology">Information Technology</option>
+              <option value="Electronics Engineering">Electronics Engineering</option>
+            </select>
+            <span class="field-hint">Filter by academic department</span>
+          </div>
+
+          <div class="field">
+            <label for="cgpa-input">Minimum CGPA</label>
+            <input id="cgpa-input" type="number" min="0" max="10" step="0.1" value="7.5">
+            <span class="field-hint">Scale: 0.0 to 10.0</span>
+          </div>
+
+          <div class="field">
+            <label for="backlog-select">Maximum Active Backlogs</label>
+            <select id="backlog-select">
+              <option value="0">0 Backlogs</option>
+              <option value="1">Maximum 1</option>
+              <option value="2">Maximum 2</option>
+              <option value="any">Any Backlog Count</option>
+            </select>
+            <span class="field-hint">Current active arrears</span>
+          </div>
+
+          <div class="field">
+            <label for="ay-select">Academic Year</label>
+            <select id="ay-select">
+              <option value="2025">AY 2024–25 (Class 2025)</option>
+              <option value="2026">AY 2025–26 (Class 2026)</option>
+              <option value="2024">AY 2023–24 (Class 2024)</option>
+            </select>
+            <span class="field-hint">Graduation cohort</span>
+          </div>
+        </div>
+
+        <div class="toggles">
+          <div class="toggle-row">
+            <div>
+              <strong>Require Complete Profile</strong>
+              <small>Only include students whose profile is 100% complete.</small>
+            </div>
+            <label class="switch" aria-label="Require complete profile">
+              <input type="checkbox" id="toggle-profile" checked>
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <div class="toggle-row">
+            <div>
+              <strong>Require Required Documents</strong>
+              <small>Only include students with verified mandatory documents.</small>
+            </div>
+            <label class="switch" aria-label="Require required documents">
+              <input type="checkbox" id="toggle-docs" checked>
+              <span class="slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <div class="criteria-footer">
+          <div class="criteria-summary" id="criteria-summary" aria-live="polite"></div>
+          <div class="criteria-actions">
+            <button class="button" id="reset-btn" type="button">Reset Filters</button>
+            <button class="button button-primary" id="run-btn" type="button"><span class="icon">✓</span> Check Eligibility</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="metrics" aria-label="Eligibility summary">
+        <article class="metric">
+          <div>
+            <div class="metric-label">Total Evaluated</div>
+            <div class="metric-value" id="total-count">248</div>
+            <div class="metric-note" id="total-note">Students in the active roster</div>
+          </div>
+          <div class="metric-icon"><span class="icon">♙</span></div>
+        </article>
+        <article class="metric good">
+          <div>
+            <div class="metric-label">Meets Criteria</div>
+            <div class="metric-value" id="eligible-count">2</div>
+            <div class="metric-note" id="eligible-percent">Qualified sample records</div>
+          </div>
+          <div class="metric-icon"><span class="icon">✓</span></div>
+        </article>
+        <article class="metric bad">
+          <div>
+            <div class="metric-label">Does Not Meet</div>
+            <div class="metric-value" id="ineligible-count">2</div>
+            <div class="metric-note" id="ineligible-percent">Unqualified or incomplete</div>
+          </div>
+          <div class="metric-icon"><span class="icon">×</span></div>
+        </article>
+      </section>
+
+      <section class="card" aria-labelledby="results-title">
+        <div class="table-toolbar">
+          <div>
+            <h2 id="results-title">Evaluated Candidates</h2>
+            <p id="result-caption">Sample student records · results update when you run the checker.</p>
+          </div>
+          <div class="toolbar-right">
+            <div class="filter-chips" id="status-filters" aria-label="Filter by eligibility status">
+              <button class="filter-chip active" type="button" data-filter="all">All Results</button>
+              <button class="filter-chip" type="button" data-filter="eligible">Eligible</button>
+              <button class="filter-chip" type="button" data-filter="ineligible">Not Eligible</button>
+            </div>
+            <div class="search-box">
+              <span class="icon">⌕</span>
+              <input id="student-search" type="search" placeholder="Search name or roll number..." aria-label="Search students">
+            </div>
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Student</th>
+                <th>Roll Number</th>
+                <th>Department</th>
+                <th>CGPA</th>
+                <th>Backlogs</th>
+                <th>Profile Status</th>
+                <th>Eligibility</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="student-rows"></tbody>
+          </table>
+          <div class="empty-state" id="empty-state" hidden>
+            <strong>No matching students</strong>
+            Try changing your eligibility criteria or search term.
+          </div>
+        </div>
+
+        <div class="table-footer">
+          <span id="showing-count">Showing 4 sample records</span>
+          <span>Eligibility is calculated from the criteria above.</span>
+        </div>
+      </section>
+
+      <aside class="policy-note">
+        <div class="policy-icon"><span class="icon">ⓘ</span></div>
+        <div>
+          <strong>Eligibility is calculated using the criteria selected above.</strong>
+          <p>This demonstration evaluates the sample records in this page. It does not connect to a university database, verify documents in real time, perform predictive scoring, or guarantee placement. Confirm institutional rules and student records before making placement decisions.</p>
+        </div>
+      </aside>
+    </main>
+  </div>
+
+  <nav class="prototype-dock" aria-label="Prototype shortcuts">
+    <span class="dock-label">PLACETRACK</span>
+    <span class="dock-divider"></span>
+    <a href="../Faculty Dashboard/code.html">Dashboard</a>
+    <a href="../Student Directory/code.html">Directory</a>
+    <span class="dock-current">Eligibility</span>
+    <a href="../Faculty Documents/code.html">Documents</a>
+  </nav>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    (() => {
+      "use strict";
+
+      // Front-end sample data. Replace with backend data when available.
+      const students = [
+        {
+          name: "Aanya Sharma",
+          roll: "21CS014",
+          department: "Computer Engineering",
+          cgpa: 8.7,
+          backlogs: 0,
+          completion: 100,
+          documentsVerified: true,
+          email: "aanya.sharma@dept.edu"
+        },
+        {
+          name: "Isha Patel",
+          roll: "21CS031",
+          department: "Computer Engineering",
+          cgpa: 8.4,
+          backlogs: 0,
+          completion: 100,
+          documentsVerified: true,
+          email: "isha.patel@engg.edu"
+        },
+        {
+          name: "Rohan Mehta",
+          roll: "21IT022",
+          department: "Information Technology",
+          cgpa: 7.9,
+          backlogs: 1,
+          completion: 80,
+          documentsVerified: false,
+          email: "rohan.mehta@it.engg.edu"
+        },
+        {
+          name: "Arjun Nair",
+          roll: "21EC018",
+          department: "Electronics Engineering",
+          cgpa: 7.2,
+          backlogs: 2,
+          completion: 64,
+          documentsVerified: false,
+          email: "arjun.nair@ece.engg.edu"
+        }
+      ];
+
+      const $ = id => document.getElementById(id);
+      const defaultCriteria = {
+        department: "all",
+        cgpa: 7.5,
+        backlogs: "0",
+        year: "2025",
+        profile: true,
+        docs: true
+      };
+
+      let currentStatus = "all";
+      let evaluatedStudents = [];
+      let toastTimeout;
+
+      function initials(name) {
+        return name.split(/\s+/).map(part => part[0]).slice(0, 2).join("").toUpperCase();
+      }
+
+      function getCriteria() {
+        const cgpa = Number($("cgpa-input").value);
+        if ($("cgpa-input").value.trim() === "" || !Number.isFinite(cgpa) || cgpa < 0 || cgpa > 10) {
+          showToast("Enter a minimum CGPA between 0.0 and 10.0.");
+          $("cgpa-input").focus();
+          return null;
+        }
+
+        return {
+          department: $("dept-select").value,
+          cgpa,
+          backlogs: $("backlog-select").value,
+          year: $("ay-select").value,
+          profile: $("toggle-profile").checked,
+          docs: $("toggle-docs").checked
+        };
+      }
+
+      function getReasons(student, criteria) {
+        const reasons = [];
+
+        if (student.cgpa < criteria.cgpa) {
+          reasons.push("CGPA below " + criteria.cgpa.toFixed(2));
+        }
+
+        if (criteria.backlogs !== "any" && student.backlogs > Number(criteria.backlogs)) {
+          reasons.push("Backlogs exceed limit");
+        }
+
+        if (criteria.profile && student.completion < 100) {
+          reasons.push("Profile incomplete");
+        }
+
+        if (criteria.docs && !student.documentsVerified) {
+          reasons.push("Required documents pending");
+        }
+
+        return reasons;
+      }
+
+      function evaluate(criteria) {
+        evaluatedStudents = students.map(student => {
+          const reasons = getReasons(student, criteria);
+          return {
+            ...student,
+            reasons,
+            eligible: reasons.length === 0
+          };
+        }).filter(student => {
+          return criteria.department === "all" || student.department === criteria.department;
+        });
+
+        // The prototype contains four records. The selected graduation year is
+        // displayed as a filter, but the sample records have no year field.
+        renderSummary();
+        renderTable();
+        renderCriteriaSummary(criteria);
+      }
+
+      function renderCriteriaSummary(criteria) {
+        const backlogLabel = criteria.backlogs === "any"
+          ? "Any backlog count"
+          : "Max " + criteria.backlogs + " backlog(s)";
+
+        const parts = [
+          "Min CGPA ≥ " + criteria.cgpa.toFixed(2),
+          backlogLabel,
+          criteria.department === "all" ? "All departments" : criteria.department,
+          criteria.profile ? "Complete profile required" : "Profile optional",
+          criteria.docs ? "Verified documents required" : "Documents optional"
+        ];
+
+        $("criteria-summary").innerHTML =
+          "<strong>Active criteria:</strong> " +
+          parts.map(escapeHTML).join(" · ");
+      }
+
+      function renderSummary() {
+        const total = evaluatedStudents.length;
+        const eligible = evaluatedStudents.filter(s => s.eligible).length;
+        const ineligible = total - eligible;
+        const percentage = total ? Math.round(eligible / total * 100) : 0;
+
+        $("total-count").textContent = total;
+        $("eligible-count").textContent = eligible;
+        $("ineligible-count").textContent = ineligible;
+        $("total-note").textContent = "Matching sample records";
+        $("eligible-percent").textContent = percentage + "% meet the selected criteria";
+        $("ineligible-percent").textContent = (100 - percentage) + "% do not meet the criteria";
+        $("result-caption").textContent =
+          total + " sample record" + (total === 1 ? "" : "s") +
+          " evaluated against the current rules";
+      }
+
+      function escapeHTML(value) {
+        return String(value).replace(/[&<>"']/g, char => ({
+          "&": "&amp;",
+          "<": "&lt;",
+          ">": "&gt;",
+          '"': "&quot;",
+          "'": "&#39;"
+        })[char]);
+      }
+
+      function renderTable() {
+        const query = $("student-search").value.trim().toLowerCase();
+
+        const visible = evaluatedStudents.filter(student => {
+          const matchesStatus = currentStatus === "all" ||
+            (currentStatus === "eligible" && student.eligible) ||
+            (currentStatus === "ineligible" && !student.eligible);
+
+          const matchesSearch =
+            student.name.toLowerCase().includes(query) ||
+            student.roll.toLowerCase().includes(query) ||
+            student.department.toLowerCase().includes(query);
+
+          return matchesStatus && matchesSearch;
+        });
+
+        const eligibleCount = evaluatedStudents.filter(s => s.eligible).length;
+        const ineligibleCount = evaluatedStudents.length - eligibleCount;
+
+        document.querySelector('[data-filter="all"]').textContent =
+          "All Results (" + evaluatedStudents.length + ")";
+        document.querySelector('[data-filter="eligible"]').textContent =
+          "Eligible (" + eligibleCount + ")";
+        document.querySelector('[data-filter="ineligible"]').textContent =
+          "Not Eligible (" + ineligibleCount + ")";
+
+        $("student-rows").innerHTML = visible.map(student => {
+          const eligibilityClass = student.eligible ? "eligible" : "ineligible";
+          const eligibilityText = student.eligible ? "Meets Criteria" : "Does Not Meet";
+          const profileClass = student.completion === 100 ? "eligible" : "incomplete";
+          const profileText = student.completion === 100
+            ? "Complete · 100%"
+            : "Incomplete · " + student.completion + "%";
+
+          const documentText = student.documentsVerified
+            ? "Documents verified"
+            : "Documents pending";
+
+          const reasonsHTML = student.reasons.length
+            ? '<span class="reason">' + student.reasons.map(escapeHTML).join("; ") + '</span>'
+            : "";
+
+          return `
+            <tr>
+              <td>
+                <div class="student-cell">
+                  <div class="avatar">${escapeHTML(initials(student.name))}</div>
+                  <div>
+                    <strong>${escapeHTML(student.name)}</strong>
+                    <small>${escapeHTML(student.email)}</small>
+                  </div>
+                </div>
+              </td>
+              <td><span class="roll">${escapeHTML(student.roll)}</span></td>
+              <td>${escapeHTML(student.department)}</td>
+              <td><strong>${student.cgpa.toFixed(2)}</strong> <span style="color:var(--muted)">/ 10</span></td>
+              <td>${student.backlogs}</td>
+              <td>
+                <span class="status ${profileClass}">${escapeHTML(profileText)}</span>
+                <span class="reason" style="color:var(--muted)">${escapeHTML(documentText)}</span>
+              </td>
+              <td>
+                <span class="status ${eligibilityClass}">${eligibilityText}</span>
+                ${reasonsHTML}
+              </td>
+              <td>
+                <a class="view-link" href="../Student Detail/code.html"
+                   data-student-roll="${escapeHTML(student.roll)}">
+                  View Profile →
+                </a>
+              </td>
+            </tr>`;
+        }).join("");
+
+        $("empty-state").hidden = visible.length !== 0;
+        $("student-rows").parentElement.style.display = visible.length ? "" : "none";
+        $("showing-count").textContent =
+          "Showing " + visible.length + " of " + evaluatedStudents.length + " matching sample records";
+      }
+
+      function setStatusFilter(status) {
+        currentStatus = status;
+        document.querySelectorAll(".filter-chip").forEach(button => {
+          const active = button.dataset.filter === status;
+          button.classList.toggle("active", active);
+          button.setAttribute("aria-pressed", String(active));
+        });
+        renderTable();
+      }
+
+      function showToast(message) {
+        const toast = $("toast");
+        toast.textContent = message;
+        toast.classList.add("show");
+        clearTimeout(toastTimeout);
+        toastTimeout = setTimeout(() => toast.classList.remove("show"), 3000);
+      }
+
+      function exportCSV() {
+        const query = $("student-search").value.trim().toLowerCase();
+        const filtered = evaluatedStudents.filter(student => {
+          const statusMatch = currentStatus === "all" ||
+            (currentStatus === "eligible" && student.eligible) ||
+            (currentStatus === "ineligible" && !student.eligible);
+          const searchMatch =
+            student.name.toLowerCase().includes(query) ||
+            student.roll.toLowerCase().includes(query) ||
+            student.department.toLowerCase().includes(query);
+          return statusMatch && searchMatch;
+        });
+
+        if (!filtered.length) {
+          showToast("There are no records to export.");
+          return;
+        }
+
+        const columns = [
+          "Name", "Roll Number", "Department", "CGPA", "Active Backlogs",
+          "Profile Completion", "Documents Verified", "Eligibility", "Reasons"
+        ];
+
+        const csvCell = value =>
+          '"' + String(value ?? "").replace(/"/g, '""') + '"';
+
+        const rows = filtered.map(student => [
+          student.name,
+          student.roll,
+          student.department,
+          student.cgpa.toFixed(2),
+          student.backlogs,
+          student.completion + "%",
+          student.documentsVerified ? "Yes" : "No",
+          student.eligible ? "Eligible" : "Not Eligible",
+          student.reasons.join("; ")
+        ]);
+
+        const csv = [columns, ...rows].map(row => row.map(csvCell).join(",")).join("\r\n");
+        const blob = new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8;" });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = "PlaceTrack_Eligibility_Cohort.csv";
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        URL.revokeObjectURL(url);
+        showToast("CSV export generated for " + filtered.length + " sample record(s).");
+      }
+
+      $("run-btn").addEventListener("click", () => {
+        const criteria = getCriteria();
+        if (!criteria) return;
+        evaluate(criteria);
+        showToast("Eligibility results updated using the selected rules.");
+      });
+
+      $("reset-btn").addEventListener("click", () => {
+        $("dept-select").value = defaultCriteria.department;
+        $("cgpa-input").value = defaultCriteria.cgpa;
+        $("backlog-select").value = defaultCriteria.backlogs;
+        $("ay-select").value = defaultCriteria.year;
+        $("toggle-profile").checked = defaultCriteria.profile;
+        $("toggle-docs").checked = defaultCriteria.docs;
+        $("student-search").value = "";
+        setStatusFilter("all");
+        evaluate(defaultCriteria);
+        showToast("Eligibility filters reset.");
+      });
+
+      $("student-search").addEventListener("input", renderTable);
+
+      document.querySelectorAll(".filter-chip").forEach(button => {
+        button.addEventListener("click", () => setStatusFilter(button.dataset.filter));
+      });
+
+      $("export-btn").addEventListener("click", exportCSV);
+      $("print-btn").addEventListener("click", () => window.print());
+
+      $("help-btn").addEventListener("click", () => {
+        showToast("Choose criteria, select Check Eligibility, then search, filter or export the results.");
+      });
+
+      // Pass the selected student to the detail page for the prototype.
+      $("student-rows").addEventListener("click", event => {
+        const link = event.target.closest("[data-student-roll]");
+        if (!link) return;
+
+        const student = students.find(s => s.roll === link.dataset.studentRoll);
+        if (!student) return;
+
+        try {
+          sessionStorage.setItem("placetrackSelectedStudent", JSON.stringify({
+            name: student.name,
+            roll: student.roll,
+            department: student.department,
+            cgpa: student.cgpa,
+            backlogs: student.backlogs,
+            completion: student.completion,
+            email: student.email
+          }));
+          sessionStorage.setItem("selectedStudent", JSON.stringify({
+            name: student.name,
+            roll: student.roll,
+            department: student.department,
+            cgpa: student.cgpa,
+            backlogs: student.backlogs,
+            completion: student.completion
+          }));
+          sessionStorage.setItem("selectedStudentName", student.name);
+          sessionStorage.setItem("selectedStudentRoll", student.roll);
+        } catch (error) {
+          // Navigation still works when session storage is unavailable.
+        }
+      });
+
+      evaluate(defaultCriteria);
+    })();
+  </script>
+</body>
+</html>

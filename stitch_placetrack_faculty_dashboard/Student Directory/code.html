@@ -1,0 +1,2051 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Directory | PlaceTrack</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+
+  <style>
+    :root {
+      --ivory: #f7f5ef;
+      --white: #ffffff;
+      --forest: #244a3b;
+      --forest-dark: #18382c;
+      --sage: #78927a;
+      --sage-light: #edf2ea;
+      --sage-border: #d7e3d4;
+      --terracotta: #d8b89a;
+      --terracotta-light: #f6eee5;
+      --text: #343832;
+      --muted: #777a73;
+      --border: #e6e2d9;
+      --danger: #a7463c;
+      --danger-light: #f9e9e6;
+      --shadow: 0 4px 16px rgba(36, 74, 59, 0.045);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background: var(--ivory);
+      color: var(--text);
+      font-family: "Inter", sans-serif;
+      font-size: 14px;
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
+    button,
+    a,
+    select {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .material-symbols-outlined {
+      font-size: 20px;
+      font-weight: normal;
+      line-height: 1;
+      vertical-align: middle;
+    }
+
+    /* Sidebar */
+
+    .sidebar {
+      position: fixed;
+      inset: 0 auto 0 0;
+      width: 250px;
+      padding: 25px 16px 18px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background: #f1f2eb;
+      border-right: 1px solid var(--border);
+      z-index: 100;
+      overflow-y: auto;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      padding: 3px 8px 23px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .brand-mark {
+      width: 42px;
+      height: 42px;
+      border-radius: 13px;
+      background: var(--forest);
+      color: white;
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+    }
+
+    .brand-mark .material-symbols-outlined {
+      font-size: 25px;
+    }
+
+    .brand-name {
+      color: var(--forest);
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.7px;
+    }
+
+    .brand-subtitle {
+      color: var(--muted);
+      font-size: 10px;
+      margin-top: 4px;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+    }
+
+    .nav-label {
+      margin: 25px 10px 10px;
+      color: #92958d;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.3px;
+      text-transform: uppercase;
+    }
+
+    .nav-links {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 13px;
+      color: #62675f;
+      border-radius: 9px;
+      font-size: 13px;
+      font-weight: 500;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .nav-link .material-symbols-outlined {
+      font-size: 20px;
+    }
+
+    .nav-link:hover {
+      background: #e5e9e0;
+      color: var(--forest);
+    }
+
+    .nav-link.active {
+      background: var(--forest);
+      color: white;
+      font-weight: 600;
+      box-shadow: 0 3px 8px rgba(36, 74, 59, 0.12);
+    }
+
+    .sidebar-bottom {
+      margin-top: 30px;
+    }
+
+    .faculty-card {
+      padding: 13px;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      margin-bottom: 12px;
+    }
+
+    .faculty-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .avatar {
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+      border-radius: 50%;
+      font-weight: 700;
+    }
+
+    .avatar-faculty {
+      width: 37px;
+      height: 37px;
+      color: var(--forest);
+      background: var(--sage-light);
+      border: 1px solid var(--sage-border);
+      font-size: 11px;
+    }
+
+    .faculty-name {
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .faculty-role {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    .faculty-dept {
+      margin-top: 12px;
+      padding: 7px 8px;
+      border-radius: 6px;
+      color: var(--forest);
+      background: var(--sage-light);
+      font-size: 10px;
+      line-height: 1.5;
+    }
+
+    .signout {
+      color: var(--danger);
+    }
+
+    .signout:hover {
+      background: var(--danger-light);
+      color: var(--danger);
+    }
+
+    /* Main layout */
+
+    .main {
+      margin-left: 250px;
+      min-height: 100vh;
+    }
+
+    .topbar {
+      height: 66px;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(247, 245, 239, 0.94);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 30px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    .topbar-left,
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+    }
+
+    .portal-badge {
+      padding: 7px 10px;
+      color: var(--forest);
+      background: var(--sage-light);
+      border: 1px solid var(--sage-border);
+      border-radius: 6px;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      white-space: nowrap;
+    }
+
+    .topbar-divider {
+      width: 1px;
+      height: 22px;
+      background: var(--border);
+    }
+
+    .academic-year {
+      color: var(--muted);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .top-search {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      width: 220px;
+      padding: 9px 11px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: white;
+      color: var(--muted);
+    }
+
+    .top-search .material-symbols-outlined {
+      font-size: 18px;
+    }
+
+    .top-search input {
+      width: 100%;
+      min-width: 0;
+      border: 0;
+      outline: 0;
+      color: var(--text);
+      background: transparent;
+      font-size: 12px;
+    }
+
+    .icon-button {
+      width: 35px;
+      height: 35px;
+      border: 1px solid transparent;
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      background: transparent;
+      color: var(--muted);
+    }
+
+    .icon-button:hover {
+      color: var(--forest);
+      background: var(--sage-light);
+    }
+
+    .top-avatar {
+      width: 34px;
+      height: 34px;
+      background: var(--forest);
+      color: white;
+      font-size: 11px;
+    }
+
+    .content {
+      max-width: 1600px;
+      margin: auto;
+      padding: 29px 30px 38px;
+    }
+
+    /* Page heading */
+
+    .page-heading {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 18px;
+      padding-bottom: 23px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .heading-title-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+    }
+
+    h1 {
+      margin: 0;
+      color: var(--forest);
+      font-size: 27px;
+      letter-spacing: -1px;
+      font-weight: 700;
+    }
+
+    .version-badge {
+      padding: 5px 8px;
+      background: var(--sage-light);
+      border: 1px solid var(--sage-border);
+      color: var(--forest);
+      border-radius: 5px;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.7px;
+    }
+
+    .heading-description {
+      max-width: 680px;
+      margin: 10px 0 0;
+      color: var(--muted);
+      line-height: 1.7;
+      font-size: 13px;
+    }
+
+    .heading-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      flex-shrink: 0;
+    }
+
+    .btn {
+      min-height: 39px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 9px 13px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: white;
+      color: var(--text);
+      font-size: 12px;
+      font-weight: 600;
+      transition: 0.2s;
+    }
+
+    .btn:hover {
+      border-color: var(--sage);
+      background: var(--sage-light);
+    }
+
+    .btn-primary {
+      background: var(--forest);
+      color: white;
+      border-color: var(--forest);
+    }
+
+    .btn-primary:hover {
+      background: var(--forest-dark);
+      border-color: var(--forest-dark);
+      color: white;
+    }
+
+    .btn .material-symbols-outlined {
+      font-size: 18px;
+    }
+
+    /* Summary cards */
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 15px;
+      margin-top: 23px;
+    }
+
+    .summary-card {
+      padding: 17px;
+      border: 1px solid var(--border);
+      background: white;
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+    }
+
+    .summary-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .summary-label {
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .summary-icon {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border-radius: 9px;
+      background: var(--sage-light);
+      color: var(--forest);
+    }
+
+    .summary-icon.warning {
+      background: var(--terracotta-light);
+      color: #956b45;
+    }
+
+    .summary-number {
+      margin-top: 15px;
+      font-size: 28px;
+      line-height: 1;
+      font-weight: 700;
+      color: var(--forest);
+      letter-spacing: -1px;
+    }
+
+    .summary-foot {
+      margin-top: 10px;
+      font-size: 10px;
+      color: var(--muted);
+    }
+
+    /* Filters */
+
+    .panel {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+    }
+
+    .filter-panel {
+      margin-top: 22px;
+      padding: 20px;
+    }
+
+    .section-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 17px;
+    }
+
+    .section-title {
+      margin: 0;
+      color: var(--forest);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .section-subtitle {
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .filter-grid {
+      display: grid;
+      grid-template-columns: minmax(220px, 2fr) repeat(4, minmax(120px, 1fr));
+      gap: 13px;
+      align-items: end;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      min-width: 0;
+    }
+
+    .field label {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .input-wrap {
+      position: relative;
+    }
+
+    .input-wrap .material-symbols-outlined {
+      position: absolute;
+      top: 50%;
+      left: 10px;
+      transform: translateY(-50%);
+      color: var(--muted);
+      font-size: 18px;
+      pointer-events: none;
+    }
+
+    .field input,
+    .field select {
+      width: 100%;
+      height: 39px;
+      padding: 0 10px;
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      background: white;
+      color: var(--text);
+      outline: none;
+      font-size: 11px;
+      min-width: 0;
+    }
+
+    .field input:focus,
+    .field select:focus {
+      border-color: var(--sage);
+      box-shadow: 0 0 0 3px rgba(120, 146, 122, 0.12);
+    }
+
+    .field input.search-input {
+      padding-left: 35px;
+    }
+
+    .filter-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      padding-top: 15px;
+      margin-top: 17px;
+      border-top: 1px solid var(--border);
+    }
+
+    .active-filters {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .active-label {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      margin-right: 3px;
+    }
+
+    .filter-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 6px 8px;
+      border-radius: 20px;
+      background: var(--sage-light);
+      border: 1px solid var(--sage-border);
+      color: var(--forest);
+      font-size: 10px;
+      font-weight: 500;
+    }
+
+    .clear-btn {
+      border: 0;
+      background: transparent;
+      color: var(--forest);
+      font-size: 11px;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 5px;
+    }
+
+    .clear-btn:hover {
+      text-decoration: underline;
+    }
+
+    .record-count {
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .record-count strong {
+      color: var(--forest);
+    }
+
+    /* Directory table */
+
+    .directory-panel {
+      margin-top: 22px;
+      overflow: hidden;
+    }
+
+    .table-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 17px 19px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .table-title {
+      margin: 0;
+      font-size: 14px;
+      color: var(--forest);
+      font-weight: 700;
+    }
+
+    .table-description {
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .table-scroll {
+      width: 100%;
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      min-width: 1030px;
+    }
+
+    thead {
+      background: #f5f5ef;
+    }
+
+    th {
+      padding: 13px 15px;
+      border-bottom: 1px solid var(--border);
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      font-size: 9px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    td {
+      padding: 13px 15px;
+      border-bottom: 1px solid #eeece5;
+      font-size: 11px;
+      vertical-align: middle;
+    }
+
+    tbody tr {
+      transition: background 0.15s;
+    }
+
+    tbody tr:hover {
+      background: #f8f9f5;
+    }
+
+    tbody tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .student-cell {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 180px;
+    }
+
+    .student-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+      background: var(--sage-light);
+      color: var(--forest);
+      font-weight: 700;
+      font-size: 10px;
+      border: 1px solid var(--sage-border);
+    }
+
+    .student-avatar.terracotta {
+      background: var(--terracotta-light);
+      border-color: #ead8c7;
+      color: #8a6241;
+    }
+
+    .student-avatar.danger {
+      background: var(--danger-light);
+      border-color: #efceca;
+      color: var(--danger);
+    }
+
+    .student-name {
+      font-weight: 700;
+      color: var(--text);
+      font-size: 11px;
+    }
+
+    .student-email {
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 10px;
+    }
+
+    .roll-number {
+      font-family: monospace;
+      font-size: 11px;
+      font-weight: 600;
+      white-space: nowrap;
+      background: #f5f5ef;
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      padding: 5px 6px;
+    }
+
+    .cgpa {
+      color: var(--forest);
+      font-weight: 700;
+      font-size: 12px;
+    }
+
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 8px;
+      border-radius: 20px;
+      white-space: nowrap;
+      font-size: 9px;
+      font-weight: 600;
+    }
+
+    .status::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+
+    .status.complete {
+      background: var(--sage-light);
+      color: var(--forest);
+    }
+
+    .status.pending {
+      background: var(--terracotta-light);
+      color: #8a6241;
+    }
+
+    .status.review {
+      background: var(--danger-light);
+      color: var(--danger);
+    }
+
+    .backlog-pill {
+      display: inline-block;
+      padding: 5px 8px;
+      border-radius: 6px;
+      font-size: 10px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .backlog-clear {
+      color: var(--forest);
+      background: var(--sage-light);
+    }
+
+    .backlog-active {
+      color: #8a6241;
+      background: var(--terracotta-light);
+    }
+
+    .backlog-high {
+      color: var(--danger);
+      background: var(--danger-light);
+    }
+
+    .document-info {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .document-info .material-symbols-outlined {
+      font-size: 17px;
+    }
+
+    .document-info.verified {
+      color: var(--forest);
+    }
+
+    .document-info.missing {
+      color: var(--danger);
+    }
+
+    .completion {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 115px;
+    }
+
+    .progress-track {
+      width: 65px;
+      height: 6px;
+      overflow: hidden;
+      border-radius: 10px;
+      background: #e9e9e1;
+    }
+
+    .progress-fill {
+      height: 100%;
+      border-radius: inherit;
+      background: var(--sage);
+    }
+
+    .progress-fill.mid {
+      background: #bd9872;
+    }
+
+    .progress-fill.low {
+      background: var(--danger);
+    }
+
+    .completion-value {
+      color: var(--forest);
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    .view-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      border: 0;
+      background: transparent;
+      color: var(--forest);
+      font-size: 10px;
+      font-weight: 700;
+      white-space: nowrap;
+      padding: 6px 0;
+    }
+
+    .view-link:hover {
+      text-decoration: underline;
+    }
+
+    .view-link .material-symbols-outlined {
+      font-size: 16px;
+    }
+
+    .empty-state {
+      display: none;
+      padding: 38px 20px;
+      text-align: center;
+      color: var(--muted);
+    }
+
+    .empty-state .material-symbols-outlined {
+      font-size: 34px;
+      color: var(--sage);
+    }
+
+    .empty-state h3 {
+      margin: 12px 0 6px;
+      color: var(--forest);
+      font-size: 14px;
+    }
+
+    .empty-state p {
+      margin: 0 0 14px;
+      font-size: 11px;
+    }
+
+    .table-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      padding: 14px 19px;
+      border-top: 1px solid var(--border);
+      background: #fafaf6;
+    }
+
+    .pagination-note {
+      color: var(--muted);
+      font-size: 10px;
+    }
+
+    .pagination {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .page-btn {
+      min-width: 30px;
+      height: 30px;
+      padding: 0 8px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: white;
+      color: var(--text);
+      font-size: 10px;
+    }
+
+    .page-btn:hover:not(:disabled),
+    .page-btn.current {
+      background: var(--forest);
+      border-color: var(--forest);
+      color: white;
+    }
+
+    .page-btn:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+
+    /* Bottom information cards */
+
+    .bottom-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 2fr) minmax(250px, 1fr);
+      gap: 18px;
+      margin-top: 22px;
+    }
+
+    .info-card {
+      padding: 20px;
+    }
+
+    .info-card-heading {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .info-icon {
+      width: 39px;
+      height: 39px;
+      flex-shrink: 0;
+      display: grid;
+      place-items: center;
+      border-radius: 10px;
+      color: var(--forest);
+      background: var(--sage-light);
+    }
+
+    .info-card h2 {
+      margin: 2px 0 7px;
+      color: var(--forest);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .info-card p {
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.8;
+      margin: 0;
+    }
+
+    .info-card-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 17px;
+      padding-top: 13px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 10px;
+    }
+
+    .text-link {
+      color: var(--forest);
+      font-weight: 700;
+    }
+
+    .text-link:hover {
+      text-decoration: underline;
+    }
+
+    .empty-preview {
+      margin-top: 15px;
+      padding: 20px 12px;
+      background: #f8f9f5;
+      border: 1px dashed #d4d8cf;
+      border-radius: 9px;
+      text-align: center;
+    }
+
+    .empty-preview .material-symbols-outlined {
+      color: var(--sage);
+      font-size: 29px;
+    }
+
+    .empty-preview h3 {
+      margin: 9px 0 5px;
+      color: var(--forest);
+      font-size: 12px;
+    }
+
+    .empty-preview p {
+      font-size: 10px;
+      line-height: 1.6;
+    }
+
+    .demo-notice {
+      margin-top: 20px;
+      padding: 12px 15px;
+      background: var(--sage-light);
+      border: 1px solid var(--sage-border);
+      border-radius: 9px;
+      color: var(--forest);
+      font-size: 10px;
+      line-height: 1.6;
+    }
+
+    /* Responsive layout */
+
+    @media (max-width: 1250px) {
+      .filter-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .field-search {
+        grid-column: span 2;
+      }
+
+      .summary-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .content {
+        padding-left: 23px;
+        padding-right: 23px;
+      }
+
+      .topbar {
+        padding-left: 23px;
+        padding-right: 23px;
+      }
+    }
+
+    @media (max-width: 850px) {
+      .sidebar {
+        width: 70px;
+        padding: 18px 9px;
+        align-items: center;
+      }
+
+      .brand {
+        padding: 0 0 20px;
+        border: 0;
+      }
+
+      .brand-mark {
+        width: 43px;
+        height: 43px;
+      }
+
+      .brand-copy,
+      .nav-label,
+      .nav-link span:not(.material-symbols-outlined),
+      .faculty-card,
+      .sidebar-bottom .signout span:not(.material-symbols-outlined) {
+        display: none;
+      }
+
+      .nav-links {
+        width: 100%;
+        margin-top: 20px;
+      }
+
+      .nav-link {
+        justify-content: center;
+        padding: 13px 0;
+      }
+
+      .nav-link .material-symbols-outlined {
+        font-size: 22px;
+      }
+
+      .sidebar-bottom {
+        width: 100%;
+      }
+
+      .sidebar-bottom .signout {
+        justify-content: center;
+        padding: 13px 0;
+      }
+
+      .main {
+        margin-left: 70px;
+      }
+
+      .topbar {
+        padding: 0 17px;
+      }
+
+      .top-search {
+        width: 170px;
+      }
+
+      .content {
+        padding: 22px 17px;
+      }
+
+      .page-heading {
+        flex-direction: column;
+      }
+
+      .bottom-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .topbar {
+        height: 60px;
+      }
+
+      .portal-badge {
+        font-size: 9px;
+        padding: 6px;
+      }
+
+      .academic-year,
+      .topbar-divider,
+      .top-search,
+      .topbar-right .icon-button:nth-of-type(2) {
+        display: none;
+      }
+
+      .content {
+        padding: 19px 12px 30px;
+      }
+
+      h1 {
+        font-size: 24px;
+      }
+
+      .heading-actions {
+        width: 100%;
+      }
+
+      .heading-actions .btn {
+        flex: 1;
+      }
+
+      .summary-grid {
+        gap: 10px;
+      }
+
+      .summary-card {
+        padding: 13px;
+      }
+
+      .summary-number {
+        font-size: 24px;
+      }
+
+      .filter-panel {
+        padding: 14px;
+      }
+
+      .filter-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .field-search {
+        grid-column: span 2;
+      }
+
+      .filter-footer {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .table-toolbar {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .table-footer {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .pagination {
+        flex-wrap: wrap;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div>
+      <a class="brand" href="../Faculty Dashboard/code.html" aria-label="PlaceTrack home">
+        <div class="brand-mark">
+          <span class="material-symbols-outlined">school</span>
+        </div>
+        <div class="brand-copy">
+          <div class="brand-name">PlaceTrack</div>
+          <div class="brand-subtitle">Admin Workspace</div>
+        </div>
+      </a>
+
+      <div class="nav-label">Workspace</div>
+
+      <nav class="nav-links" aria-label="Faculty navigation">
+        <a class="nav-link" href="../Faculty Dashboard/code.html" title="Dashboard">
+          <span class="material-symbols-outlined">dashboard</span>
+          <span>Dashboard</span>
+        </a>
+
+        <a class="nav-link active" href="../Student Directory/code.html" title="Student Directory" aria-current="page">
+          <span class="material-symbols-outlined">groups</span>
+          <span>Student Directory</span>
+        </a>
+
+        <a class="nav-link" href="../Eligibility Checker/code.html" title="Eligibility Checker">
+          <span class="material-symbols-outlined">fact_check</span>
+          <span>Eligibility Checker</span>
+        </a>
+
+        <a class="nav-link" href="../Faculty Documents/code.html" title="Documents">
+          <span class="material-symbols-outlined">folder_open</span>
+          <span>Documents</span>
+        </a>
+
+        <a class="nav-link" href="../Settings/code.html" title="Settings">
+          <span class="material-symbols-outlined">settings</span>
+          <span>Settings</span>
+        </a>
+      </nav>
+    </div>
+
+    <div class="sidebar-bottom">
+      <div class="faculty-card">
+        <div class="faculty-info">
+          <div class="avatar avatar-faculty">SR</div>
+          <div>
+            <div class="faculty-name">Dr. S. K. Ramanathan</div>
+            <div class="faculty-role">Placement In-Charge</div>
+          </div>
+        </div>
+        <div class="faculty-dept">Department of Placement &amp; Training</div>
+      </div>
+
+      <a class="nav-link signout" href="../Login/code.html" title="Sign Out">
+        <span class="material-symbols-outlined">logout</span>
+        <span>Sign Out</span>
+      </a>
+    </div>
+  </aside>
+
+  <!-- Main area -->
+  <div class="main">
+    <header class="topbar">
+      <div class="topbar-left">
+        <span class="portal-badge">Placement Faculty Portal</span>
+        <span class="topbar-divider"></span>
+        <span class="academic-year">Academic Year&nbsp; <strong>2024–25</strong></span>
+      </div>
+
+      <div class="topbar-right">
+        <label class="top-search">
+          <span class="material-symbols-outlined">search</span>
+          <input id="global-search" type="search" placeholder="Search students...">
+        </label>
+
+        <button class="icon-button" type="button" aria-label="Notifications" title="Notifications"
+          onclick="showNotice('You are all caught up with notifications.')">
+          <span class="material-symbols-outlined">notifications</span>
+        </button>
+
+        <button class="icon-button" type="button" aria-label="Help" title="Help"
+          onclick="showNotice('Use the filters to find student records. Select View Profile to open a student record.')">
+          <span class="material-symbols-outlined">help_outline</span>
+        </button>
+
+        <div class="avatar top-avatar" title="Dr. S. K. Ramanathan">SR</div>
+      </div>
+    </header>
+
+    <main class="content">
+      <!-- Page header -->
+      <section class="page-heading">
+        <div>
+          <div class="heading-title-row">
+            <h1>Student Directory</h1>
+            <span class="version-badge">DIRECTORY V4.2</span>
+          </div>
+          <p class="heading-description">
+            Browse, audit, and manage central student placement profiles and verification records.
+          </p>
+        </div>
+
+        <div class="heading-actions">
+          <button class="btn" id="export-btn" type="button">
+            <span class="material-symbols-outlined">download</span>
+            Export Directory
+          </button>
+
+          <a class="btn btn-primary" href="../Eligibility Checker/code.html">
+            <span class="material-symbols-outlined">verified_user</span>
+            Quick Eligibility Check
+          </a>
+        </div>
+      </section>
+
+      <!-- Summary cards -->
+      <section class="summary-grid" aria-label="Directory summary">
+        <article class="summary-card">
+          <div class="summary-top">
+            <span class="summary-label">Total Students</span>
+            <span class="summary-icon">
+              <span class="material-symbols-outlined">groups</span>
+            </span>
+          </div>
+          <div class="summary-number">248</div>
+          <div class="summary-foot">Active student registry</div>
+        </article>
+
+        <article class="summary-card">
+          <div class="summary-top">
+            <span class="summary-label">Verified Profiles</span>
+            <span class="summary-icon">
+              <span class="material-symbols-outlined">task_alt</span>
+            </span>
+          </div>
+          <div class="summary-number">186</div>
+          <div class="summary-foot">Profiles marked complete</div>
+        </article>
+
+        <article class="summary-card">
+          <div class="summary-top">
+            <span class="summary-label">Pending Documents</span>
+            <span class="summary-icon warning">
+              <span class="material-symbols-outlined">pending_actions</span>
+            </span>
+          </div>
+          <div class="summary-number">42</div>
+          <div class="summary-foot">Require document follow-up</div>
+        </article>
+
+        <article class="summary-card">
+          <div class="summary-top">
+            <span class="summary-label">Eligible Students</span>
+            <span class="summary-icon">
+              <span class="material-symbols-outlined">workspace_premium</span>
+            </span>
+          </div>
+          <div class="summary-number">154</div>
+          <div class="summary-foot">Based on placement criteria</div>
+        </article>
+      </section>
+
+      <!-- Filters -->
+      <section class="panel filter-panel">
+        <div class="section-heading">
+          <div>
+            <h2 class="section-title">Find Student Records</h2>
+            <div class="section-subtitle">Combine filters to narrow down the student directory.</div>
+          </div>
+          <span class="material-symbols-outlined" style="color: var(--sage)">tune</span>
+        </div>
+
+        <div class="filter-grid">
+          <div class="field field-search">
+            <label for="filter-search">Search Registry</label>
+            <div class="input-wrap">
+              <span class="material-symbols-outlined">search</span>
+              <input class="search-input" id="filter-search" type="search"
+                placeholder="Name, roll number, or email...">
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="filter-dept">Department</label>
+            <select id="filter-dept">
+              <option value="all">All Departments</option>
+              <option value="cse">Computer Engineering</option>
+              <option value="it">Information Technology</option>
+              <option value="ece">Electronics Engineering</option>
+              <option value="mech">Mechanical Engineering</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="filter-ay">Academic Cohort</label>
+            <select id="filter-ay">
+              <option value="2024-25">AY 2024–25</option>
+              <option value="2023-24">AY 2023–24</option>
+              <option value="all">All Cohorts</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="filter-cgpa">Minimum CGPA</label>
+            <select id="filter-cgpa">
+              <option value="0">All CGPA Scores</option>
+              <option value="7.0">7.0 and above</option>
+              <option value="7.5">7.5 and above</option>
+              <option value="8.0">8.0 and above</option>
+              <option value="8.5">8.5 and above</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="filter-backlogs">Maximum Backlogs</label>
+            <select id="filter-backlogs">
+              <option value="all">Any Backlogs</option>
+              <option value="0" selected>0 backlogs</option>
+              <option value="1">Up to 1 backlog</option>
+              <option value="2">Up to 2 backlogs</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="filter-footer">
+          <div class="active-filters">
+            <span class="active-label">Active criteria</span>
+            <span class="filter-chip" id="chip-dept">Department: All</span>
+            <span class="filter-chip" id="chip-ay">Cohort: 2024–25</span>
+            <span class="filter-chip" id="chip-cgpa">CGPA: Any</span>
+            <span class="filter-chip" id="chip-backlogs">Backlogs: 0 max</span>
+
+            <button class="clear-btn" id="clear-filters" type="button">
+              <span class="material-symbols-outlined" style="font-size: 16px">restart_alt</span>
+              Clear filters
+            </button>
+          </div>
+
+          <div class="record-count" aria-live="polite">
+            Showing <strong id="visible-count">2</strong> of
+            <strong id="total-visible">4</strong> demo records
+          </div>
+        </div>
+      </section>
+
+      <!-- Student table -->
+      <section class="panel directory-panel">
+        <div class="table-toolbar">
+          <div>
+            <h2 class="table-title">Student Registry</h2>
+            <div class="table-description">Student academic, document, and profile status overview.</div>
+          </div>
+          <button class="btn" id="reset-view" type="button">
+            <span class="material-symbols-outlined">refresh</span>
+            Reset View
+          </button>
+        </div>
+
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">Student</th>
+                <th scope="col">Roll Number</th>
+                <th scope="col">Department</th>
+                <th scope="col">CGPA</th>
+                <th scope="col">Backlogs</th>
+                <th scope="col">Documents</th>
+                <th scope="col">Profile Completion</th>
+                <th scope="col">Status</th>
+                <th scope="col">Action</th>
+              </tr>
+            </thead>
+
+            <tbody id="student-table-body">
+              <!-- Aanya Sharma -->
+              <tr class="student-row"
+                data-name="Aanya Sharma"
+                data-roll="21CS014"
+                data-email="aanya.sharma@dept.edu"
+                data-dept="cse"
+                data-cohort="2024-25"
+                data-cgpa="8.7"
+                data-backlogs="0"
+                data-documents="5/5 Verified"
+                data-completion="100"
+                data-status="Verified / Complete">
+
+                <td>
+                  <div class="student-cell">
+                    <div class="student-avatar">AS</div>
+                    <div>
+                      <div class="student-name">Aanya Sharma</div>
+                      <div class="student-email">aanya.sharma@dept.edu</div>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="roll-number">21CS014</span></td>
+                <td>Computer Engineering</td>
+                <td><span class="cgpa">8.70</span></td>
+                <td><span class="backlog-pill backlog-clear">0 · Clear</span></td>
+                <td><span class="document-info verified"><span class="material-symbols-outlined">task_alt</span>5/5 Verified</span></td>
+                <td>
+                  <div class="completion">
+                    <div class="progress-track"><div class="progress-fill" style="width:100%"></div></div>
+                    <span class="completion-value">100%</span>
+                  </div>
+                </td>
+                <td><span class="status complete">Verified / Complete</span></td>
+                <td>
+                  <button class="view-link" type="button" data-open-student="21CS014">
+                    View Profile <span class="material-symbols-outlined">chevron_right</span>
+                  </button>
+                </td>
+              </tr>
+
+              <!-- Rohan Mehta -->
+              <tr class="student-row"
+                data-name="Rohan Mehta"
+                data-roll="21IT022"
+                data-email="rohan.mehta@dept.edu"
+                data-dept="it"
+                data-cohort="2024-25"
+                data-cgpa="7.9"
+                data-backlogs="1"
+                data-documents="4/5 Pending 1"
+                data-completion="80"
+                data-status="Pending Docs">
+
+                <td>
+                  <div class="student-cell">
+                    <div class="student-avatar terracotta">RM</div>
+                    <div>
+                      <div class="student-name">Rohan Mehta</div>
+                      <div class="student-email">rohan.mehta@dept.edu</div>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="roll-number">21IT022</span></td>
+                <td>Information Technology</td>
+                <td><span class="cgpa">7.90</span></td>
+                <td><span class="backlog-pill backlog-active">1 · Active</span></td>
+                <td><span class="document-info"><span class="material-symbols-outlined">schedule</span>4/5 Pending 1</span></td>
+                <td>
+                  <div class="completion">
+                    <div class="progress-track"><div class="progress-fill mid" style="width:80%"></div></div>
+                    <span class="completion-value">80%</span>
+                  </div>
+                </td>
+                <td><span class="status pending">Pending Docs</span></td>
+                <td>
+                  <button class="view-link" type="button" data-open-student="21IT022">
+                    View Profile <span class="material-symbols-outlined">chevron_right</span>
+                  </button>
+                </td>
+              </tr>
+
+              <!-- Isha Patel -->
+              <tr class="student-row"
+                data-name="Isha Patel"
+                data-roll="21CS031"
+                data-email="isha.patel@dept.edu"
+                data-dept="cse"
+                data-cohort="2024-25"
+                data-cgpa="8.4"
+                data-backlogs="0"
+                data-documents="5/5 Verified"
+                data-completion="100"
+                data-status="Verified / Complete">
+
+                <td>
+                  <div class="student-cell">
+                    <div class="student-avatar">IP</div>
+                    <div>
+                      <div class="student-name">Isha Patel</div>
+                      <div class="student-email">isha.patel@dept.edu</div>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="roll-number">21CS031</span></td>
+                <td>Computer Engineering</td>
+                <td><span class="cgpa">8.40</span></td>
+                <td><span class="backlog-pill backlog-clear">0 · Clear</span></td>
+                <td><span class="document-info verified"><span class="material-symbols-outlined">task_alt</span>5/5 Verified</span></td>
+                <td>
+                  <div class="completion">
+                    <div class="progress-track"><div class="progress-fill" style="width:100%"></div></div>
+                    <span class="completion-value">100%</span>
+                  </div>
+                </td>
+                <td><span class="status complete">Verified / Complete</span></td>
+                <td>
+                  <button class="view-link" type="button" data-open-student="21CS031">
+                    View Profile <span class="material-symbols-outlined">chevron_right</span>
+                  </button>
+                </td>
+              </tr>
+
+              <!-- Arjun Nair -->
+              <tr class="student-row"
+                data-name="Arjun Nair"
+                data-roll="21EC018"
+                data-email="arjun.nair@dept.edu"
+                data-dept="ece"
+                data-cohort="2024-25"
+                data-cgpa="7.2"
+                data-backlogs="2"
+                data-documents="3/5 Missing 2"
+                data-completion="60"
+                data-status="Under Review">
+
+                <td>
+                  <div class="student-cell">
+                    <div class="student-avatar danger">AN</div>
+                    <div>
+                      <div class="student-name">Arjun Nair</div>
+                      <div class="student-email">arjun.nair@dept.edu</div>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="roll-number">21EC018</span></td>
+                <td>Electronics Engineering</td>
+                <td><span class="cgpa">7.20</span></td>
+                <td><span class="backlog-pill backlog-high">2 · Active</span></td>
+                <td><span class="document-info missing"><span class="material-symbols-outlined">warning</span>3/5 Missing 2</span></td>
+                <td>
+                  <div class="completion">
+                    <div class="progress-track"><div class="progress-fill low" style="width:60%"></div></div>
+                    <span class="completion-value">60%</span>
+                  </div>
+                </td>
+                <td><span class="status review">Under Review</span></td>
+                <td>
+                  <button class="view-link" type="button" data-open-student="21EC018">
+                    View Profile <span class="material-symbols-outlined">chevron_right</span>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="empty-state" id="empty-state">
+          <span class="material-symbols-outlined">person_search</span>
+          <h3>No Matching Profiles</h3>
+          <p>Try adjusting the search term, department, CGPA, or backlog criteria.</p>
+          <button class="btn" type="button" id="empty-reset">Reset Filters</button>
+        </div>
+
+        <div class="table-footer">
+          <div class="pagination-note" id="pagination-note">
+            Showing 1–2 of 2 matching demo records
+          </div>
+
+          <div class="pagination" aria-label="Directory pagination">
+            <button class="page-btn" id="prev-page" type="button" disabled>
+              <span class="material-symbols-outlined">chevron_left</span>
+              Previous
+            </button>
+            <button class="page-btn current" type="button" aria-current="page">1</button>
+            <button class="page-btn" id="next-page" type="button" disabled>
+              Next
+              <span class="material-symbols-outlined">chevron_right</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Information panels -->
+      <section class="bottom-grid">
+        <article class="panel info-card">
+          <div class="info-card-heading">
+            <div class="info-icon">
+              <span class="material-symbols-outlined">policy</span>
+            </div>
+            <div>
+              <h2>Institutional Compliance &amp; Verification Protocol</h2>
+              <p>
+                Student records can be reviewed for missing academic documents,
+                active backlogs, and incomplete profiles. Students with outstanding
+                requirements may be marked Pending Docs or Under Review.
+                Final placement eligibility should be assessed against the applicable
+                employer and institution criteria.
+              </p>
+            </div>
+          </div>
+
+          <div class="info-card-bottom">
+            <span>
+              <span class="material-symbols-outlined" style="font-size:14px">history</span>
+              Demonstration data · No live ERP connection
+            </span>
+            <a class="text-link" href="../Eligibility Checker/code.html">
+              View Eligibility Checker →
+            </a>
+          </div>
+        </article>
+
+        <article class="panel info-card">
+          <div class="info-card-heading">
+            <div class="info-icon">
+              <span class="material-symbols-outlined">search_off</span>
+            </div>
+            <div>
+              <h2>Zero-Match Preview</h2>
+              <p>See what happens when your search criteria return no matching records.</p>
+            </div>
+          </div>
+
+          <div class="empty-preview">
+            <span class="material-symbols-outlined">manage_search</span>
+            <h3>No Matching Profiles</h3>
+            <p>Refine your filters or reset the search to view the demo student records.</p>
+            <button class="clear-btn" type="button" id="preview-reset">Reset Filters →</button>
+          </div>
+        </article>
+      </section>
+
+      <div class="demo-notice">
+        <strong>Prototype note:</strong> This directory uses four sample student records for demonstration.
+        The summary figures are illustrative and do not represent a live database. Search, filtering,
+        and CSV export operate on the sample records displayed here.
+      </div>
+    </main>
+  </div>
+
+  <script>
+    const searchInput = document.getElementById("filter-search");
+    const globalSearch = document.getElementById("global-search");
+    const departmentSelect = document.getElementById("filter-dept");
+    const cohortSelect = document.getElementById("filter-ay");
+    const cgpaSelect = document.getElementById("filter-cgpa");
+    const backlogSelect = document.getElementById("filter-backlogs");
+
+    const studentRows = Array.from(document.querySelectorAll(".student-row"));
+    const visibleCount = document.getElementById("visible-count");
+    const totalVisible = document.getElementById("total-visible");
+    const emptyState = document.getElementById("empty-state");
+    const tableBody = document.getElementById("student-table-body");
+
+    const departmentNames = {
+      all: "All",
+      cse: "Computer Engineering",
+      it: "Information Technology",
+      ece: "Electronics Engineering",
+      mech: "Mechanical Engineering"
+    };
+
+    function getFilters() {
+      return {
+        search: searchInput.value.trim().toLowerCase(),
+        department: departmentSelect.value,
+        cohort: cohortSelect.value,
+        minCgpa: Number(cgpaSelect.value) || 0,
+        maxBacklogs: backlogSelect.value === "all"
+          ? Infinity
+          : Number(backlogSelect.value)
+      };
+    }
+
+    function applyFilters() {
+      const filters = getFilters();
+      let count = 0;
+      let firstVisible = null;
+      let lastVisible = null;
+
+      studentRows.forEach((row) => {
+        const name = row.dataset.name.toLowerCase();
+        const roll = row.dataset.roll.toLowerCase();
+        const email = row.dataset.email.toLowerCase();
+        const department = row.dataset.dept;
+        const cohort = row.dataset.cohort;
+        const cgpa = Number(row.dataset.cgpa);
+        const backlogs = Number(row.dataset.backlogs);
+
+        const matchesSearch =
+          !filters.search ||
+          name.includes(filters.search) ||
+          roll.includes(filters.search) ||
+          email.includes(filters.search);
+
+        const matchesDepartment =
+          filters.department === "all" ||
+          department === filters.department;
+
+        const matchesCohort =
+          filters.cohort === "all" ||
+          cohort === filters.cohort;
+
+        const matchesCgpa = cgpa >= filters.minCgpa;
+        const matchesBacklogs = backlogs <= filters.maxBacklogs;
+
+        const matches =
+          matchesSearch &&
+          matchesDepartment &&
+          matchesCohort &&
+          matchesCgpa &&
+          matchesBacklogs;
+
+        row.style.display = matches ? "" : "none";
+
+        if (matches) {
+          count++;
+          if (!firstVisible) firstVisible = row;
+          lastVisible = row;
+        }
+      });
+
+      visibleCount.textContent = count;
+      totalVisible.textContent = studentRows.length;
+
+      emptyState.style.display = count === 0 ? "block" : "none";
+      tableBody.style.display = count === 0 ? "none" : "";
+
+      document.getElementById("pagination-note").textContent =
+        count === 0
+          ? "No matching demo records"
+          : `Showing 1–${count} of ${count} matching demo records`;
+
+      document.getElementById("chip-dept").textContent =
+        "Department: " + departmentNames[filters.department];
+
+      document.getElementById("chip-ay").textContent =
+        "Cohort: " +
+        (filters.cohort === "all" ? "All" : filters.cohort.replace("-", "–"));
+
+      document.getElementById("chip-cgpa").textContent =
+        filters.minCgpa === 0
+          ? "CGPA: Any"
+          : `CGPA: ${filters.minCgpa}+`;
+
+      document.getElementById("chip-backlogs").textContent =
+        filters.maxBacklogs === Infinity
+          ? "Backlogs: Any"
+          : `Backlogs: ${filters.maxBacklogs} max`;
+    }
+
+    function clearFilters() {
+      searchInput.value = "";
+      globalSearch.value = "";
+      departmentSelect.value = "all";
+      cohortSelect.value = "2024-25";
+      cgpaSelect.value = "0";
+      backlogSelect.value = "all";
+      applyFilters();
+    }
+
+    searchInput.addEventListener("input", () => {
+      globalSearch.value = searchInput.value;
+      applyFilters();
+    });
+
+    globalSearch.addEventListener("input", () => {
+      searchInput.value = globalSearch.value;
+      applyFilters();
+    });
+
+    [
+      departmentSelect,
+      cohortSelect,
+      cgpaSelect,
+      backlogSelect
+    ].forEach((element) => {
+      element.addEventListener("change", applyFilters);
+    });
+
+    document.getElementById("clear-filters").addEventListener("click", clearFilters);
+    document.getElementById("reset-view").addEventListener("click", clearFilters);
+    document.getElementById("empty-reset").addEventListener("click", clearFilters);
+    document.getElementById("preview-reset").addEventListener("click", clearFilters);
+
+    function openStudentProfile(rollNumber) {
+      const row = studentRows.find((item) => item.dataset.roll === rollNumber);
+
+      if (!row) {
+        showNotice("Student record not found.");
+        return;
+      }
+
+      const student = {
+        name: row.dataset.name,
+        roll: row.dataset.roll,
+        email: row.dataset.email,
+        department: row.cells[2].textContent.trim(),
+        cgpa: row.dataset.cgpa,
+        backlogs: row.dataset.backlogs,
+        documents: row.dataset.documents,
+        completion: row.dataset.completion,
+        status: row.dataset.status
+      };
+
+      try {
+        sessionStorage.setItem("placetrackSelectedStudent", JSON.stringify(student));
+        sessionStorage.setItem("selectedStudent", JSON.stringify(student));
+        sessionStorage.setItem("selectedStudentName", student.name);
+        sessionStorage.setItem("selectedStudentRoll", student.roll);
+      } catch (error) {
+        console.warn("Could not save selected student in session storage.", error);
+      }
+
+      window.location.href = "../Student Detail/code.html";
+    }
+
+    document.querySelectorAll("[data-open-student]").forEach((button) => {
+      button.addEventListener("click", () => {
+        openStudentProfile(button.dataset.openStudent);
+      });
+    });
+
+    // Export the currently filtered records as a CSV file.
+    document.getElementById("export-btn").addEventListener("click", () => {
+      const visibleRows = studentRows.filter(
+        (row) => row.style.display !== "none"
+      );
+
+      if (visibleRows.length === 0) {
+        showNotice("There are no matching records to export.");
+        return;
+      }
+
+      const headers = [
+        "Student Name",
+        "Roll Number",
+        "Email",
+        "Department",
+        "CGPA",
+        "Backlogs",
+        "Documents",
+        "Profile Completion",
+        "Status"
+      ];
+
+      const csvCell = (value) =>
+        '"' + String(value).replace(/"/g, '""') + '"';
+
+      const lines = [
+        headers.map(csvCell).join(","),
+        ...visibleRows.map((row) => [
+          row.dataset.name,
+          row.dataset.roll,
+          row.dataset.email,
+          row.cells[2].textContent.trim(),
+          row.dataset.cgpa,
+          row.dataset.backlogs,
+          row.dataset.documents,
+          row.dataset.completion + "%",
+          row.dataset.status
+        ].map(csvCell).join(","))
+      ];
+
+      const blob = new Blob(
+        ["\uFEFF" + lines.join("\r\n")],
+        { type: "text/csv;charset=utf-8;" }
+      );
+
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "placetrack-student-directory.csv";
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(url);
+    });
+
+    function showNotice(message) {
+      alert(message);
+    }
+
+    // Initial filter: 2024–25 cohort with no backlogs.
+    applyFilters();
+  </script>
+</body>
+</html>

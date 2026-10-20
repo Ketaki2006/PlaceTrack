@@ -1,0 +1,1163 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Settings | PlaceTrack</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ivory: #F7F5EF;
+      --white: #FFFFFF;
+      --forest: #244A3B;
+      --forest-dark: #18382D;
+      --sage: #78927A;
+      --sage-pale: #EDF2EA;
+      --terracotta: #D8B89A;
+      --text: #343832;
+      --muted: #777A73;
+      --border: #E6E2D9;
+      --danger: #A3443E;
+      --danger-bg: #F9ECE9;
+      --warning: #95652F;
+      --warning-bg: #FBF1E3;
+      --shadow: 0 4px 18px rgba(36, 74, 59, .05);
+      --radius: 12px;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--ivory);
+      color: var(--text);
+      font-family: Inter, sans-serif;
+      font-size: 13px;
+    }
+    button, input { font: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    a { color: inherit; text-decoration: none; }
+    button { cursor: pointer; }
+    button:focus-visible, a:focus-visible, input:focus-visible {
+      outline: 2px solid var(--sage);
+      outline-offset: 3px;
+    }
+
+    .sidebar {
+      position: fixed;
+      inset: 0 auto 0 0;
+      width: 248px;
+      background: var(--white);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      z-index: 20;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      padding: 0 22px;
+      height: 76px;
+      border-bottom: 1px solid var(--border);
+    }
+    .brand-mark {
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      border-radius: 10px;
+      color: white;
+      background: var(--forest);
+      font-size: 16px;
+      font-weight: 700;
+    }
+    .brand-name { color: var(--forest); font-size: 16px; font-weight: 700; }
+    .brand-subtitle {
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1.3px;
+    }
+    .nav-label {
+      padding: 25px 24px 10px;
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+    }
+    .nav { display: grid; gap: 5px; padding: 0 12px; }
+    .nav a {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 13px;
+      border-radius: 8px;
+      color: var(--muted);
+      font-size: 12px;
+      transition: .15s;
+    }
+    .nav a:hover { color: var(--forest); background: var(--ivory); }
+    .nav a.active { color: white; background: var(--forest); font-weight: 600; }
+    .nav-icon { width: 20px; text-align: center; font-size: 16px; }
+
+    .sidebar-bottom { padding: 15px; border-top: 1px solid var(--border); }
+    .user-card {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 11px;
+      background: var(--ivory);
+      border-radius: 9px;
+    }
+    .avatar {
+      width: 36px;
+      height: 36px;
+      flex-shrink: 0;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      color: white;
+      background: var(--forest);
+      font-weight: 700;
+    }
+    .user-name { font-size: 12px; font-weight: 600; }
+    .user-meta { margin-top: 4px; color: var(--muted); font-size: 10px; }
+    .signout {
+      display: flex;
+      justify-content: space-between;
+      padding: 13px 9px 3px;
+      color: var(--muted);
+      font-size: 11px;
+    }
+    .signout a:hover { color: var(--danger); }
+
+    .main { min-height: 100vh; margin-left: 248px; }
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      height: 66px;
+      padding: 0 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      background: rgba(255,255,255,.95);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(12px);
+    }
+    .topbar-label {
+      padding: 8px 11px;
+      border-radius: 7px;
+      background: var(--sage-pale);
+      color: var(--forest);
+      font-size: 10px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .top-search { position: relative; width: min(370px, 42%); }
+    .top-search input {
+      width: 100%;
+      padding: 10px 12px 10px 34px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--ivory);
+      outline: none;
+      font-size: 11px;
+    }
+    .search-icon { position: absolute; top: 9px; left: 12px; color: var(--muted); }
+    .top-user { display: flex; align-items: center; gap: 10px; }
+    .top-user .avatar { width: 32px; height: 32px; }
+    .top-user-name { font-size: 11px; font-weight: 600; }
+    .top-user-id { margin-top: 3px; color: var(--muted); font-size: 10px; }
+
+    .content { max-width: 1500px; margin: auto; padding: 30px; }
+    .page-heading {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 20px;
+      padding-bottom: 23px;
+      margin-bottom: 23px;
+      border-bottom: 1px solid var(--border);
+    }
+    .eyebrow {
+      margin-bottom: 9px;
+      color: var(--sage);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+    }
+    h1 { margin: 0; color: var(--forest); font-size: 28px; letter-spacing: -1px; }
+    h2, h3, p { margin-top: 0; }
+    .subtitle { margin: 9px 0 0; color: var(--muted); line-height: 1.7; }
+    .sso-card {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 15px;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      box-shadow: var(--shadow);
+      white-space: nowrap;
+    }
+    .sso-icon {
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      border-radius: 9px;
+      background: var(--sage-pale);
+      color: var(--forest);
+      font-size: 18px;
+    }
+    .sso-label { color: var(--muted); font-size: 9px; font-weight: 700; letter-spacing: 1px; }
+    .sso-value { margin-top: 5px; color: var(--forest); font-size: 11px; font-weight: 600; }
+
+    .settings-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.8fr) minmax(290px, 1fr);
+      gap: 20px;
+      align-items: start;
+    }
+    .column { display: grid; gap: 20px; min-width: 0; }
+    .card {
+      overflow: hidden;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--border);
+    }
+    .card-heading { display: flex; align-items: flex-start; gap: 11px; }
+    .card-icon {
+      width: 36px;
+      height: 36px;
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+      border-radius: 9px;
+      background: var(--sage-pale);
+      color: var(--forest);
+      font-size: 17px;
+    }
+    .card-title { margin: 0; color: var(--forest); font-size: 13px; font-weight: 700; }
+    .card-description { margin: 5px 0 0; color: var(--muted); font-size: 10px; line-height: 1.6; }
+    .card-body { padding: 20px; }
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 9px;
+      border-radius: 20px;
+      background: var(--sage-pale);
+      color: var(--forest);
+      font-size: 9px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .tag-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--sage); }
+
+    .identity-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 12px; }
+    .identity-item {
+      min-width: 0;
+      padding: 14px;
+      background: #F9F8F4;
+      border: 1px solid #F0EDE6;
+      border-radius: 9px;
+    }
+    .identity-item.wide { grid-column: 1 / -1; }
+    .field-label {
+      display: block;
+      margin-bottom: 9px;
+      color: var(--muted);
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: .7px;
+      text-transform: uppercase;
+    }
+    .field-value { overflow-wrap: anywhere; font-size: 12px; font-weight: 600; line-height: 1.6; }
+    .field-sub { margin-top: 5px; color: var(--muted); font-size: 10px; line-height: 1.6; }
+    .readonly-badge { float: right; color: var(--sage); font-size: 9px; font-weight: 700; }
+    .info-note {
+      display: flex;
+      gap: 10px;
+      margin-top: 16px;
+      padding: 13px;
+      background: var(--sage-pale);
+      border-radius: 8px;
+      color: var(--muted);
+      font-size: 10px;
+      line-height: 1.7;
+    }
+    .info-note strong { color: var(--forest); }
+
+    .notice {
+      display: flex;
+      gap: 10px;
+      padding: 13px;
+      margin-bottom: 18px;
+      border-radius: 8px;
+      background: var(--sage-pale);
+      color: var(--muted);
+      font-size: 10px;
+      line-height: 1.7;
+    }
+    .notice strong { color: var(--forest); }
+    .notice-icon { flex-shrink: 0; color: var(--forest); font-size: 16px; }
+    .field { margin-bottom: 16px; }
+    .field label { display: block; margin-bottom: 7px; font-size: 11px; font-weight: 600; }
+    .input-wrap { position: relative; }
+    .field input {
+      width: 100%;
+      height: 42px;
+      padding: 10px 42px 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: #FAF9F5;
+      color: var(--text);
+      outline: none;
+      font-size: 12px;
+    }
+    .field input:focus { border-color: var(--sage); background: white; }
+    .field input:disabled { color: var(--muted); cursor: not-allowed; }
+    .field input.invalid { border-color: var(--danger); }
+    .toggle-password {
+      position: absolute;
+      top: 7px;
+      right: 7px;
+      width: 28px;
+      height: 28px;
+      border: 0;
+      border-radius: 6px;
+      background: transparent;
+      color: var(--muted);
+    }
+    .toggle-password:hover { background: var(--border); }
+    .field-error { display: none; margin-top: 6px; color: var(--danger); font-size: 10px; }
+    .field-error.show { display: block; }
+    .password-rules {
+      display: grid;
+      grid-template-columns: repeat(2,minmax(0,1fr));
+      gap: 9px;
+      padding: 13px;
+      margin: 5px 0 17px;
+      background: #F9F8F4;
+      border-radius: 8px;
+    }
+    .rule { color: var(--muted); font-size: 10px; }
+    .rule::before { content: "○"; margin-right: 7px; }
+    .rule.valid { color: var(--forest); }
+    .rule.valid::before { content: "✓"; font-weight: 700; }
+    .form-actions { display: flex; justify-content: flex-end; gap: 9px; flex-wrap: wrap; }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      padding: 10px 14px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: white;
+      color: var(--text);
+      font-size: 11px;
+      font-weight: 600;
+      transition: .15s;
+    }
+    .btn:hover { background: var(--ivory); }
+    .btn-primary { border-color: var(--forest); background: var(--forest); color: white; }
+    .btn-primary:hover { background: var(--forest-dark); }
+    .btn-danger { border-color: var(--danger-bg); background: var(--danger-bg); color: var(--danger); }
+    .btn-danger:hover { background: #F3DEDA; }
+    .btn:disabled { opacity: .55; cursor: not-allowed; }
+    .demo-label { margin: 15px 0 0; color: var(--warning); font-size: 10px; line-height: 1.6; }
+
+    .session-item {
+      padding: 14px;
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      background: #FAF9F5;
+      margin-bottom: 11px;
+    }
+    .session-item.revoked { opacity: .62; background: #F3F1EB; }
+    .session-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+    .session-device { display: flex; align-items: center; gap: 9px; min-width: 0; }
+    .device-icon {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+      border-radius: 8px;
+      background: var(--sage-pale);
+      color: var(--forest);
+      font-size: 16px;
+    }
+    .device-name { font-size: 11px; font-weight: 600; }
+    .device-meta { margin-top: 5px; color: var(--muted); font-size: 10px; line-height: 1.6; }
+    .session-status {
+      padding: 5px 7px;
+      border-radius: 5px;
+      background: var(--sage-pale);
+      color: var(--forest);
+      font-size: 9px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .session-status.ended { background: var(--danger-bg); color: var(--danger); }
+    .session-action { margin-top: 12px; }
+    .session-action .btn { padding: 7px 10px; font-size: 10px; }
+    .session-warning { margin: 14px 0; color: var(--muted); font-size: 10px; line-height: 1.8; }
+
+    .audit-hash {
+      padding: 12px;
+      border-radius: 8px;
+      background: #F9F8F4;
+      color: var(--muted);
+      font-family: monospace;
+      font-size: 10px;
+      line-height: 1.8;
+      overflow-wrap: anywhere;
+    }
+    .audit-meta { display: flex; justify-content: space-between; gap: 10px; margin-top: 12px; color: var(--muted); font-size: 9px; }
+    .go-profile { display: inline-flex; margin-top: 12px; color: var(--forest); font-size: 11px; font-weight: 700; }
+    .go-profile:hover { text-decoration: underline; }
+
+    .footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 25px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 10px;
+      line-height: 1.7;
+    }
+    .footer-links { display: flex; gap: 13px; flex-wrap: wrap; }
+    .footer-links a:hover { color: var(--forest); text-decoration: underline; }
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: rgba(24,40,31,.48);
+    }
+    .modal-backdrop.show { display: flex; }
+    .modal {
+      width: min(430px,100%);
+      padding: 24px;
+      background: white;
+      border-radius: 14px;
+      box-shadow: 0 20px 70px rgba(0,0,0,.2);
+    }
+    .modal-icon {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      margin-bottom: 15px;
+      border-radius: 11px;
+      background: var(--danger-bg);
+      color: var(--danger);
+      font-size: 19px;
+    }
+    .modal h2 { margin-bottom: 8px; color: var(--forest); font-size: 18px; }
+    .modal p { color: var(--muted); font-size: 12px; line-height: 1.8; }
+    .modal-actions { display: flex; justify-content: flex-end; gap: 9px; margin-top: 22px; flex-wrap: wrap; }
+    .toast {
+      position: fixed;
+      right: 22px;
+      bottom: 22px;
+      z-index: 200;
+      max-width: min(420px,calc(100vw - 44px));
+      padding: 13px 17px;
+      border-radius: 9px;
+      background: var(--forest-dark);
+      color: white;
+      font-size: 11px;
+      line-height: 1.6;
+      box-shadow: var(--shadow);
+      opacity: 0;
+      transform: translateY(10px);
+      pointer-events: none;
+      transition: .2s;
+    }
+    .toast.show { opacity: 1; transform: translateY(0); }
+
+    .mobile-nav { display: none; }
+    @media(max-width:1150px) {
+      .sidebar { width: 220px; }
+      .main { margin-left: 220px; }
+      .settings-grid { grid-template-columns: minmax(0,1.4fr) minmax(260px,1fr); }
+      .content { padding: 24px 20px; }
+      .topbar { padding: 0 20px; }
+    }
+    @media(max-width:850px) {
+      .settings-grid { grid-template-columns: 1fr; }
+      .page-heading { align-items: flex-start; flex-direction: column; }
+      .sso-card { align-self: flex-start; }
+    }
+    @media(max-width:680px) {
+      .sidebar { display: none; }
+      .main { margin-left: 0; }
+      .topbar { height: 60px; padding: 0 14px; gap: 10px; }
+      .topbar-label { display: none; }
+      .top-search { width: 100%; }
+      .top-user > div:last-child { display: none; }
+      .content { padding: 22px 14px 90px; }
+      h1 { font-size: 25px; }
+      .card-header { padding: 15px; align-items: flex-start; }
+      .card-body { padding: 15px; }
+      .identity-grid { grid-template-columns: 1fr; }
+      .identity-item.wide { grid-column: auto; }
+      .password-rules { grid-template-columns: 1fr 1fr; }
+      .mobile-nav {
+        position: fixed;
+        inset: auto 0 0;
+        z-index: 30;
+        display: flex;
+        justify-content: space-around;
+        padding: 9px 4px calc(9px + env(safe-area-inset-bottom));
+        border-top: 1px solid var(--border);
+        background: white;
+      }
+      .mobile-nav a {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 5px;
+        padding: 4px;
+        color: var(--muted);
+        font-size: 9px;
+      }
+      .mobile-nav a.active { color: var(--forest); font-weight: 700; }
+      .footer { align-items: flex-start; flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <aside class="sidebar">
+    <div>
+      <a class="brand" href="../Student Dashboard/code.html">
+        <div class="brand-mark">PT</div>
+        <div>
+          <div class="brand-name">PlaceTrack</div>
+          <div class="brand-subtitle">Student Portal</div>
+        </div>
+      </a>
+
+      <div class="nav-label">Navigation</div>
+      <nav class="nav">
+        <a href="../Student Dashboard/code.html"><span class="nav-icon">▦</span>Dashboard</a>
+        <a href="../My Profile/code.html"><span class="nav-icon">♙</span>My Profile</a>
+        <a href="../My Documents/code.html"><span class="nav-icon">▤</span>My Documents</a>
+        <a class="active" aria-current="page" href="../Settings/code.html"><span class="nav-icon">⚙</span>Settings</a>
+      </nav>
+    </div>
+
+    <div class="sidebar-bottom">
+      <div class="user-card">
+        <div class="avatar" id="sidebarAvatar">AS</div>
+        <div>
+          <div class="user-name" id="sidebarName">Aanya Sharma</div>
+          <div class="user-meta" id="sidebarMeta">21CS014 · Computer Engg.</div>
+        </div>
+      </div>
+      <div class="signout">
+        <a href="../Login/code.html" id="sidebarSignout">↗ Sign Out</a>
+        <span>Prototype</span>
+      </div>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <span class="topbar-label">STUDENT SETTINGS</span>
+      <div class="top-search">
+        <span class="search-icon">⌕</span>
+        <input id="settingsSearch" type="search" placeholder="Search settings..." aria-label="Search settings">
+      </div>
+      <div class="top-user">
+        <div class="avatar" id="topAvatar">AS</div>
+        <div>
+          <div class="top-user-name" id="topName">Aanya Sharma</div>
+          <div class="top-user-id" id="topId">21CS014 · Student</div>
+        </div>
+      </div>
+    </header>
+
+    <main class="content">
+      <section class="page-heading">
+        <div>
+          <div class="eyebrow">SEC-09 · Student Portal · Account Management</div>
+          <h1>Settings</h1>
+          <p class="subtitle">Review your institutional identity, password guidance, and active session controls.</p>
+        </div>
+        <div class="sso-card">
+          <div class="sso-icon">✓</div>
+          <div>
+            <div class="sso-label">IDENTITY STATUS</div>
+            <div class="sso-value">Demo account · Not connected to SSO</div>
+          </div>
+        </div>
+      </section>
+
+      <div class="settings-grid">
+        <div class="column">
+          <!-- Account information -->
+          <section class="card searchable" data-search="account information identity name roll number email role department academic">
+            <div class="card-header">
+              <div class="card-heading">
+                <div class="card-icon">♙</div>
+                <div>
+                  <h2 class="card-title">Account Information</h2>
+                  <p class="card-description">Review the identity details associated with your placement profile.</p>
+                </div>
+              </div>
+              <span class="tag"><span class="tag-dot"></span>Read-only record</span>
+            </div>
+
+            <div class="card-body">
+              <div class="identity-grid">
+                <div class="identity-item">
+                  <span class="field-label">Full Name <span class="readonly-badge">PROFILE</span></span>
+                  <div class="field-value" id="identityName">Aanya Sharma</div>
+                  <div class="field-sub">Student placement account</div>
+                </div>
+
+                <div class="identity-item">
+                  <span class="field-label">University Roll Number</span>
+                  <div class="field-value" id="identityRoll">21CS014</div>
+                  <div class="field-sub">Institutional student identifier</div>
+                </div>
+
+                <div class="identity-item">
+                  <span class="field-label">College Email</span>
+                  <div class="field-value" id="identityEmail">aanya.sharma@dept.edu</div>
+                  <div class="field-sub">Demonstration email address</div>
+                </div>
+
+                <div class="identity-item">
+                  <span class="field-label">Portal Role</span>
+                  <div class="field-value">Student / Placement Candidate</div>
+                  <div class="field-sub">Academic year 2024–25 · Demo data</div>
+                </div>
+
+                <div class="identity-item wide">
+                  <span class="field-label">Academic Department</span>
+                  <div class="field-value" id="identityDepartment">Computer Engineering</div>
+                  <div class="field-sub">Academic identity fields are displayed for reference.</div>
+                </div>
+              </div>
+
+              <div class="info-note">
+                <span>ⓘ</span>
+                <div>
+                  <strong>Profile management:</strong>
+                  Edit contact information, skills, and projects on
+                  <a href="../My Profile/code.html" style="color:var(--forest);font-weight:700;text-decoration:underline">My Profile</a>.
+                  Identity changes in a production system would require an authorized institutional workflow.
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Password and authentication -->
+          <section class="card searchable" id="passwordSection" data-search="password authentication security passcode credential reset">
+            <div class="card-header">
+              <div class="card-heading">
+                <div class="card-icon">◇</div>
+                <div>
+                  <h2 class="card-title">Password &amp; Authentication</h2>
+                  <p class="card-description">Review password requirements for your demonstration account.</p>
+                </div>
+              </div>
+              <span class="tag">Local demo</span>
+            </div>
+
+            <div class="card-body">
+              <div class="notice">
+                <span class="notice-icon">ⓘ</span>
+                <div>
+                  <strong>Authentication notice</strong><br>
+                  This prototype does not connect to a university identity provider. Password changes cannot be applied to a real account here. Never enter your actual campus password into a demonstration page.
+                </div>
+              </div>
+
+              <form id="passwordForm" novalidate>
+                <div class="field">
+                  <label for="currentPassword">Current passcode (demo only)</label>
+                  <div class="input-wrap">
+                    <input id="currentPassword" type="password" placeholder="Enter a demo passcode" autocomplete="current-password">
+                    <button class="toggle-password" type="button" data-toggle="currentPassword" aria-label="Show current passcode">◉</button>
+                  </div>
+                  <div class="field-error" id="currentError"></div>
+                </div>
+
+                <div class="field">
+                  <label for="newPassword">New passcode</label>
+                  <div class="input-wrap">
+                    <input id="newPassword" type="password" placeholder="Create a demo passcode" autocomplete="new-password">
+                    <button class="toggle-password" type="button" data-toggle="newPassword" aria-label="Show new passcode">◉</button>
+                  </div>
+                  <div class="field-error" id="newError"></div>
+                </div>
+
+                <div class="field">
+                  <label for="confirmPassword">Confirm new passcode</label>
+                  <div class="input-wrap">
+                    <input id="confirmPassword" type="password" placeholder="Re-enter your new passcode" autocomplete="new-password">
+                    <button class="toggle-password" type="button" data-toggle="confirmPassword" aria-label="Show confirmed passcode">◉</button>
+                  </div>
+                  <div class="field-error" id="confirmError"></div>
+                </div>
+
+                <div class="password-rules" aria-live="polite">
+                  <div class="rule" id="ruleLength">At least 8 characters</div>
+                  <div class="rule" id="ruleUpper">One uppercase letter</div>
+                  <div class="rule" id="ruleNumber">One number</div>
+                  <div class="rule" id="ruleSpecial">One special character</div>
+                </div>
+
+                <div class="form-actions">
+                  <button class="btn" type="button" id="discardPassword">Clear fields</button>
+                  <button class="btn btn-primary" type="submit">Validate demo passcode →</button>
+                </div>
+
+                <p class="demo-label">Demo behavior: this form validates your entries in the browser only. It does not change, save, or transmit a real password.</p>
+              </form>
+            </div>
+          </section>
+        </div>
+
+        <div class="column">
+          <!-- Sessions -->
+          <section class="card searchable" data-search="active session devices browser sign out revoke session management">
+            <div class="card-header">
+              <div class="card-heading">
+                <div class="card-icon">▣</div>
+                <div>
+                  <h2 class="card-title">Session Management</h2>
+                  <p class="card-description">Example browser sessions for this prototype.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="card-body">
+              <div class="session-item" id="currentSession">
+                <div class="session-top">
+                  <div class="session-device">
+                    <div class="device-icon">▣</div>
+                    <div>
+                      <div class="device-name">Current browser</div>
+                      <div class="device-meta" id="currentBrowser">This browser · Current session</div>
+                    </div>
+                  </div>
+                  <span class="session-status" id="currentStatus">CURRENT</span>
+                </div>
+                <div class="device-meta">This page is a local prototype and has no authenticated server session.</div>
+              </div>
+
+              <div class="session-item" id="secondarySession">
+                <div class="session-top">
+                  <div class="session-device">
+                    <div class="device-icon">▯</div>
+                    <div>
+                      <div class="device-name">Example mobile device</div>
+                      <div class="device-meta">Illustrative previous session · Not a real device record</div>
+                    </div>
+                  </div>
+                  <span class="session-status" id="secondaryStatus">DEMO</span>
+                </div>
+                <div class="session-action">
+                  <button class="btn btn-danger" type="button" id="revokeSession">Mark as revoked</button>
+                </div>
+              </div>
+
+              <p class="session-warning">
+                Sign out when using a shared computer. In a production application, session revocation must be enforced by the authentication server.
+              </p>
+
+              <button class="btn btn-danger" style="width:100%" type="button" id="openLogout">
+                ↗ Sign Out of PlaceTrack
+              </button>
+            </div>
+          </section>
+
+          <!-- Audit / system information -->
+          <section class="card searchable" data-search="audit ledger security policy hash system information">
+            <div class="card-header">
+              <div class="card-heading">
+                <div class="card-icon">⌘</div>
+                <div>
+                  <h2 class="card-title">System Information</h2>
+                  <p class="card-description">Prototype and browser storage status.</p>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <span class="field-label">Environment</span>
+              <div class="field-value">PlaceTrack Front-end Prototype</div>
+              <div class="field-sub">Student Placement Data Management System</div>
+
+              <div style="height:18px"></div>
+
+              <span class="field-label">Browser record identifier</span>
+              <div class="audit-hash" id="recordId">Generating local identifier…</div>
+
+              <div class="audit-meta">
+                <span>Version 2.4 · Demo</span>
+                <span id="storageStatus">Checking storage…</span>
+              </div>
+
+              <div class="info-note" style="margin-top:17px">
+                <span>ⓘ</span>
+                <div>Security certifications, encryption, LDAP synchronization, and server audit hashes are not verified or implemented by this standalone page.</div>
+              </div>
+            </div>
+          </section>
+
+          <section class="card searchable" data-search="profile edit contact skills projects documents">
+            <div class="card-header">
+              <div class="card-heading">
+                <div class="card-icon">↗</div>
+                <div>
+                  <h2 class="card-title">Quick Links</h2>
+                  <p class="card-description">Continue managing your placement records.</p>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <a class="btn" style="width:100%;justify-content:space-between;margin-bottom:9px" href="../Student Dashboard/code.html">Student Dashboard <span>→</span></a>
+              <a class="btn" style="width:100%;justify-content:space-between;margin-bottom:9px" href="../My Profile/code.html">Edit My Profile <span>→</span></a>
+              <a class="btn" style="width:100%;justify-content:space-between" href="../My Documents/code.html">Manage My Documents <span>→</span></a>
+              <a class="go-profile" href="../Login/code.html">Return to login page ↗</a>
+            </div>
+          </section>
+        </div>
+      </div>
+
+      <footer class="footer">
+        <div>PlaceTrack v2.4 · Student Placement Data Management System</div>
+        <div class="footer-links">
+          <a href="../Student Dashboard/code.html">Dashboard</a>
+          <a href="../My Profile/code.html">Profile</a>
+          <a href="../My Documents/code.html">Documents</a>
+          <a href="../Login/code.html">Login</a>
+        </div>
+      </footer>
+    </main>
+  </div>
+
+  <nav class="mobile-nav" aria-label="Mobile navigation">
+    <a href="../Student Dashboard/code.html"><span>▦</span>Dashboard</a>
+    <a href="../My Profile/code.html"><span>♙</span>Profile</a>
+    <a href="../My Documents/code.html"><span>▤</span>Documents</a>
+    <a class="active" href="../Settings/code.html"><span>⚙</span>Settings</a>
+  </nav>
+
+  <!-- Sign-out confirmation -->
+  <div class="modal-backdrop" id="logoutModal" role="dialog" aria-modal="true" aria-labelledby="logoutTitle">
+    <div class="modal">
+      <div class="modal-icon">↗</div>
+      <h2 id="logoutTitle">Confirm sign out</h2>
+      <p>Are you sure you want to leave PlaceTrack and return to the login page?</p>
+      <p>This demonstration does not have a server session to terminate. Your saved profile and document demo data will remain in browser storage.</p>
+      <div class="modal-actions">
+        <button class="btn" type="button" id="cancelLogout">Stay here</button>
+        <a class="btn btn-primary" href="../Login/code.html" id="confirmLogout">Confirm sign out →</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    const PROFILE_KEY = "placetrackMyProfile";
+    const SESSION_KEY = "placetrackDemoSecondarySessionRevoked";
+
+    function safeGet(key) {
+      try {
+        return localStorage.getItem(key);
+      } catch {
+        return null;
+      }
+    }
+
+    function readProfile() {
+      try {
+        return JSON.parse(safeGet(PROFILE_KEY) || "null") || {};
+      } catch {
+        return {};
+      }
+    }
+
+    function readSelectedStudent() {
+      try {
+        return JSON.parse(sessionStorage.getItem("placetrackSelectedStudent") || "null") || {};
+      } catch {
+        return {};
+      }
+    }
+
+    function setText(id, value) {
+      const element = document.getElementById(id);
+      if (element && value !== undefined && value !== null && String(value).trim()) {
+        element.textContent = value;
+      }
+    }
+
+    function loadAccount() {
+      const profile = readProfile();
+      const selected = readSelectedStudent();
+
+      const name = profile.name || selected.name || selected.studentName || "Aanya Sharma";
+      const roll = profile.roll || selected.roll || selected.rollNumber || "21CS014";
+      const department = profile.department || selected.department || "Computer Engineering";
+      const email = profile.email || "aanya.sharma@dept.edu";
+      const initials = name.split(/\s+/).filter(Boolean).slice(0, 2)
+        .map(part => part[0].toUpperCase()).join("") || "AS";
+
+      setText("sidebarName", name);
+      setText("topName", name);
+      setText("sidebarMeta", `${roll} · ${department}`);
+      setText("topId", `${roll} · Student`);
+      setText("identityName", name);
+      setText("identityRoll", roll);
+      setText("identityEmail", email);
+      setText("identityDepartment", department);
+      setText("sidebarAvatar", initials);
+      setText("topAvatar", initials);
+
+      document.title = `Settings | PlaceTrack`;
+      document.getElementById("confirmLogout").href = "../Login/code.html";
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById("toast");
+      toast.textContent = message;
+      toast.classList.add("show");
+      clearTimeout(showToast.timer);
+      showToast.timer = setTimeout(() => toast.classList.remove("show"), 3200);
+    }
+
+    function getPasswordChecks(password) {
+      return {
+        ruleLength: password.length >= 8,
+        ruleUpper: /[A-Z]/.test(password),
+        ruleNumber: /\d/.test(password),
+        ruleSpecial: /[^A-Za-z0-9]/.test(password)
+      };
+    }
+
+    function updatePasswordRules() {
+      const password = document.getElementById("newPassword").value;
+      const checks = getPasswordChecks(password);
+
+      Object.entries(checks).forEach(([id, valid]) => {
+        document.getElementById(id).classList.toggle("valid", valid);
+      });
+      return Object.values(checks).every(Boolean);
+    }
+
+    function setError(id, message) {
+      const inputMap = {
+        currentError: "currentPassword",
+        newError: "newPassword",
+        confirmError: "confirmPassword"
+      };
+      const error = document.getElementById(id);
+      const input = document.getElementById(inputMap[id]);
+      error.textContent = message;
+      error.classList.toggle("show", Boolean(message));
+      input.classList.toggle("invalid", Boolean(message));
+    }
+
+    function clearPasswordErrors() {
+      ["currentError", "newError", "confirmError"].forEach(id => setError(id, ""));
+    }
+
+    document.querySelectorAll("[data-toggle]").forEach(button => {
+      button.addEventListener("click", () => {
+        const input = document.getElementById(button.dataset.toggle);
+        const showing = input.type === "password";
+        input.type = showing ? "text" : "password";
+        button.textContent = showing ? "⊘" : "◉";
+        button.setAttribute("aria-label", showing ? "Hide passcode" : "Show passcode");
+      });
+    });
+
+    document.getElementById("newPassword").addEventListener("input", () => {
+      updatePasswordRules();
+      setError("newError", "");
+    });
+
+    document.getElementById("confirmPassword").addEventListener("input", () => {
+      setError("confirmError", "");
+    });
+
+    document.getElementById("currentPassword").addEventListener("input", () => {
+      setError("currentError", "");
+    });
+
+    document.getElementById("passwordForm").addEventListener("submit", event => {
+      event.preventDefault();
+      clearPasswordErrors();
+
+      const current = document.getElementById("currentPassword").value;
+      const next = document.getElementById("newPassword").value;
+      const confirm = document.getElementById("confirmPassword").value;
+      let valid = true;
+
+      if (!current) {
+        setError("currentError", "Enter a demo passcode to continue.");
+        valid = false;
+      }
+      if (!updatePasswordRules()) {
+        setError("newError", "Use 8+ characters, uppercase, a number, and a special character.");
+        valid = false;
+      }
+      if (next && next === current) {
+        setError("newError", "Choose a passcode different from the current demo entry.");
+        valid = false;
+      }
+      if (!confirm || confirm !== next) {
+        setError("confirmError", "The confirmation must match the new passcode.");
+        valid = false;
+      }
+
+      if (!valid) return;
+
+      // Deliberately do not save a password or imply that a real password changed.
+      document.getElementById("passwordForm").reset();
+      updatePasswordRules();
+      clearPasswordErrors();
+      showToast("Demo validation successful. No password was saved or changed.");
+    });
+
+    document.getElementById("discardPassword").addEventListener("click", () => {
+      document.getElementById("passwordForm").reset();
+      updatePasswordRules();
+      clearPasswordErrors();
+      showToast("Password fields cleared.");
+    });
+
+    function renderSessionState() {
+      const revoked = safeGet(SESSION_KEY) === "true";
+      const item = document.getElementById("secondarySession");
+      const status = document.getElementById("secondaryStatus");
+      const button = document.getElementById("revokeSession");
+
+      item.classList.toggle("revoked", revoked);
+      status.textContent = revoked ? "REVOKED (DEMO)" : "DEMO";
+      status.classList.toggle("ended", revoked);
+      button.disabled = revoked;
+      button.textContent = revoked ? "Marked as revoked" : "Mark as revoked";
+    }
+
+    document.getElementById("revokeSession").addEventListener("click", () => {
+      try {
+        localStorage.setItem(SESSION_KEY, "true");
+      } catch {
+        showToast("Browser storage is unavailable.");
+        return;
+      }
+      renderSessionState();
+      showToast("Example session marked as revoked in this browser only.");
+    });
+
+    const logoutModal = document.getElementById("logoutModal");
+
+    function openLogoutModal() {
+      logoutModal.classList.add("show");
+      document.getElementById("cancelLogout").focus();
+    }
+
+    function closeLogoutModal() {
+      logoutModal.classList.remove("show");
+    }
+
+    document.getElementById("openLogout").addEventListener("click", openLogoutModal);
+    document.getElementById("sidebarSignout").addEventListener("click", event => {
+      event.preventDefault();
+      openLogoutModal();
+    });
+    document.getElementById("cancelLogout").addEventListener("click", closeLogoutModal);
+
+    logoutModal.addEventListener("click", event => {
+      if (event.target === logoutModal) closeLogoutModal();
+    });
+
+    document.addEventListener("keydown", event => {
+      if (event.key === "Escape") closeLogoutModal();
+    });
+
+    // Lightweight client-side search for settings sections.
+    document.getElementById("settingsSearch").addEventListener("input", event => {
+      const query = event.target.value.trim().toLowerCase();
+      let matches = 0;
+
+      document.querySelectorAll(".searchable").forEach(section => {
+        const text = `${section.dataset.search || ""} ${section.innerText}`.toLowerCase();
+        const visible = !query || text.includes(query);
+        section.style.display = visible ? "" : "none";
+        if (visible) matches++;
+      });
+
+      if (query && matches === 0) {
+        showToast("No settings sections match your search.");
+      }
+    });
+
+    function initStorageStatus() {
+      const status = document.getElementById("storageStatus");
+      try {
+        const key = "placetrackSettingsStorageTest";
+        localStorage.setItem(key, "ok");
+        localStorage.removeItem(key);
+        status.textContent = "Browser storage available";
+      } catch {
+        status.textContent = "Storage unavailable";
+      }
+
+      let id = safeGet("placetrackDemoRecordId");
+      if (!id) {
+        id = "PT-DEMO-" + Math.random().toString(36).slice(2, 10).toUpperCase();
+        try {
+          localStorage.setItem("placetrackDemoRecordId", id);
+        } catch {
+          // Show a session-only identifier if storage is blocked.
+        }
+      }
+      setText("recordId", id || "PT-DEMO-SESSION");
+    }
+
+    loadAccount();
+    initStorageStatus();
+    renderSessionState();
+    updatePasswordRules();
+  </script>
+</body>
+</html>

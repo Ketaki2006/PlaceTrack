@@ -1,0 +1,2459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Detail | PlaceTrack</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+
+  <style>
+    :root {
+      --ivory: #f7f5ef;
+      --white: #ffffff;
+      --forest: #244a3b;
+      --forest-dark: #18382c;
+      --sage: #78927a;
+      --sage-light: #edf2ea;
+      --sage-border: #d7e3d4;
+      --terracotta: #d8b89a;
+      --terracotta-light: #f6eee5;
+      --text: #343832;
+      --muted: #777a73;
+      --border: #e6e2d9;
+      --danger: #a7463c;
+      --danger-light: #f9e9e6;
+      --shadow: 0 4px 16px rgba(36, 74, 59, 0.045);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--ivory);
+      color: var(--text);
+      font-family: "Inter", sans-serif;
+      font-size: 13px;
+    }
+
+    button, input, select {
+      font: inherit;
+    }
+
+    button, a {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .material-symbols-outlined {
+      font-size: 20px;
+      line-height: 1;
+      vertical-align: middle;
+    }
+
+    /* Sidebar */
+
+    .sidebar {
+      position: fixed;
+      inset: 0 auto 0 0;
+      width: 250px;
+      padding: 24px 16px 18px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background: #f1f2eb;
+      border-right: 1px solid var(--border);
+      z-index: 20;
+      overflow-y: auto;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      padding: 3px 8px 22px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .brand-mark {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      background: var(--forest);
+      color: white;
+      border-radius: 12px;
+      flex-shrink: 0;
+    }
+
+    .brand-mark .material-symbols-outlined {
+      font-size: 25px;
+    }
+
+    .brand-name {
+      color: var(--forest);
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.7px;
+    }
+
+    .brand-subtitle {
+      color: var(--muted);
+      margin-top: 4px;
+      font-size: 10px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .nav-label {
+      margin: 24px 10px 10px;
+      color: #92958d;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.3px;
+      text-transform: uppercase;
+    }
+
+    .nav-links {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 13px;
+      border-radius: 9px;
+      color: #62675f;
+      font-size: 12px;
+      font-weight: 500;
+      transition: 0.2s;
+    }
+
+    .nav-link:hover {
+      background: #e5e9e0;
+      color: var(--forest);
+    }
+
+    .nav-link.active {
+      background: var(--forest);
+      color: white;
+      font-weight: 600;
+    }
+
+    .nav-link .material-symbols-outlined {
+      font-size: 20px;
+    }
+
+    .sidebar-bottom {
+      margin-top: 25px;
+    }
+
+    .faculty-card {
+      padding: 13px;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      margin-bottom: 12px;
+    }
+
+    .faculty-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .faculty-avatar {
+      width: 37px;
+      height: 37px;
+      display: grid;
+      place-items: center;
+      background: var(--sage-light);
+      border: 1px solid var(--sage-border);
+      color: var(--forest);
+      border-radius: 50%;
+      font-size: 11px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .faculty-name {
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .faculty-role {
+      margin-top: 4px;
+      font-size: 10px;
+      color: var(--muted);
+    }
+
+    .faculty-dept {
+      margin-top: 12px;
+      padding: 7px 8px;
+      background: var(--sage-light);
+      color: var(--forest);
+      border-radius: 6px;
+      font-size: 10px;
+    }
+
+    .signout {
+      color: var(--danger);
+    }
+
+    .signout:hover {
+      color: var(--danger);
+      background: var(--danger-light);
+    }
+
+    /* Main shell */
+
+    .main {
+      margin-left: 250px;
+      min-height: 100vh;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      height: 66px;
+      z-index: 15;
+      padding: 0 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+      background: rgba(247, 245, 239, 0.94);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .topbar-left,
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+    }
+
+    .portal-badge {
+      padding: 7px 10px;
+      background: var(--sage-light);
+      border: 1px solid var(--sage-border);
+      color: var(--forest);
+      border-radius: 6px;
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      white-space: nowrap;
+    }
+
+    .topbar-divider {
+      width: 1px;
+      height: 22px;
+      background: var(--border);
+    }
+
+    .academic-year {
+      color: var(--muted);
+      font-size: 11px;
+      white-space: nowrap;
+    }
+
+    .top-search {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 11px;
+      width: 205px;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--muted);
+    }
+
+    .top-search input {
+      width: 100%;
+      min-width: 0;
+      border: 0;
+      outline: 0;
+      background: transparent;
+      font-size: 11px;
+    }
+
+    .icon-button {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      color: var(--muted);
+      background: transparent;
+      border: 1px solid transparent;
+      border-radius: 8px;
+    }
+
+    .icon-button:hover {
+      color: var(--forest);
+      background: var(--sage-light);
+    }
+
+    .top-avatar {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      background: var(--forest);
+      color: white;
+      border-radius: 50%;
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    .content {
+      max-width: 1550px;
+      margin: 0 auto;
+      padding: 24px 28px 40px;
+    }
+
+    .toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--forest);
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .back-link:hover {
+      text-decoration: underline;
+    }
+
+    .toolbar-actions {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .read-only-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 10px;
+      background: #f0f0e9;
+      color: var(--muted);
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      font-size: 10px;
+      white-space: nowrap;
+    }
+
+    .btn {
+      min-height: 36px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      background: white;
+      color: var(--text);
+      font-size: 11px;
+      font-weight: 600;
+      transition: 0.2s;
+    }
+
+    .btn:hover {
+      border-color: var(--sage);
+      background: var(--sage-light);
+    }
+
+    .btn-primary {
+      background: var(--forest);
+      color: white;
+      border-color: var(--forest);
+    }
+
+    .btn-primary:hover {
+      background: var(--forest-dark);
+      border-color: var(--forest-dark);
+      color: white;
+    }
+
+    .btn-warning {
+      background: var(--terracotta-light);
+      border-color: #ead8c7;
+      color: #8a6241;
+    }
+
+    .btn-warning:hover {
+      background: #f1e2d2;
+    }
+
+    .btn .material-symbols-outlined {
+      font-size: 17px;
+    }
+
+    /* Shared cards */
+
+    .panel {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+    }
+
+    .panel-pad {
+      padding: 20px;
+    }
+
+    .panel-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 17px;
+    }
+
+    .panel-title {
+      margin: 0;
+      color: var(--forest);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .panel-caption {
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 10px;
+      line-height: 1.6;
+    }
+
+    .eyebrow {
+      color: var(--muted);
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.9px;
+      text-transform: uppercase;
+    }
+
+    /* Hero dossier */
+
+    .hero {
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .hero-main {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .student-identity {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      min-width: 0;
+    }
+
+    .student-avatar {
+      width: 67px;
+      height: 67px;
+      flex-shrink: 0;
+      display: grid;
+      place-items: center;
+      background: var(--sage-light);
+      border: 1px solid var(--sage-border);
+      border-radius: 13px;
+      color: var(--forest);
+      font-size: 23px;
+      font-weight: 700;
+      letter-spacing: -0.8px;
+    }
+
+    .student-name-row {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    h1 {
+      margin: 0;
+      color: var(--text);
+      font-size: 25px;
+      line-height: 1.3;
+      letter-spacing: -0.8px;
+    }
+
+    .roll-badge {
+      padding: 5px 7px;
+      background: #f5f5ef;
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      font-family: monospace;
+      font-size: 10px;
+      font-weight: 600;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 5px 8px;
+      border-radius: 20px;
+      font-size: 9px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .pill-success {
+      background: var(--sage-light);
+      color: var(--forest);
+    }
+
+    .pill-pending {
+      background: var(--terracotta-light);
+      color: #8a6241;
+    }
+
+    .pill-danger {
+      background: var(--danger-light);
+      color: var(--danger);
+    }
+
+    .pill-neutral {
+      background: #f0f0e9;
+      color: var(--muted);
+    }
+
+    .student-meta {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-top: 9px;
+      color: var(--muted);
+      font-size: 10px;
+      line-height: 1.7;
+    }
+
+    .student-meta strong {
+      color: var(--forest);
+    }
+
+    .hero-status {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding: 14px 16px;
+      background: var(--sage-light);
+      border: 1px solid var(--sage-border);
+      border-radius: 10px;
+      flex-shrink: 0;
+    }
+
+    .hero-status .status-value {
+      margin-top: 6px;
+      color: var(--forest);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .hero-status-divider {
+      width: 1px;
+      height: 35px;
+      background: #cbd9c8;
+    }
+
+    .dossier-id {
+      margin-top: 6px;
+      color: var(--text);
+      font-family: monospace;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .completion-box {
+      padding: 12px 14px;
+      background: #f6f7f2;
+      border: 1px solid #ebeee6;
+      border-radius: 9px;
+    }
+
+    .completion-heading {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 9px;
+    }
+
+    .completion-heading span:first-child {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--forest);
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .completion-value {
+      color: var(--forest);
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 7px;
+      overflow: hidden;
+      background: #e1e6dc;
+      border-radius: 20px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: var(--sage);
+      border-radius: inherit;
+      transition: width 0.3s;
+    }
+
+    /* Main two-column grid */
+
+    .details-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.8fr) minmax(290px, 0.95fr);
+      align-items: start;
+      gap: 18px;
+      margin-top: 18px;
+    }
+
+    .left-column,
+    .right-column {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      min-width: 0;
+    }
+
+    .section-icon {
+      width: 33px;
+      height: 33px;
+      display: grid;
+      place-items: center;
+      background: var(--sage-light);
+      color: var(--forest);
+      border-radius: 9px;
+      flex-shrink: 0;
+    }
+
+    .section-heading-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .section-heading-left .panel-title {
+      line-height: 1.5;
+    }
+
+    .section-meta {
+      color: var(--muted);
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      text-align: right;
+    }
+
+    .field-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .data-field {
+      padding: 12px;
+      background: #f6f7f2;
+      border: 1px solid #eff0e9;
+      border-radius: 8px;
+      min-width: 0;
+    }
+
+    .data-label {
+      display: block;
+      color: var(--muted);
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+    }
+
+    .data-value {
+      display: block;
+      margin-top: 7px;
+      color: var(--text);
+      font-size: 11px;
+      font-weight: 600;
+      line-height: 1.6;
+      overflow-wrap: anywhere;
+    }
+
+    .data-value.email {
+      color: var(--forest);
+      font-weight: 500;
+    }
+
+    /* Academic metrics */
+
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 9px;
+    }
+
+    .metric-card {
+      padding: 12px 10px;
+      background: #f6f7f2;
+      border: 1px solid #eff0e9;
+      border-radius: 8px;
+      min-width: 0;
+    }
+
+    .metric-label {
+      color: var(--muted);
+      font-size: 9px;
+      line-height: 1.5;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .metric-number {
+      margin-top: 8px;
+      color: var(--forest);
+      font-size: 23px;
+      font-weight: 700;
+      letter-spacing: -0.8px;
+    }
+
+    .metric-foot {
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 9px;
+    }
+
+    .semester-section {
+      margin-top: 19px;
+    }
+
+    .semester-grid {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      gap: 6px;
+      margin-top: 10px;
+      padding: 10px;
+      background: #f6f7f2;
+      border-radius: 9px;
+    }
+
+    .semester-card {
+      padding: 10px 4px;
+      text-align: center;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 7px;
+    }
+
+    .semester-name {
+      color: var(--muted);
+      font-size: 9px;
+    }
+
+    .semester-score {
+      margin-top: 6px;
+      color: var(--forest);
+      font-family: monospace;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    /* Skills and projects */
+
+    .skill-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-top: 11px;
+    }
+
+    .skill-tag {
+      padding: 7px 9px;
+      background: var(--sage-light);
+      border: 1px solid #e1e9dd;
+      color: var(--forest);
+      border-radius: 6px;
+      font-size: 10px;
+      font-weight: 600;
+    }
+
+    .project-list {
+      display: flex;
+      flex-direction: column;
+      gap: 11px;
+      margin-top: 10px;
+    }
+
+    .project-card {
+      padding: 14px;
+      background: #f6f7f2;
+      border: 1px solid #ebeee6;
+      border-radius: 9px;
+    }
+
+    .project-heading {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .project-title {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      color: var(--forest);
+      font-size: 11px;
+      line-height: 1.6;
+      font-weight: 700;
+    }
+
+    .project-title .material-symbols-outlined {
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+
+    .project-tier {
+      flex-shrink: 0;
+      padding: 5px 7px;
+      border-radius: 5px;
+      background: #e1eadc;
+      color: var(--forest);
+      font-size: 9px;
+      font-weight: 600;
+    }
+
+    .project-description {
+      margin: 9px 0 0;
+      color: #656a62;
+      font-size: 10px;
+      line-height: 1.8;
+    }
+
+    .project-stack {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-top: 11px;
+    }
+
+    .stack-label {
+      color: var(--muted);
+      font-size: 9px;
+      font-weight: 600;
+      margin-right: 3px;
+    }
+
+    .stack-tag {
+      padding: 4px 6px;
+      background: white;
+      border: 1px solid var(--border);
+      color: var(--text);
+      border-radius: 5px;
+      font-size: 9px;
+    }
+
+    /* Audit criteria */
+
+    .audit-list {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    .audit-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 10px;
+      background: #f6f7f2;
+      border-radius: 7px;
+    }
+
+    .audit-name {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 10px;
+      line-height: 1.5;
+      font-weight: 500;
+    }
+
+    .audit-name .material-symbols-outlined {
+      font-size: 17px;
+      color: var(--forest);
+    }
+
+    .audit-result {
+      font-size: 9px;
+      font-weight: 700;
+      color: var(--forest);
+      white-space: nowrap;
+    }
+
+    .audit-row.pending .audit-name .material-symbols-outlined,
+    .audit-row.pending .audit-result {
+      color: #956b45;
+    }
+
+    .audit-row.review .audit-name .material-symbols-outlined,
+    .audit-row.review .audit-result {
+      color: var(--danger);
+    }
+
+    .audit-note {
+      display: flex;
+      align-items: flex-start;
+      gap: 9px;
+      margin-top: 13px;
+      padding: 12px;
+      background: var(--sage-light);
+      border: 1px solid var(--sage-border);
+      color: var(--forest);
+      border-radius: 8px;
+      font-size: 10px;
+      line-height: 1.7;
+    }
+
+    .audit-note .material-symbols-outlined {
+      flex-shrink: 0;
+      font-size: 18px;
+    }
+
+    /* Documents */
+
+    .storage-note {
+      display: flex;
+      align-items: flex-start;
+      gap: 7px;
+      padding: 10px;
+      background: #f6f7f2;
+      border-radius: 7px;
+      color: var(--muted);
+      font-size: 10px;
+      line-height: 1.6;
+      margin-bottom: 12px;
+    }
+
+    .storage-note .material-symbols-outlined {
+      color: var(--forest);
+      font-size: 17px;
+      flex-shrink: 0;
+    }
+
+    .document-list {
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+    }
+
+    .document-card {
+      padding: 12px;
+      background: #f6f7f2;
+      border: 1px solid #eff0e9;
+      border-radius: 8px;
+    }
+
+    .document-main {
+      display: flex;
+      align-items: flex-start;
+      gap: 9px;
+    }
+
+    .document-icon {
+      width: 32px;
+      height: 32px;
+      display: grid;
+      place-items: center;
+      background: white;
+      border: 1px solid var(--border);
+      color: var(--forest);
+      border-radius: 7px;
+      flex-shrink: 0;
+    }
+
+    .document-icon .material-symbols-outlined {
+      font-size: 18px;
+    }
+
+    .document-info {
+      min-width: 0;
+      flex: 1;
+    }
+
+    .document-title {
+      color: var(--text);
+      font-size: 10px;
+      font-weight: 600;
+      line-height: 1.6;
+      overflow-wrap: anywhere;
+    }
+
+    .document-meta {
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 9px;
+      line-height: 1.6;
+    }
+
+    .document-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 6px;
+      background: #e1eadc;
+      color: var(--forest);
+      border-radius: 5px;
+      font-size: 8px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .document-status .material-symbols-outlined {
+      font-size: 12px;
+    }
+
+    .document-actions {
+      display: flex;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 10px;
+    }
+
+    .mini-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 6px 8px;
+      background: white;
+      border: 1px solid var(--border);
+      color: var(--forest);
+      border-radius: 6px;
+      font-size: 9px;
+      font-weight: 600;
+    }
+
+    .mini-btn:hover {
+      background: var(--sage-light);
+      border-color: var(--sage-border);
+    }
+
+    .mini-btn .material-symbols-outlined {
+      font-size: 15px;
+    }
+
+    .repository-link {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-top: 13px;
+      padding: 12px;
+      background: var(--sage-light);
+      border: 1px solid var(--sage-border);
+      border-radius: 8px;
+      color: var(--forest);
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    .repository-link:hover {
+      background: #e1eadc;
+    }
+
+    .prototype-note {
+      margin-top: 18px;
+      padding: 13px 15px;
+      background: var(--sage-light);
+      border: 1px solid var(--sage-border);
+      color: var(--forest);
+      border-radius: 9px;
+      font-size: 10px;
+      line-height: 1.7;
+    }
+
+    /* Modal and toast */
+
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      background: rgba(25, 29, 23, 0.45);
+      backdrop-filter: blur(4px);
+    }
+
+    .modal-overlay.hidden {
+      display: none;
+    }
+
+    .modal {
+      width: 100%;
+      max-width: 480px;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 13px;
+      padding: 21px;
+      box-shadow: 0 20px 70px rgba(0, 0, 0, 0.18);
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding-bottom: 13px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .modal-title {
+      margin: 0;
+      color: var(--forest);
+      font-size: 15px;
+      font-weight: 700;
+      overflow-wrap: anywhere;
+    }
+
+    .modal-preview {
+      margin-top: 16px;
+      padding: 30px 18px;
+      background: #f6f7f2;
+      border: 1px dashed #d5dbd0;
+      border-radius: 10px;
+      text-align: center;
+    }
+
+    .modal-preview-icon {
+      width: 58px;
+      height: 58px;
+      display: grid;
+      place-items: center;
+      margin: 0 auto 13px;
+      background: var(--sage-light);
+      border-radius: 50%;
+      color: var(--forest);
+    }
+
+    .modal-preview-icon .material-symbols-outlined {
+      font-size: 29px;
+    }
+
+    .modal-preview h3 {
+      margin: 0 0 8px;
+      color: var(--forest);
+      font-size: 13px;
+    }
+
+    .modal-preview p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 10px;
+      line-height: 1.8;
+    }
+
+    .modal-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-top: 17px;
+    }
+
+    .toast {
+      position: fixed;
+      right: 22px;
+      bottom: 22px;
+      z-index: 120;
+      max-width: min(420px, calc(100vw - 30px));
+      display: flex;
+      align-items: flex-start;
+      gap: 9px;
+      padding: 13px 16px;
+      background: var(--forest-dark);
+      border: 1px solid #426552;
+      color: white;
+      border-radius: 9px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+      font-size: 11px;
+      line-height: 1.6;
+      opacity: 0;
+      transform: translateY(12px);
+      pointer-events: none;
+      transition: opacity 0.2s, transform 0.2s;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .toast .material-symbols-outlined {
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+
+    /* Quick navigation */
+
+    .quick-nav {
+      position: fixed;
+      bottom: 14px;
+      left: calc(250px + (100% - 250px) / 2);
+      transform: translateX(-50%);
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      max-width: calc(100vw - 280px);
+      overflow-x: auto;
+      padding: 7px;
+      background: rgba(255, 255, 255, 0.95);
+      border: 1px solid var(--border);
+      border-radius: 30px;
+      box-shadow: 0 5px 20px rgba(36, 74, 59, 0.12);
+      backdrop-filter: blur(10px);
+    }
+
+    .quick-nav a {
+      padding: 7px 10px;
+      border-radius: 20px;
+      color: var(--muted);
+      font-size: 9px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .quick-nav a:hover {
+      background: var(--sage-light);
+      color: var(--forest);
+    }
+
+    .quick-nav a.active {
+      background: var(--forest);
+      color: white;
+    }
+
+    /* Print */
+
+    @media print {
+      body {
+        background: white;
+        color: black;
+      }
+
+      .sidebar,
+      .topbar,
+      .toolbar,
+      .quick-nav,
+      .document-actions,
+      .repository-link,
+      .prototype-note,
+      .toast,
+      .modal-overlay,
+      .btn {
+        display: none !important;
+      }
+
+      .main {
+        margin: 0;
+      }
+
+      .content {
+        max-width: none;
+        padding: 0;
+      }
+
+      .panel {
+        box-shadow: none;
+        break-inside: avoid;
+        border-color: #ccc;
+      }
+
+      .hero,
+      .panel-pad {
+        padding: 12px;
+      }
+
+      .details-grid {
+        grid-template-columns: 1.5fr 1fr;
+        gap: 10px;
+      }
+
+      .left-column,
+      .right-column {
+        gap: 10px;
+      }
+
+      .panel,
+      .hero {
+        margin-bottom: 10px;
+      }
+
+      .quick-nav {
+        display: none !important;
+      }
+    }
+
+    /* Responsive */
+
+    @media (max-width: 1180px) {
+      .details-grid {
+        grid-template-columns: minmax(0, 1.4fr) minmax(270px, 1fr);
+      }
+
+      .hero-main {
+        flex-direction: column;
+      }
+
+      .hero-status {
+        width: 100%;
+      }
+
+      .metrics-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .semester-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 900px) {
+      .sidebar {
+        width: 70px;
+        padding: 18px 9px;
+        align-items: center;
+      }
+
+      .brand {
+        padding: 0 0 18px;
+        border: 0;
+      }
+
+      .brand-mark {
+        width: 43px;
+        height: 43px;
+      }
+
+      .brand-copy,
+      .nav-label,
+      .nav-link span:not(.material-symbols-outlined),
+      .faculty-card,
+      .signout span:not(.material-symbols-outlined) {
+        display: none;
+      }
+
+      .nav-links {
+        width: 100%;
+        margin-top: 20px;
+      }
+
+      .nav-link {
+        justify-content: center;
+        padding: 13px 0;
+      }
+
+      .sidebar-bottom {
+        width: 100%;
+      }
+
+      .signout {
+        justify-content: center;
+        padding: 13px 0;
+      }
+
+      .main {
+        margin-left: 70px;
+      }
+
+      .topbar {
+        padding: 0 16px;
+      }
+
+      .content {
+        padding: 20px 16px 35px;
+      }
+
+      .details-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .quick-nav {
+        left: calc(70px + (100% - 70px) / 2);
+        max-width: calc(100vw - 90px);
+      }
+
+      .top-search {
+        width: 160px;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .topbar {
+        height: 59px;
+      }
+
+      .academic-year,
+      .topbar-divider,
+      .top-search,
+      #help-button {
+        display: none;
+      }
+
+      .portal-badge {
+        font-size: 8px;
+        padding: 6px 7px;
+      }
+
+      .content {
+        padding: 16px 11px 30px;
+      }
+
+      .toolbar {
+        align-items: flex-start;
+      }
+
+      .toolbar-actions {
+        width: 100%;
+      }
+
+      .toolbar-actions .btn {
+        flex: 1;
+      }
+
+      .hero {
+        padding: 15px;
+      }
+
+      .student-identity {
+        align-items: flex-start;
+        gap: 12px;
+      }
+
+      .student-avatar {
+        width: 54px;
+        height: 54px;
+        font-size: 19px;
+      }
+
+      h1 {
+        font-size: 21px;
+      }
+
+      .hero-status {
+        gap: 12px;
+        padding: 12px;
+      }
+
+      .hero-status .status-value {
+        font-size: 10px;
+      }
+
+      .field-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .panel-pad {
+        padding: 15px;
+      }
+
+      .panel-heading {
+        align-items: flex-start;
+      }
+
+      .section-meta {
+        max-width: 95px;
+        line-height: 1.5;
+      }
+
+      .metrics-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .semester-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .project-heading {
+        flex-direction: column;
+      }
+
+      .quick-nav {
+        max-width: calc(100vw - 84px);
+        bottom: 9px;
+      }
+
+      .quick-nav a {
+        padding: 7px 9px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <aside class="sidebar">
+    <div>
+      <a class="brand" href="../Faculty Dashboard/code.html">
+        <div class="brand-mark">
+          <span class="material-symbols-outlined">school</span>
+        </div>
+        <div class="brand-copy">
+          <div class="brand-name">PlaceTrack</div>
+          <div class="brand-subtitle">Admin Workspace</div>
+        </div>
+      </a>
+
+      <div class="nav-label">Workspace</div>
+
+      <nav class="nav-links" aria-label="Faculty navigation">
+        <a class="nav-link" href="../Faculty Dashboard/code.html">
+          <span class="material-symbols-outlined">dashboard</span>
+          <span>Dashboard</span>
+        </a>
+
+        <a class="nav-link active" href="../Student Directory/code.html">
+          <span class="material-symbols-outlined">badge</span>
+          <span>Student Directory</span>
+        </a>
+
+        <a class="nav-link" href="../Eligibility Checker/code.html">
+          <span class="material-symbols-outlined">fact_check</span>
+          <span>Eligibility Checker</span>
+        </a>
+
+        <a class="nav-link" href="../Faculty Documents/code.html">
+          <span class="material-symbols-outlined">folder_shared</span>
+          <span>Documents</span>
+        </a>
+
+        <a class="nav-link" href="../Settings/code.html">
+          <span class="material-symbols-outlined">settings</span>
+          <span>Settings</span>
+        </a>
+      </nav>
+    </div>
+
+    <div class="sidebar-bottom">
+      <div class="faculty-card">
+        <div class="faculty-info">
+          <div class="faculty-avatar">SR</div>
+          <div>
+            <div class="faculty-name">Dr. S. K. Ramanathan</div>
+            <div class="faculty-role">Placement In-Charge</div>
+          </div>
+        </div>
+        <div class="faculty-dept">Dept. of Placement &amp; Training</div>
+      </div>
+
+      <a class="nav-link signout" href="../Login/code.html">
+        <span class="material-symbols-outlined">logout</span>
+        <span>Sign Out</span>
+      </a>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <div class="topbar-left">
+        <span class="portal-badge">Placement Faculty Portal</span>
+        <span class="topbar-divider"></span>
+        <span class="academic-year">Academic Year <strong>2024–25</strong></span>
+      </div>
+
+      <div class="topbar-right">
+        <label class="top-search">
+          <span class="material-symbols-outlined">search</span>
+          <input id="top-search-input" type="search" placeholder="Search student...">
+        </label>
+
+        <button class="icon-button" type="button" aria-label="Notifications"
+          onclick="showToast('You are all caught up with notifications.')">
+          <span class="material-symbols-outlined">notifications</span>
+        </button>
+
+        <button class="icon-button" id="help-button" type="button" aria-label="Help"
+          onclick="showToast('Use Student Directory to select another candidate.')">
+          <span class="material-symbols-outlined">help_outline</span>
+        </button>
+
+        <div class="top-avatar" title="Faculty profile">SR</div>
+      </div>
+    </header>
+
+    <main class="content">
+      <div class="toolbar">
+        <a class="back-link" href="../Student Directory/code.html">
+          <span class="material-symbols-outlined">arrow_back</span>
+          Back to Student Directory
+        </a>
+
+        <div class="toolbar-actions">
+          <span class="read-only-badge">
+            <span class="material-symbols-outlined" style="font-size:15px">lock</span>
+            Faculty Read-Only Audit
+          </span>
+
+          <button class="btn" id="print-button" type="button">
+            <span class="material-symbols-outlined">print</span>
+            Print Dossier
+          </button>
+
+          <button class="btn btn-primary" id="verify-button" type="button">
+            <span class="material-symbols-outlined">verified</span>
+            <span id="verify-button-text">Record Verified</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Student hero card -->
+      <section class="panel hero">
+        <div class="hero-main">
+          <div class="student-identity">
+            <div class="student-avatar" id="student-initials">AS</div>
+
+            <div style="min-width:0">
+              <div class="student-name-row">
+                <h1 id="student-name">Aanya Sharma</h1>
+                <span class="roll-badge" id="student-roll">21CS014</span>
+                <span class="pill pill-success" id="profile-status">Complete</span>
+                <span class="pill pill-success" id="candidate-status">
+                  <span class="material-symbols-outlined" style="font-size:13px">verified_user</span>
+                  Verified Candidate
+                </span>
+              </div>
+
+              <div class="student-meta">
+                <strong id="student-department">Computer Engineering</strong>
+                <span>•</span>
+                <span id="student-cohort">AY 2024–25 (Batch 2021–2025)</span>
+                <span>•</span>
+                <span id="student-semester">Semester VIII</span>
+                <span>•</span>
+                <strong id="student-cgpa-meta">CGPA: 8.70</strong>
+              </div>
+            </div>
+          </div>
+
+          <div class="hero-status">
+            <div>
+              <div class="eyebrow">Placement Status</div>
+              <div class="status-value" id="placement-status">Eligible &amp; Active</div>
+            </div>
+            <div class="hero-status-divider"></div>
+            <div>
+              <div class="eyebrow">Dossier ID</div>
+              <div class="dossier-id" id="dossier-id">REC-21CS014-V4</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="completion-box">
+          <div class="completion-heading">
+            <span>
+              <span class="material-symbols-outlined" style="font-size:17px">task_alt</span>
+              Institutional Verification Checklist
+            </span>
+            <span class="completion-value" id="checklist-summary">6 / 6 Criteria Verified (100%)</span>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill" id="completion-progress" style="width:100%"></div>
+          </div>
+        </div>
+      </section>
+
+      <div class="details-grid">
+        <!-- Left column -->
+        <div class="left-column">
+          <!-- Personal information -->
+          <section class="panel panel-pad">
+            <div class="panel-heading">
+              <div class="section-heading-left">
+                <div class="section-icon">
+                  <span class="material-symbols-outlined">person</span>
+                </div>
+                <div>
+                  <h2 class="panel-title">Personal Information</h2>
+                  <div class="panel-caption">Student identity and contact details</div>
+                </div>
+              </div>
+              <span class="section-meta">Identity &amp; Department</span>
+            </div>
+
+            <div class="field-grid">
+              <div class="data-field">
+                <span class="data-label">Full Legal Name</span>
+                <span class="data-value" id="personal-name">Aanya Sharma</span>
+              </div>
+
+              <div class="data-field">
+                <span class="data-label">Contact Number</span>
+                <span class="data-value" id="personal-phone">+91 98765 43210</span>
+              </div>
+
+              <div class="data-field">
+                <span class="data-label">Institutional Email</span>
+                <span class="data-value email" id="institutional-email">aanya.sharma@dept.edu</span>
+              </div>
+
+              <div class="data-field">
+                <span class="data-label">Personal Email</span>
+                <span class="data-value" id="personal-email">aanya.sharma.dev@gmail.com</span>
+              </div>
+
+              <div class="data-field">
+                <span class="data-label">Department</span>
+                <span class="data-value" id="personal-department">Computer Engineering (CoE)</span>
+              </div>
+
+              <div class="data-field">
+                <span class="data-label">Academic Term Cohort</span>
+                <span class="data-value" id="personal-cohort">AY 2024–25 (Graduating Class 2025)</span>
+              </div>
+            </div>
+          </section>
+
+          <!-- Academic history -->
+          <section class="panel panel-pad">
+            <div class="panel-heading">
+              <div class="section-heading-left">
+                <div class="section-icon">
+                  <span class="material-symbols-outlined">school</span>
+                </div>
+                <div>
+                  <h2 class="panel-title">Academic History &amp; Transcript Performance</h2>
+                  <div class="panel-caption">Academic summary and semester-wise results</div>
+                </div>
+              </div>
+              <span class="section-meta">Academic Record</span>
+            </div>
+
+            <div class="metrics-grid">
+              <div class="metric-card">
+                <div class="metric-label">Current CGPA</div>
+                <div class="metric-number" id="academic-cgpa">8.70</div>
+                <div class="metric-foot">Out of 10.0</div>
+              </div>
+
+              <div class="metric-card">
+                <div class="metric-label">Active Backlogs</div>
+                <div class="metric-number" id="academic-backlogs">0</div>
+                <div class="metric-foot" id="backlog-standing">Clear standing</div>
+              </div>
+
+              <div class="metric-card">
+                <div class="metric-label">History of Backlogs</div>
+                <div class="metric-number" id="history-backlogs">Nil</div>
+                <div class="metric-foot">Academic history</div>
+              </div>
+
+              <div class="metric-card">
+                <div class="metric-label">Current Standing</div>
+                <div class="metric-number" style="font-size:18px" id="academic-semester">Sem VIII</div>
+                <div class="metric-foot">Final year</div>
+              </div>
+            </div>
+
+            <div class="semester-section">
+              <div class="eyebrow">Semester-wise Grade Point Average (SGPA)</div>
+
+              <div class="semester-grid">
+                <div class="semester-card">
+                  <div class="semester-name">Sem I</div>
+                  <div class="semester-score">8.40</div>
+                </div>
+                <div class="semester-card">
+                  <div class="semester-name">Sem II</div>
+                  <div class="semester-score">8.60</div>
+                </div>
+                <div class="semester-card">
+                  <div class="semester-name">Sem III</div>
+                  <div class="semester-score">8.50</div>
+                </div>
+                <div class="semester-card">
+                  <div class="semester-name">Sem IV</div>
+                  <div class="semester-score">8.80</div>
+                </div>
+                <div class="semester-card">
+                  <div class="semester-name">Sem V</div>
+                  <div class="semester-score">8.90</div>
+                </div>
+                <div class="semester-card">
+                  <div class="semester-name">Sem VI</div>
+                  <div class="semester-score">8.70</div>
+                </div>
+                <div class="semester-card">
+                  <div class="semester-name">Sem VII</div>
+                  <div class="semester-score">8.70</div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Skills and projects -->
+          <section class="panel panel-pad">
+            <div class="panel-heading">
+              <div class="section-heading-left">
+                <div class="section-icon">
+                  <span class="material-symbols-outlined">terminal</span>
+                </div>
+                <div>
+                  <h2 class="panel-title">Technical Profile &amp; Project Portfolio</h2>
+                  <div class="panel-caption">Skills and selected engineering projects</div>
+                </div>
+              </div>
+              <span class="section-meta">Student Portfolio</span>
+            </div>
+
+            <div class="eyebrow">Technical Competencies</div>
+            <div class="skill-list">
+              <span class="skill-tag">Python</span>
+              <span class="skill-tag">React</span>
+              <span class="skill-tag">Flask</span>
+              <span class="skill-tag">MySQL</span>
+              <span class="skill-tag">AWS S3</span>
+              <span class="skill-tag">Docker</span>
+              <span class="skill-tag">Data Structures</span>
+              <span class="skill-tag">REST APIs</span>
+              <span class="skill-tag">Git</span>
+              <span class="skill-tag">Linux System Ops</span>
+            </div>
+
+            <div class="eyebrow" style="margin-top:22px">Capstone &amp; Engineering Projects</div>
+
+            <div class="project-list">
+              <article class="project-card">
+                <div class="project-heading">
+                  <div class="project-title">
+                    <span class="material-symbols-outlined">code</span>
+                    <span>PlaceTrack Decentralized Verification Ledger</span>
+                  </div>
+                  <span class="project-tier">Institutional Tier</span>
+                </div>
+
+                <p class="project-description">
+                  Student placement tracking workflow engine with role-based access control,
+                  verification hashes, and encrypted document storage workflows.
+                </p>
+
+                <div class="project-stack">
+                  <span class="stack-label">Stack:</span>
+                  <span class="stack-tag">React</span>
+                  <span class="stack-tag">Python Flask</span>
+                  <span class="stack-tag">Amazon RDS MySQL</span>
+                  <span class="stack-tag">AWS S3</span>
+                </div>
+              </article>
+
+              <article class="project-card">
+                <div class="project-heading">
+                  <div class="project-title">
+                    <span class="material-symbols-outlined">hub</span>
+                    <span>Autonomous Distributed File Sync</span>
+                  </div>
+                  <span class="project-tier">Systems Research</span>
+                </div>
+
+                <p class="project-description">
+                  Distributed file synchronization prototype exploring consensus-based
+                  state replication and fault tolerance across cloud cluster nodes.
+                </p>
+
+                <div class="project-stack">
+                  <span class="stack-label">Stack:</span>
+                  <span class="stack-tag">Go</span>
+                  <span class="stack-tag">gRPC</span>
+                  <span class="stack-tag">Docker</span>
+                  <span class="stack-tag">Linux</span>
+                </div>
+              </article>
+            </div>
+          </section>
+        </div>
+
+        <!-- Right column -->
+        <div class="right-column">
+          <!-- Audit criteria -->
+          <section class="panel panel-pad">
+            <div class="panel-heading">
+              <div>
+                <h2 class="panel-title">Audit Criteria</h2>
+                <div class="panel-caption">Institutional verification checklist</div>
+              </div>
+              <span class="pill pill-success" id="audit-readiness">100% Ready</span>
+            </div>
+
+            <div class="audit-list" id="audit-list">
+              <div class="audit-row">
+                <div class="audit-name">
+                  <span class="material-symbols-outlined">check_circle</span>
+                  Personal Information
+                </div>
+                <span class="audit-result">Verified</span>
+              </div>
+
+              <div class="audit-row">
+                <div class="audit-name">
+                  <span class="material-symbols-outlined">check_circle</span>
+                  Academic Records
+                </div>
+                <span class="audit-result" id="audit-cgpa">8.70 CGPA</span>
+              </div>
+
+              <div class="audit-row">
+                <div class="audit-name">
+                  <span class="material-symbols-outlined">check_circle</span>
+                  Skills &amp; Project Dossier
+                </div>
+                <span class="audit-result">Verified</span>
+              </div>
+
+              <div class="audit-row">
+                <div class="audit-name">
+                  <span class="material-symbols-outlined">check_circle</span>
+                  Placement Resume
+                </div>
+                <span class="audit-result">Authorized</span>
+              </div>
+
+              <div class="audit-row">
+                <div class="audit-name">
+                  <span class="material-symbols-outlined">check_circle</span>
+                  Identity Photograph
+                </div>
+                <span class="audit-result">Compliant</span>
+              </div>
+
+              <div class="audit-row">
+                <div class="audit-name">
+                  <span class="material-symbols-outlined">check_circle</span>
+                  Internship Credentials
+                </div>
+                <span class="audit-result">Verified</span>
+              </div>
+            </div>
+
+            <div class="audit-note">
+              <span class="material-symbols-outlined">verified</span>
+              <span id="audit-note-text">
+                Demonstration audit record for faculty review. Verify information against
+                institutional records before making placement decisions.
+              </span>
+            </div>
+          </section>
+
+          <!-- Authorized documents -->
+          <section class="panel panel-pad">
+            <div class="panel-heading">
+              <div class="section-heading-left">
+                <div class="section-icon">
+                  <span class="material-symbols-outlined">folder_open</span>
+                </div>
+                <div>
+                  <h2 class="panel-title">Authorized Documents</h2>
+                  <div class="panel-caption">Student placement document records</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="storage-note">
+              <span class="material-symbols-outlined">lock</span>
+              <span>Private storage concept · Role-authorized access. This prototype does not connect to a real storage service.</span>
+            </div>
+
+            <div class="document-list">
+              <article class="document-card">
+                <div class="document-main">
+                  <div class="document-icon">
+                    <span class="material-symbols-outlined">picture_as_pdf</span>
+                  </div>
+                  <div class="document-info">
+                    <div class="document-title" data-doc-title>Aanya_Sharma_Resume_2024.pdf</div>
+                    <div class="document-meta">PDF · 240 KB · Placement resume</div>
+                  </div>
+                  <span class="document-status">
+                    <span class="material-symbols-outlined">check_circle</span>
+                    Verified
+                  </span>
+                </div>
+                <div class="document-actions">
+                  <button class="mini-btn" type="button" data-view-doc>
+                    <span class="material-symbols-outlined">visibility</span>View
+                  </button>
+                  <button class="mini-btn" type="button" data-download-doc>
+                    <span class="material-symbols-outlined">download</span>Download
+                  </button>
+                </div>
+              </article>
+
+              <article class="document-card">
+                <div class="document-main">
+                  <div class="document-icon">
+                    <span class="material-symbols-outlined">image</span>
+                  </div>
+                  <div class="document-info">
+                    <div class="document-title" data-doc-title>Aanya_21CS014_Photo.jpg</div>
+                    <div class="document-meta">JPEG · 180 KB · Identity photograph</div>
+                  </div>
+                  <span class="document-status">
+                    <span class="material-symbols-outlined">check_circle</span>
+                    Verified
+                  </span>
+                </div>
+                <div class="document-actions">
+                  <button class="mini-btn" type="button" data-view-doc>
+                    <span class="material-symbols-outlined">visibility</span>View
+                  </button>
+                  <button class="mini-btn" type="button" data-download-doc>
+                    <span class="material-symbols-outlined">download</span>Download
+                  </button>
+                </div>
+              </article>
+
+              <article class="document-card">
+                <div class="document-main">
+                  <div class="document-icon">
+                    <span class="material-symbols-outlined">workspace_premium</span>
+                  </div>
+                  <div class="document-info">
+                    <div class="document-title" data-doc-title>Google_SWE_Internship_Certificate.pdf</div>
+                    <div class="document-meta">PDF · 410 KB · Internship certificate</div>
+                  </div>
+                  <span class="document-status">
+                    <span class="material-symbols-outlined">check_circle</span>
+                    Verified
+                  </span>
+                </div>
+                <div class="document-actions">
+                  <button class="mini-btn" type="button" data-view-doc>
+                    <span class="material-symbols-outlined">visibility</span>View
+                  </button>
+                  <button class="mini-btn" type="button" data-download-doc>
+                    <span class="material-symbols-outlined">download</span>Download
+                  </button>
+                </div>
+              </article>
+
+              <article class="document-card">
+                <div class="document-main">
+                  <div class="document-icon">
+                    <span class="material-symbols-outlined">history_edu</span>
+                  </div>
+                  <div class="document-info">
+                    <div class="document-title" data-doc-title>Research_Fellowship_IISc.pdf</div>
+                    <div class="document-meta">PDF · 325 KB · Research credential</div>
+                  </div>
+                  <span class="document-status">
+                    <span class="material-symbols-outlined">check_circle</span>
+                    Verified
+                  </span>
+                </div>
+                <div class="document-actions">
+                  <button class="mini-btn" type="button" data-view-doc>
+                    <span class="material-symbols-outlined">visibility</span>View
+                  </button>
+                  <button class="mini-btn" type="button" data-download-doc>
+                    <span class="material-symbols-outlined">download</span>Download
+                  </button>
+                </div>
+              </article>
+            </div>
+
+            <a class="repository-link" href="../Faculty Documents/code.html">
+              <span>View All Documents in Repository</span>
+              <span class="material-symbols-outlined">arrow_forward</span>
+            </a>
+          </section>
+
+          <!-- Quick actions -->
+          <section class="panel panel-pad">
+            <div class="panel-heading">
+              <div>
+                <h2 class="panel-title">Faculty Quick Actions</h2>
+                <div class="panel-caption">Continue reviewing this student record</div>
+              </div>
+            </div>
+
+            <div style="display:flex;flex-direction:column;gap:9px">
+              <a class="btn" href="../Eligibility Checker/code.html" style="justify-content:flex-start">
+                <span class="material-symbols-outlined">fact_check</span>
+                Check Placement Eligibility
+              </a>
+
+              <a class="btn" href="../Student Directory/code.html" style="justify-content:flex-start">
+                <span class="material-symbols-outlined">groups</span>
+                Return to Student Directory
+              </a>
+
+              <a class="btn" href="../Faculty Dashboard/code.html" style="justify-content:flex-start">
+                <span class="material-symbols-outlined">dashboard</span>
+                Return to Faculty Dashboard
+              </a>
+            </div>
+          </section>
+        </div>
+      </div>
+
+      <div class="prototype-note">
+        <strong>Prototype notice:</strong> This page uses demonstration data. Verification changes,
+        document previews, and download notifications are front-end interactions only. No real
+        document is retrieved, and no verification decision is stored on a server.
+      </div>
+    </main>
+  </div>
+
+  <!-- Floating page navigation -->
+  <nav class="quick-nav" aria-label="Prototype quick navigation">
+    <a href="../Faculty Dashboard/code.html">1. Dashboard</a>
+    <a href="../Student Directory/code.html">2. Directory</a>
+    <a class="active" href="../Student Detail/code.html">3. Candidate</a>
+    <a href="../Faculty Documents/code.html">4. Docs</a>
+    <a href="../Eligibility Checker/code.html">5. Eligibility</a>
+    <a href="../Login/code.html">6. Login</a>
+  </nav>
+
+  <!-- Document preview modal -->
+  <div class="modal-overlay hidden" id="document-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 class="modal-title" id="modal-title">Document Preview</h2>
+        <button class="icon-button" type="button" id="close-modal" aria-label="Close preview">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+
+      <div class="modal-preview">
+        <div class="modal-preview-icon">
+          <span class="material-symbols-outlined" id="modal-icon">verified</span>
+        </div>
+        <h3 id="modal-headline">Verified Document Record</h3>
+        <p id="modal-description">
+          This is a demonstration preview. The original file is not available in this prototype.
+        </p>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn" type="button" id="cancel-modal">Close</button>
+        <button class="btn btn-primary" type="button" id="modal-download">
+          <span class="material-symbols-outlined">download</span>
+          Simulate Download
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast notification -->
+  <div class="toast" id="toast" role="status" aria-live="polite">
+    <span class="material-symbols-outlined" id="toast-icon">check_circle</span>
+    <span id="toast-message">Action completed.</span>
+  </div>
+
+  <script>
+    const $ = (selector) => document.querySelector(selector);
+
+    let toastTimer = null;
+    let currentDocument = "";
+    let isVerified = true;
+
+    function showToast(message, icon = "check_circle") {
+      const toast = $("#toast");
+      $("#toast-message").textContent = message;
+      $("#toast-icon").textContent = icon;
+
+      toast.classList.add("show");
+      clearTimeout(toastTimer);
+
+      toastTimer = setTimeout(() => {
+        toast.classList.remove("show");
+      }, 3200);
+    }
+
+    function readSelectedStudent() {
+      const possibleKeys = [
+        "placetrackSelectedStudent",
+        "selectedStudent"
+      ];
+
+      for (const key of possibleKeys) {
+        try {
+          const raw = sessionStorage.getItem(key);
+          if (!raw) continue;
+
+          const student = JSON.parse(raw);
+          if (student && (student.name || student.roll)) {
+            return student;
+          }
+        } catch (error) {
+          console.warn("Unable to read selected student:", error);
+        }
+      }
+
+      // Support the simpler storage keys used by the directory prototype.
+      try {
+        const name = sessionStorage.getItem("selectedStudentName");
+        const roll = sessionStorage.getItem("selectedStudentRoll");
+
+        if (name || roll) {
+          return { name, roll };
+        }
+      } catch (error) {
+        console.warn("Unable to read student selection:", error);
+      }
+
+      return null;
+    }
+
+    function getInitials(name) {
+      return String(name || "Aanya Sharma")
+        .trim()
+        .split(/\s+/)
+        .slice(0, 2)
+        .map(part => part.charAt(0).toUpperCase())
+        .join("");
+    }
+
+    function setText(id, value) {
+      const element = document.getElementById(id);
+      if (element && value !== undefined && value !== null && value !== "") {
+        element.textContent = value;
+      }
+    }
+
+    function populateStudent(student) {
+      if (!student) return;
+
+      const name = student.name || "Aanya Sharma";
+      const roll = student.roll || "21CS014";
+      const department = student.department || "Computer Engineering";
+      const cgpa = Number(student.cgpa ?? 8.7);
+      const backlogs = Number(student.backlogs ?? 0);
+      const completion = Math.max(
+        0,
+        Math.min(100, Number(student.completion ?? 100))
+      );
+
+      const isComplete = completion >= 100;
+      const isClear = backlogs === 0;
+
+      setText("student-name", name);
+      setText("student-roll", roll);
+      setText("student-initials", getInitials(name));
+      setText("student-department", department);
+      setText("personal-name", name);
+      setText("personal-department", department);
+      setText("personal-cohort", "AY 2024–25 (Graduating Class 2025)");
+      setText("student-cohort", "AY 2024–25 (Batch 2021–2025)");
+      setText("student-semester", "Semester VIII");
+      setText("student-cgpa-meta", "CGPA: " + cgpa.toFixed(2));
+      setText("academic-cgpa", cgpa.toFixed(2));
+      setText("academic-backlogs", String(backlogs));
+      setText("history-backlogs", backlogs === 0 ? "Nil" : "Recorded");
+      setText("academic-semester", "Sem VIII");
+      setText("audit-cgpa", cgpa.toFixed(2) + " CGPA");
+      setText("dossier-id", "REC-" + roll + "-V4");
+
+      const institutionalEmail =
+        student.email || name.toLowerCase().trim().replace(/\s+/g, ".") + "@dept.edu";
+
+      setText("institutional-email", institutionalEmail);
+
+      const profileStatus = $("#profile-status");
+      profileStatus.textContent = isComplete ? "Complete" : "In Progress";
+      profileStatus.className = "pill " + (isComplete ? "pill-success" : "pill-pending");
+
+      const candidateStatus = $("#candidate-status");
+      candidateStatus.innerHTML = isComplete && isClear
+        ? '<span class="material-symbols-outlined" style="font-size:13px">verified_user</span> Verified Candidate'
+        : '<span class="material-symbols-outlined" style="font-size:13px">pending</span> Review Required';
+      candidateStatus.className = "pill " + (isComplete && isClear ? "pill-success" : "pill-pending");
+
+      setText(
+        "placement-status",
+        isComplete && isClear ? "Eligible & Active" : "Requires Review"
+      );
+
+      setText(
+        "backlog-standing",
+        isClear ? "Clear standing" : "Active backlog(s)"
+      );
+
+      setText(
+        "checklist-summary",
+        isComplete ? "6 / 6 Criteria Verified (100%)" : "Profile completion: " + completion + "%"
+      );
+
+      $("#completion-progress").style.width = completion + "%";
+
+      const readiness = $("#audit-readiness");
+      readiness.textContent = completion + "% Ready";
+      readiness.className = "pill " + (completion >= 80 ? "pill-success" : "pill-pending");
+
+      setText(
+        "audit-note-text",
+        isComplete && isClear
+          ? "Demonstration audit record for faculty review. Verify information against institutional records before making placement decisions."
+          : "This sample record has incomplete profile information or active backlogs. Review the relevant requirements before making placement decisions."
+      );
+
+      // Update document labels to match the selected sample student.
+      document.querySelectorAll("[data-doc-title]").forEach((element, index) => {
+        const files = [
+          roll.replace(/[^a-zA-Z0-9]/g, "_") + "_Resume.pdf",
+          roll.replace(/[^a-zA-Z0-9]/g, "_") + "_Photo.jpg",
+          "Internship_Certificate_" + roll + ".pdf",
+          "Research_Credential_" + roll + ".pdf"
+        ];
+        element.textContent = files[index] || files[0];
+      });
+
+      document.title = name + " | PlaceTrack Student Detail";
+    }
+
+    function openDocumentModal(title, icon = "description") {
+      currentDocument = title;
+      setText("modal-title", title);
+      setText("modal-headline", "Document Preview");
+      setText(
+        "modal-description",
+        "This is a demonstration document record. The real file is not connected to this page, so its contents cannot be displayed."
+      );
+      setText("modal-icon", icon);
+      $("#document-modal").classList.remove("hidden");
+      $("#close-modal").focus();
+    }
+
+    function closeDocumentModal() {
+      $("#document-modal").classList.add("hidden");
+    }
+
+    document.querySelectorAll("[data-view-doc]").forEach((button) => {
+      button.addEventListener("click", () => {
+        const card = button.closest(".document-card");
+        const title = card.querySelector("[data-doc-title]").textContent.trim();
+        const icon = card.querySelector(".document-icon .material-symbols-outlined").textContent.trim();
+        openDocumentModal(title, icon);
+      });
+    });
+
+    document.querySelectorAll("[data-download-doc]").forEach((button) => {
+      button.addEventListener("click", () => {
+        const card = button.closest(".document-card");
+        const title = card.querySelector("[data-doc-title]").textContent.trim();
+        showToast(
+          "Demo only: no real file is connected for " + title,
+          "info"
+        );
+      });
+    });
+
+    $("#close-modal").addEventListener("click", closeDocumentModal);
+    $("#cancel-modal").addEventListener("click", closeDocumentModal);
+
+    $("#document-modal").addEventListener("click", (event) => {
+      if (event.target === $("#document-modal")) {
+        closeDocumentModal();
+      }
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") closeDocumentModal();
+    });
+
+    $("#modal-download").addEventListener("click", () => {
+      showToast(
+        "Demo only: no real document download is available for " + currentDocument,
+        "info"
+      );
+      closeDocumentModal();
+    });
+
+    $("#verify-button").addEventListener("click", () => {
+      isVerified = !isVerified;
+
+      const button = $("#verify-button");
+      const text = $("#verify-button-text");
+
+      if (isVerified) {
+        text.textContent = "Record Verified";
+        button.className = "btn btn-primary";
+        button.querySelector(".material-symbols-outlined").textContent = "verified";
+        showToast("Demo record marked as verified in this page.", "verified");
+      } else {
+        text.textContent = "Verification Pending";
+        button.className = "btn btn-warning";
+        button.querySelector(".material-symbols-outlined").textContent = "pending";
+        showToast("Demo record marked as pending review in this page.", "pending");
+      }
+    });
+
+    $("#print-button").addEventListener("click", () => {
+      showToast("Opening the browser print dialog.", "print");
+      setTimeout(() => window.print(), 250);
+    });
+
+    $("#top-search-input").addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        const query = event.currentTarget.value.trim();
+        if (query) {
+          window.location.href =
+            "../Student Directory/code.html?search=" + encodeURIComponent(query);
+        }
+      }
+    });
+
+    // Load the student selected from Student Directory.
+    populateStudent(readSelectedStudent());
+  </script>
+</body>
+</html>

@@ -1,0 +1,1567 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#F7F5EF">
+  <title>My Profile | PlaceTrack</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+
+  <style>
+    :root {
+      --ivory: #F7F5EF;
+      --white: #FFFFFF;
+      --forest: #244A3B;
+      --forest-dark: #19372B;
+      --sage: #78927A;
+      --sage-pale: #EDF2EA;
+      --terracotta: #D8B89A;
+      --text: #343832;
+      --muted: #777A73;
+      --border: #E6E2D9;
+      --danger: #A4473F;
+      --danger-pale: #F8EAE7;
+      --shadow: 0 2px 10px rgba(52,56,50,.045);
+      --radius: 14px;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--ivory);
+      color: var(--text);
+      font: 14px/1.55 Inter, sans-serif;
+    }
+    button, input, textarea, select { font: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    a { color: inherit; text-decoration: none; }
+    button { cursor: pointer; }
+    .icon {
+      font-family: "Material Symbols Outlined";
+      font-weight: normal;
+      font-style: normal;
+      font-size: 21px;
+      line-height: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      white-space: nowrap;
+      -webkit-font-feature-settings: "liga";
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .sidebar {
+      position: fixed;
+      inset: 0 auto 0 0;
+      width: 250px;
+      z-index: 30;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 24px 16px 18px;
+      background: var(--white);
+      border-right: 1px solid var(--border);
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      padding: 0 10px;
+      margin-bottom: 36px;
+    }
+    .brand-mark {
+      width: 40px;
+      height: 40px;
+      display: grid;
+      place-items: center;
+      border-radius: 12px;
+      background: var(--forest);
+      color: white;
+    }
+    .brand-name { font-size: 19px; font-weight: 700; letter-spacing: -.7px; }
+    .brand-caption {
+      display: block;
+      color: var(--muted);
+      font-size: 10px;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+    }
+    .nav-label {
+      margin: 0 12px 10px;
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+    .nav-list { display: grid; gap: 5px; }
+    .nav-link {
+      min-height: 44px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 13px;
+      border-radius: 9px;
+      color: #62675F;
+      font-weight: 500;
+      transition: background .18s, color .18s;
+    }
+    .nav-link:hover { background: var(--sage-pale); color: var(--forest); }
+    .nav-link.active { background: var(--forest); color: white; }
+    .nav-link .icon { font-size: 20px; }
+
+    .sidebar-bottom {
+      padding: 13px;
+      background: var(--ivory);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+    }
+    .mini-profile { display: flex; gap: 10px; align-items: center; min-width: 0; }
+    .avatar {
+      width: 39px;
+      height: 39px;
+      flex-shrink: 0;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: var(--forest);
+      color: white;
+      font-weight: 700;
+    }
+    .mini-profile strong { display: block; font-size: 12px; }
+    .mini-profile small { color: var(--muted); font-size: 10px; }
+    .signout {
+      width: 100%;
+      margin-top: 13px;
+      padding: 9px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 7px;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--muted);
+    }
+    .signout:hover { color: var(--danger); border-color: #D9B2AD; }
+
+    .main-shell { min-height: 100vh; margin-left: 250px; }
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      min-height: 66px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+      padding: 12px 30px;
+      background: rgba(255,255,255,.94);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(12px);
+    }
+    .topbar-left, .topbar-right { display: flex; align-items: center; gap: 10px; }
+    .topbar-right { gap: 12px; }
+    .top-chip {
+      display: inline-flex;
+      align-items: center;
+      padding: 5px 9px;
+      border-radius: 7px;
+      background: var(--sage-pale);
+      color: var(--forest);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .5px;
+      text-transform: uppercase;
+    }
+    .year-chip { background: #F0EFE9; color: var(--muted); }
+    .icon-btn {
+      width: 37px;
+      height: 37px;
+      display: grid;
+      place-items: center;
+      position: relative;
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      background: white;
+      color: var(--muted);
+    }
+    .icon-btn:hover { background: var(--sage-pale); color: var(--forest); }
+    .top-user { display: flex; align-items: center; gap: 9px; font-size: 12px; font-weight: 600; }
+    .top-user .avatar { width: 32px; height: 32px; font-size: 11px; }
+    .mobile-menu { display: none; }
+
+    main { max-width: 1550px; margin: 0 auto; padding: 25px 30px 45px; }
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      margin-bottom: 18px;
+      color: var(--muted);
+      font-size: 11px;
+    }
+    .breadcrumb a:hover { color: var(--forest); text-decoration: underline; }
+    .breadcrumb .icon { font-size: 15px; }
+    .save-banner {
+      display: none;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 18px;
+      padding: 13px 15px;
+      border: 1px solid #DDE8D9;
+      border-left: 4px solid var(--forest);
+      border-radius: 9px;
+      background: var(--sage-pale);
+    }
+    .save-banner.show { display: flex; }
+    .banner-content { display: flex; align-items: flex-start; gap: 10px; }
+    .banner-content .icon { color: var(--forest); }
+    .banner-content strong { display: block; font-size: 12px; color: var(--forest); }
+    .banner-content p { margin: 2px 0 0; color: var(--muted); font-size: 11px; }
+    .banner-close { border: 0; background: transparent; color: var(--muted); }
+
+    .page-header {
+      padding: 23px;
+      margin-bottom: 20px;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+    .page-header-main { display: flex; align-items: center; justify-content: space-between; gap: 25px; }
+    .identity { display: flex; align-items: center; gap: 17px; min-width: 0; }
+    .profile-avatar {
+      width: 78px;
+      height: 78px;
+      flex-shrink: 0;
+      position: relative;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      border: 3px solid #E8EEE4;
+      border-radius: 50%;
+      background: #DCE8D8;
+      color: var(--forest);
+      font-size: 24px;
+      font-weight: 700;
+    }
+    .profile-avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .identity-copy { min-width: 0; }
+    .identity-title { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 { margin-bottom: 4px; color: var(--forest); font-size: 25px; letter-spacing: -.8px; line-height: 1.3; }
+    h2 { margin-bottom: 4px; font-size: 16px; letter-spacing: -.3px; }
+    h3 { margin-bottom: 4px; font-size: 13px; }
+    .subtext { margin: 0; color: var(--muted); font-size: 12px; }
+    .eyebrow {
+      margin-bottom: 7px;
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.3px;
+      text-transform: uppercase;
+    }
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 8px;
+      border-radius: 5px;
+      background: var(--sage-pale);
+      color: var(--forest);
+      font-size: 10px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .tag.neutral { background: #F0EFE9; color: #66695F; }
+    .tag.warning { background: #F5E9D9; color: #815D35; }
+    .tag.danger { background: var(--danger-pale); color: var(--danger); }
+    .strength {
+      width: 235px;
+      flex-shrink: 0;
+      padding: 15px;
+      border-radius: 10px;
+      background: #F7F8F3;
+    }
+    .strength-top { display: flex; justify-content: space-between; gap: 10px; font-size: 10px; }
+    .strength-top strong { color: var(--forest); font-size: 12px; }
+    .progress-track { height: 7px; margin: 11px 0 8px; overflow: hidden; border-radius: 20px; background: #E5E6DD; }
+    .progress-fill { height: 100%; border-radius: 20px; background: var(--forest); transition: width .25s; }
+    .strength small { display: block; color: var(--muted); font-size: 10px; }
+
+    .workspace {
+      display: grid;
+      grid-template-columns: minmax(0, 1.3fr) minmax(300px, .85fr);
+      gap: 20px;
+      align-items: start;
+    }
+    .column { display: grid; gap: 20px; min-width: 0; }
+    .card {
+      min-width: 0;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: white;
+      box-shadow: var(--shadow);
+    }
+    .card-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 17px 20px;
+      background: #FAFAF7;
+      border-bottom: 1px solid #F0EEE7;
+    }
+    .card-title { display: flex; align-items: center; gap: 9px; }
+    .card-title > .icon { color: var(--forest); font-size: 21px; }
+    .card-head .subtext { margin-top: 3px; font-size: 11px; }
+    .card-body { padding: 20px; }
+    .section-badge {
+      flex-shrink: 0;
+      padding: 4px 7px;
+      border-radius: 5px;
+      background: #F0EFE9;
+      color: var(--muted);
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: .4px;
+      text-transform: uppercase;
+    }
+    .form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+    .field { min-width: 0; display: flex; flex-direction: column; gap: 6px; }
+    .field.full { grid-column: 1 / -1; }
+    .field label { color: var(--text); font-size: 11px; font-weight: 600; }
+    .field label .required { color: var(--danger); }
+    .field input, .field textarea, .field select {
+      width: 100%;
+      min-width: 0;
+      padding: 10px 11px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      outline: none;
+      background: white;
+      color: var(--text);
+      font-size: 12px;
+      transition: border .15s, box-shadow .15s;
+    }
+    .field input { min-height: 40px; }
+    .field textarea { min-height: 80px; resize: vertical; }
+    .field input:focus, .field textarea:focus, .field select:focus {
+      border-color: var(--sage);
+      box-shadow: 0 0 0 3px rgba(120,146,122,.12);
+    }
+    .field input:disabled, .field input[readonly] {
+      background: #F1F1EB;
+      color: var(--muted);
+      cursor: not-allowed;
+    }
+    .field small { color: var(--muted); font-size: 10px; }
+    .field .locked-label { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+    .locked-label .icon { font-size: 13px; color: var(--muted); }
+    .inline-verified { display: inline-flex; align-items: center; gap: 4px; color: var(--sage); font-size: 10px; }
+
+    .readonly-panel {
+      padding: 16px;
+      border: 1px solid #EAEAE2;
+      border-radius: 10px;
+      background: #F8F8F4;
+    }
+    .readonly-title { display: flex; align-items: center; gap: 7px; margin-bottom: 13px; }
+    .readonly-title .icon { color: var(--muted); font-size: 17px; }
+    .readonly-title strong { font-size: 11px; }
+    .readonly-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+    .readonly-item small { display: block; color: var(--muted); font-size: 10px; }
+    .readonly-item strong { display: block; margin-top: 4px; font-size: 13px; overflow-wrap: anywhere; }
+    .readonly-item .large-value { color: var(--forest); font-size: 23px; letter-spacing: -.5px; }
+    .readonly-footer { display: flex; justify-content: space-between; gap: 10px; margin-top: 15px; padding-top: 12px; border-top: 1px solid var(--border); }
+    .readonly-footer span { color: var(--muted); font-size: 10px; }
+    .readonly-footer strong { font-size: 11px; }
+
+    .skill-wrap { display: flex; flex-wrap: wrap; gap: 8px; }
+    .skill-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 6px 9px;
+      border: 1px solid #E6E8DF;
+      border-radius: 7px;
+      background: #F3F5EF;
+      color: var(--forest);
+      font-size: 11px;
+      font-weight: 500;
+    }
+    .skill-pill button {
+      display: grid;
+      place-items: center;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      color: #81877C;
+    }
+    .skill-pill button:hover { color: var(--danger); }
+    .skill-pill button .icon { font-size: 15px; }
+    .add-row { display: flex; gap: 8px; margin-top: 15px; }
+    .add-row input {
+      min-width: 0;
+      flex: 1;
+      padding: 9px 11px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      outline: none;
+      font-size: 12px;
+    }
+    .add-row input:focus { border-color: var(--sage); }
+    .hint {
+      display: flex;
+      align-items: flex-start;
+      gap: 7px;
+      margin: 13px 0 0;
+      color: var(--muted);
+      font-size: 10px;
+    }
+    .hint .icon { font-size: 15px; color: var(--sage); }
+
+    .project-list { display: grid; gap: 15px; }
+    .project {
+      min-width: 0;
+      padding: 15px;
+      border: 1px solid #EAE9E1;
+      border-radius: 10px;
+      background: #FAFAF7;
+    }
+    .project-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 13px; }
+    .project-number { color: var(--sage); font-size: 10px; font-weight: 700; letter-spacing: .6px; text-transform: uppercase; }
+    .project-remove { display: inline-flex; align-items: center; gap: 4px; padding: 5px 7px; border: 0; border-radius: 6px; background: transparent; color: var(--danger); font-size: 10px; font-weight: 600; }
+    .project-remove:hover { background: var(--danger-pale); }
+    .project-remove .icon { font-size: 15px; }
+    .project-fields { display: grid; gap: 12px; }
+    .project .field textarea { min-height: 83px; }
+    .char-counter { display: flex; justify-content: flex-end; color: var(--muted); font-size: 10px; }
+
+    .document-callout {
+      padding: 17px;
+      border: 1px solid var(--border);
+      border-radius: 11px;
+      background: white;
+    }
+    .callout-head { display: flex; align-items: center; gap: 10px; }
+    .callout-icon {
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+      border-radius: 9px;
+      background: var(--forest);
+      color: white;
+    }
+    .callout-head h3 { color: var(--forest); }
+    .callout-head small { color: var(--muted); font-size: 10px; }
+    .document-callout p { margin: 13px 0; color: var(--muted); font-size: 11px; }
+    .document-summary {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 10px;
+      border-radius: 8px;
+      background: #F7F7F2;
+      font-size: 10px;
+    }
+    .document-summary .icon { color: var(--forest); }
+    .document-summary strong { min-width: 0; flex: 1; overflow-wrap: anywhere; }
+    .document-callout .button { width: 100%; margin-top: 12px; }
+
+    .audit-card { padding: 16px; background: #F0F2EB; border: 1px solid #E2E5DA; border-radius: 11px; }
+    .audit-card h3 { margin-bottom: 13px; color: var(--forest); font-size: 11px; text-transform: uppercase; letter-spacing: .7px; }
+    .audit-line { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; padding: 8px 0; border-bottom: 1px solid #DFE2D8; font-size: 10px; }
+    .audit-line:last-child { border-bottom: 0; }
+    .audit-line span { color: var(--muted); }
+    .audit-line strong { text-align: right; font-weight: 600; overflow-wrap: anywhere; }
+    .audit-line .good { color: var(--forest); }
+
+    .action-bar {
+      position: sticky;
+      bottom: 12px;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+      margin-top: 22px;
+      padding: 13px 16px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: rgba(255,255,255,.96);
+      box-shadow: 0 5px 22px rgba(52,56,50,.10);
+      backdrop-filter: blur(10px);
+    }
+    .save-status { display: flex; align-items: center; gap: 8px; color: var(--muted); font-size: 10px; }
+    .save-status .icon { color: var(--sage); font-size: 18px; }
+    .action-buttons { display: flex; align-items: center; gap: 8px; }
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      padding: 9px 13px;
+      border: 1px solid transparent;
+      border-radius: 8px;
+      font-size: 11px;
+      font-weight: 600;
+      transition: background .15s;
+    }
+    .button-primary { background: var(--forest); color: white; }
+    .button-primary:hover { background: var(--forest-dark); }
+    .button-secondary { border-color: var(--border); background: white; color: var(--text); }
+    .button-secondary:hover { background: var(--sage-pale); color: var(--forest); }
+    .button .icon { font-size: 17px; }
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 25px;
+      padding-top: 18px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 10px;
+    }
+    .footer strong { color: var(--forest); }
+
+    .toast {
+      position: fixed;
+      right: 22px;
+      bottom: 22px;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      max-width: min(420px, calc(100vw - 32px));
+      padding: 13px 16px;
+      border-radius: 10px;
+      background: var(--forest);
+      color: white;
+      box-shadow: 0 8px 28px rgba(0,0,0,.14);
+      opacity: 0;
+      transform: translateY(10px);
+      pointer-events: none;
+      transition: .2s;
+    }
+    .toast.show { opacity: 1; transform: translateY(0); }
+
+    @media (max-width: 1100px) {
+      .sidebar { width: 220px; }
+      .main-shell { margin-left: 220px; }
+      main { padding: 22px 20px 35px; }
+      .topbar { padding: 12px 20px; }
+      .workspace { grid-template-columns: minmax(0, 1fr); }
+      .column-right { grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; }
+      .page-header-main { align-items: flex-start; }
+      .strength { width: 220px; }
+    }
+    @media (max-width: 760px) {
+      .sidebar {
+        width: min(285px, 85vw);
+        transform: translateX(-105%);
+        transition: transform .2s ease;
+        box-shadow: none;
+      }
+      .sidebar.open { transform: translateX(0); box-shadow: 8px 0 30px rgba(0,0,0,.12); }
+      .main-shell { margin-left: 0; }
+      .topbar { min-height: 60px; padding: 10px 14px; }
+      .mobile-menu { display: grid; }
+      .top-user .user-name { display: none; }
+      .topbar-right { gap: 7px; }
+      .top-chip { padding: 5px 7px; font-size: 9px; }
+      main { padding: 19px 13px 30px; }
+      .page-header { padding: 17px; }
+      .page-header-main { flex-direction: column; }
+      .identity { align-items: flex-start; gap: 12px; }
+      .profile-avatar { width: 61px; height: 61px; font-size: 20px; }
+      h1 { font-size: 21px; }
+      .strength { width: 100%; }
+      .column-right { grid-template-columns: minmax(0, 1fr); }
+      .card-head { padding: 14px 15px; }
+      .card-body { padding: 15px; }
+      .form-grid { grid-template-columns: minmax(0, 1fr); }
+      .field.full { grid-column: auto; }
+      .readonly-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .action-bar { align-items: stretch; flex-direction: column; bottom: 6px; }
+      .action-buttons { justify-content: flex-end; }
+      .footer { flex-direction: column; }
+    }
+    @media (max-width: 400px) {
+      .top-chip.year-chip { display: none; }
+      .readonly-grid { grid-template-columns: minmax(0, 1fr); }
+      .add-row { flex-direction: column; }
+      .add-row .button { width: 100%; }
+      .action-buttons .button { flex: 1; }
+    }
+    @media print {
+      .sidebar, .topbar, .breadcrumb, .action-bar, .footer, .toast,
+      .save-banner, .project-remove, .add-row, .skill-pill button,
+      .document-callout .button { display: none !important; }
+      .main-shell { margin: 0; }
+      main { max-width: none; padding: 0; }
+      body { background: white; }
+      .workspace { grid-template-columns: 1fr 1fr; }
+      .card, .page-header { box-shadow: none; break-inside: avoid; }
+      input, textarea { border-color: #DDD !important; }
+    }
+  </style>
+</head>
+
+<body>
+  <aside class="sidebar" id="sidebar">
+    <div>
+      <a class="brand" href="../Student Dashboard/code.html">
+        <span class="brand-mark icon">apartment</span>
+        <span>
+          <span class="brand-name">PlaceTrack</span>
+          <span class="brand-caption">Student Workspace</span>
+        </span>
+      </a>
+
+      <div class="nav-label">Workspace</div>
+      <nav class="nav-list" aria-label="Student navigation">
+        <a class="nav-link" href="../Student Dashboard/code.html">
+          <span class="icon">dashboard</span> Dashboard
+        </a>
+        <a class="nav-link active" aria-current="page" href="../My Profile/code.html">
+          <span class="icon">account_box</span> My Profile
+        </a>
+        <a class="nav-link" href="../My Documents/code.html">
+          <span class="icon">folder_open</span> My Documents
+        </a>
+        <a class="nav-link" href="../Settings/code.html">
+          <span class="icon">settings</span> Settings
+        </a>
+      </nav>
+    </div>
+
+    <div class="sidebar-bottom">
+      <div class="mini-profile">
+        <div class="avatar" id="sideAvatar">AS</div>
+        <div style="min-width:0">
+          <strong id="sideName">Aanya Sharma</strong>
+          <small id="sideRoll">21CS014 · Computer Engineering</small>
+        </div>
+      </div>
+      <a class="signout" href="../Login/code.html">
+        <span class="icon">logout</span> Sign Out
+      </a>
+    </div>
+  </aside>
+
+  <div class="main-shell">
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="icon-btn mobile-menu" id="menuButton" type="button" aria-label="Open navigation">
+          <span class="icon">menu</span>
+        </button>
+        <span class="top-chip">Student Portal</span>
+        <span class="top-chip year-chip">AY 2024–25</span>
+      </div>
+
+      <div class="topbar-right">
+        <button class="icon-btn" id="notificationButton" type="button" aria-label="Notifications">
+          <span class="icon">notifications</span>
+        </button>
+        <button class="icon-btn" id="helpButton" type="button" aria-label="Help">
+          <span class="icon">help_outline</span>
+        </button>
+        <a class="top-user" href="../Settings/code.html">
+          <span class="avatar" id="topAvatar">AS</span>
+          <span class="user-name" id="topName">Aanya Sharma</span>
+        </a>
+      </div>
+    </header>
+
+    <main>
+      <div class="save-banner" id="saveBanner" role="status" aria-live="polite">
+        <div class="banner-content">
+          <span class="icon">check_circle</span>
+          <div>
+            <strong id="bannerTitle">Profile saved locally.</strong>
+            <p id="bannerMessage">Your prototype changes are stored in this browser.</p>
+          </div>
+        </div>
+        <button class="banner-close" type="button" id="closeBanner" aria-label="Dismiss message">
+          <span class="icon">close</span>
+        </button>
+      </div>
+
+      <div class="breadcrumb">
+        <a href="../Student Dashboard/code.html">Student Portal</a>
+        <span class="icon">chevron_right</span>
+        <span style="color:var(--forest);font-weight:600">My Profile</span>
+      </div>
+
+      <section class="page-header">
+        <div class="page-header-main">
+          <div class="identity">
+            <div class="profile-avatar" id="profileAvatar">AS</div>
+            <div class="identity-copy">
+              <div class="eyebrow">Student Identity Record</div>
+              <div class="identity-title">
+                <h1 id="headingName">Aanya Sharma</h1>
+                <span class="tag neutral" id="headingRoll">21CS014</span>
+                <span class="tag"><span class="icon" style="font-size:13px">verified</span> Active Enrollment</span>
+              </div>
+              <p class="subtext" id="headingDepartment">B.Tech · Department of Computer Engineering</p>
+              <p class="subtext" style="font-size:10px;margin-top:5px">Academic Cohort: AY 2024–25 · Graduating Class of 2025</p>
+            </div>
+          </div>
+
+          <div class="strength">
+            <div class="strength-top">
+              <span class="eyebrow" style="margin:0;letter-spacing:.8px">Profile Strength</span>
+              <strong id="strengthPercent">80% Complete</strong>
+            </div>
+            <div class="progress-track">
+              <div class="progress-fill" id="strengthBar" style="width:80%"></div>
+            </div>
+            <small id="strengthHint">Complete the missing profile picture requirement.</small>
+          </div>
+        </div>
+      </section>
+
+      <div class="workspace">
+        <div class="column">
+          <section class="card">
+            <div class="card-head">
+              <div>
+                <div class="card-title">
+                  <span class="icon">person_outline</span>
+                  <h2>Personal Information</h2>
+                </div>
+                <p class="subtext">Your contact details and personal profile</p>
+              </div>
+              <span class="section-badge">Student Managed</span>
+            </div>
+
+            <div class="card-body">
+              <form id="profileForm">
+                <div class="form-grid">
+                  <div class="field full">
+                    <label for="fullName">Full Legal Name <span class="required">*</span></label>
+                    <input id="fullName" name="fullName" type="text" required maxlength="100" value="Aanya Sharma">
+                    <small>Contact the institution to correct your official identity record.</small>
+                  </div>
+
+                  <div class="field">
+                    <label class="locked-label" for="institutionalEmail">
+                      <span>Institutional Email</span>
+                      <span><span class="icon">lock</span> Assigned</span>
+                    </label>
+                    <input id="institutionalEmail" type="email" value="aanya.sharma@dept.edu" readonly>
+                    <small>Read-only university identity.</small>
+                  </div>
+
+                  <div class="field">
+                    <label for="personalEmail">Personal Email <span class="required">*</span></label>
+                    <input id="personalEmail" name="personalEmail" type="email" required value="aanya.sharma.dev@gmail.com">
+                    <small>Used for placement communication.</small>
+                  </div>
+
+                  <div class="field">
+                    <label for="phone">Contact Number <span class="required">*</span></label>
+                    <input id="phone" name="phone" type="tel" required maxlength="20" value="+91 98765 43210">
+                    <small>Include your country code.</small>
+                  </div>
+
+                  <div class="field">
+                    <label class="locked-label" for="department">
+                      <span>Department</span>
+                      <span><span class="icon">lock</span> Record</span>
+                    </label>
+                    <input id="department" type="text" value="Computer Engineering" readonly>
+                    <small>Maintained by the institution.</small>
+                  </div>
+
+                  <div class="field full">
+                    <label class="locked-label" for="academicYear">
+                      <span>Academic Standing &amp; Session</span>
+                      <span><span class="icon">lock</span> Fixed</span>
+                    </label>
+                    <input id="academicYear" type="text" value="AY 2024–25 · Final Year · Semester VIII" readonly>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </section>
+
+          <section class="card">
+            <div class="card-head">
+              <div>
+                <div class="card-title">
+                  <span class="icon">psychology</span>
+                  <h2>Technical Skills</h2>
+                </div>
+                <p class="subtext">Core competencies, programming languages, libraries and tools.</p>
+              </div>
+              <span class="section-badge" id="skillCounter">10 Skills</span>
+            </div>
+
+            <div class="card-body">
+              <div class="skill-wrap" id="skillContainer"></div>
+
+              <div class="add-row">
+                <input id="newSkillInput" type="text" maxlength="40" placeholder="Add a skill, e.g. Java or PostgreSQL">
+                <button class="button button-secondary" id="addSkillButton" type="button">
+                  <span class="icon">add</span> Add Skill
+                </button>
+              </div>
+
+              <p class="hint">
+                <span class="icon">info</span>
+                Skills can be included in your placement profile. Keep them accurate and relevant to your experience.
+              </p>
+            </div>
+          </section>
+
+          <section class="card">
+            <div class="card-head">
+              <div>
+                <div class="card-title">
+                  <span class="icon">terminal</span>
+                  <h2>Technical Projects</h2>
+                </div>
+                <p class="subtext">Showcase your work, technologies and project impact.</p>
+              </div>
+              <button class="button button-secondary" id="addProjectButton" type="button">
+                <span class="icon">add</span> Add Project
+              </button>
+            </div>
+
+            <div class="card-body">
+              <div class="project-list" id="projectsContainer"></div>
+              <p class="hint">
+                <span class="icon">info</span>
+                Describe your own contribution clearly. Project details remain in this browser prototype until connected to a backend.
+              </p>
+            </div>
+          </section>
+        </div>
+
+        <div class="column column-right">
+          <section class="card">
+            <div class="card-head">
+              <div>
+                <div class="card-title">
+                  <span class="icon">school</span>
+                  <h2>Academic Record</h2>
+                </div>
+                <p class="subtext">Institutional academic details</p>
+              </div>
+            </div>
+
+            <div class="card-body">
+              <div class="readonly-panel">
+                <div class="readonly-title">
+                  <span class="icon">lock</span>
+                  <strong>Institutional Record · Read Only</strong>
+                </div>
+
+                <div class="readonly-grid">
+                  <div class="readonly-item">
+                    <small>Cumulative CGPA</small>
+                    <strong class="large-value" id="academicCgpa">8.70</strong>
+                    <small>Out of 10.0</small>
+                  </div>
+                  <div class="readonly-item">
+                    <small>Active Backlogs</small>
+                    <strong class="large-value" id="academicBacklogs">0</strong>
+                    <span class="tag" id="backlogStatus" style="margin-top:5px">Clear</span>
+                  </div>
+                  <div class="readonly-item">
+                    <small>Student Roll Number</small>
+                    <strong id="academicRoll">21CS014</strong>
+                  </div>
+                  <div class="readonly-item">
+                    <small>Current Term</small>
+                    <strong>Semester VIII</strong>
+                  </div>
+                  <div class="readonly-item">
+                    <small>Degree</small>
+                    <strong>B.Tech</strong>
+                  </div>
+                  <div class="readonly-item">
+                    <small>Academic Year</small>
+                    <strong>2024–25</strong>
+                  </div>
+                </div>
+
+                <div class="readonly-footer">
+                  <span>Backlog history</span>
+                  <strong id="backlogHistory">Clean record</strong>
+                </div>
+              </div>
+
+              <p class="hint">
+                <span class="icon">help_center</span>
+                Academic details are illustrative demo records. Contact your institution to correct a CGPA or backlog discrepancy.
+              </p>
+            </div>
+          </section>
+
+          <section class="document-callout">
+            <div class="callout-head">
+              <div class="callout-icon"><span class="icon">folder_open</span></div>
+              <div>
+                <h3>Resume &amp; Credentials</h3>
+                <small>Placement document workspace</small>
+              </div>
+            </div>
+            <p>Review your resume, transcripts and internship certificates in the document management area.</p>
+
+            <div class="document-summary">
+              <span class="icon">description</span>
+              <strong id="resumeName">Aanya_Sharma_Resume_2024.pdf</strong>
+              <span class="tag">Demo</span>
+            </div>
+
+            <a class="button button-primary" href="../My Documents/code.html">
+              Manage My Documents <span class="icon">arrow_forward</span>
+            </a>
+          </section>
+
+          <section class="audit-card">
+            <h3><span class="icon" style="font-size:15px;vertical-align:middle">fact_check</span> Profile Overview</h3>
+            <div class="audit-line">
+              <span>Student ID</span>
+              <strong id="auditRoll">21CS014</strong>
+            </div>
+            <div class="audit-line">
+              <span>Profile completion</span>
+              <strong id="auditCompletion">80%</strong>
+            </div>
+            <div class="audit-line">
+              <span>Academic eligibility demo</span>
+              <strong class="good" id="auditEligibility">Meets sample criteria</strong>
+            </div>
+            <div class="audit-line">
+              <span>Save location</span>
+              <strong>Browser storage</strong>
+            </div>
+            <p class="hint">
+              <span class="icon">info</span>
+              This page does not create a cryptographic audit record or sync changes to a university server.
+            </p>
+          </section>
+        </div>
+      </div>
+
+      <div class="action-bar">
+        <div class="save-status">
+          <span class="icon">cloud_done</span>
+          <span id="saveStatusText">Changes are not saved until you select Save Profile.</span>
+        </div>
+        <div class="action-buttons">
+          <button class="button button-secondary" id="discardButton" type="button">
+            <span class="icon">restart_alt</span> Discard
+          </button>
+          <button class="button button-primary" id="saveButton" type="button">
+            <span class="icon">save</span> Save Profile
+          </button>
+        </div>
+      </div>
+
+      <footer class="footer">
+        <span><strong>PlaceTrack</strong> · Student Placement Data Management System</span>
+        <span>Student Portal · Demonstration Prototype</span>
+      </footer>
+    </main>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite">
+    <span class="icon">check_circle</span>
+    <span id="toastMessage">Done.</span>
+  </div>
+
+  <script>
+    const $ = id => document.getElementById(id);
+
+    const defaultSkills = [
+      "Python", "React", "Flask", "MySQL", "AWS S3",
+      "Docker", "Data Structures", "REST APIs", "Git", "Linux"
+    ];
+
+    const defaultProjects = [
+      {
+        title: "PlaceTrack Decentralized Verification Ledger",
+        technologies: "React, Python Flask, Amazon RDS MySQL, AWS S3",
+        description: "Student placement tracking workflow with role-based access, verification records, and secure document storage."
+      },
+      {
+        title: "Autonomous Distributed File Sync",
+        technologies: "Go, gRPC, Docker, Linux",
+        description: "A distributed file synchronization tool exploring consensus, state replication, and fault tolerance across nodes."
+      }
+    ];
+
+    let skills = [...defaultSkills];
+    let projects = structuredClone(defaultProjects);
+    let toastTimer;
+    let dirty = false;
+    let profileImageData = "";
+    let selectedStudent = null;
+
+    function showToast(message) {
+      $("toastMessage").textContent = message;
+      $("toast").classList.add("show");
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => $("toast").classList.remove("show"), 3200);
+    }
+
+    function showBanner(title, message) {
+      $("bannerTitle").textContent = title;
+      $("bannerMessage").textContent = message;
+      $("saveBanner").classList.add("show");
+    }
+
+    function setDirty(value = true) {
+      dirty = value;
+      $("saveStatusText").textContent = value
+        ? "You have unsaved changes."
+        : "Your current changes are saved in this browser.";
+    }
+
+    function initials(name) {
+      return String(name || "Aanya Sharma")
+        .trim().split(/\s+/).slice(0, 2)
+        .map(part => part[0] || "").join("").toUpperCase();
+    }
+
+    function readSelectedStudent() {
+      let student = null;
+
+      for (const key of ["placetrackSelectedStudent", "selectedStudent"]) {
+        try {
+          const raw = sessionStorage.getItem(key);
+          if (!raw) continue;
+          const parsed = JSON.parse(raw);
+          if (parsed && typeof parsed === "object") {
+            student = parsed;
+            break;
+          }
+        } catch (_) {
+          // Ignore non-JSON values and fall back to the default record.
+        }
+      }
+
+      if (!student) {
+        const name = sessionStorage.getItem("selectedStudentName");
+        const roll = sessionStorage.getItem("selectedStudentRoll");
+        if (name || roll) student = { name, roll };
+      }
+
+      const records = {
+        "21CS014": {
+          name: "Aanya Sharma",
+          roll: "21CS014",
+          department: "Computer Engineering",
+          cgpa: 8.7,
+          backlogs: 0
+        },
+        "21IT022": {
+          name: "Rohan Mehta",
+          roll: "21IT022",
+          department: "Information Technology",
+          cgpa: 7.9,
+          backlogs: 1
+        },
+        "21CS031": {
+          name: "Isha Patel",
+          roll: "21CS031",
+          department: "Computer Engineering",
+          cgpa: 8.4,
+          backlogs: 0
+        },
+        "21EC018": {
+          name: "Arjun Nair",
+          roll: "21EC018",
+          department: "Electronics Engineering",
+          cgpa: 7.2,
+          backlogs: 2
+        }
+      };
+
+      if (!student) return { ...records["21CS014"] };
+
+      const roll = student.roll || student.rollNumber || student.studentId || "21CS014";
+      const base = records[roll] || records["21CS014"];
+
+      return {
+        ...base,
+        ...student,
+        roll,
+        name: student.name || student.fullName || base.name,
+        department: student.department || student.branch || base.department,
+        cgpa: Number(student.cgpa ?? student.CGPA ?? base.cgpa),
+        backlogs: Number(student.backlogs ?? student.activeBacklogs ?? base.backlogs)
+      };
+    }
+
+    function applyIdentity() {
+      selectedStudent = readSelectedStudent();
+
+      const name = selectedStudent.name || "Aanya Sharma";
+      const roll = selectedStudent.roll || "21CS014";
+      const department = selectedStudent.department || "Computer Engineering";
+      const cgpa = Number(selectedStudent.cgpa ?? 8.7);
+      const backlogs = Number(selectedStudent.backlogs ?? 0);
+      const avatarText = initials(name);
+
+      $("sideAvatar").textContent = avatarText;
+      $("topAvatar").textContent = avatarText;
+      $("sideName").textContent = name;
+      $("topName").textContent = name;
+      $("sideRoll").textContent = `${roll} · ${department}`;
+      $("headingName").textContent = name;
+      $("headingRoll").textContent = roll;
+      $("headingDepartment").textContent = `B.Tech · Department of ${department}`;
+      $("academicRoll").textContent = roll;
+      $("auditRoll").textContent = roll;
+      $("academicCgpa").textContent = cgpa.toFixed(2);
+      $("academicBacklogs").textContent = String(backlogs);
+      $("backlogStatus").textContent = backlogs === 0 ? "Clear" : "Review";
+      $("backlogStatus").className = `tag ${backlogs === 0 ? "" : "warning"}`;
+      $("backlogHistory").textContent = backlogs === 0 ? "Clean record" : "Backlog(s) recorded";
+      $("auditEligibility").textContent = cgpa >= 7 && backlogs === 0
+        ? "Meets sample criteria"
+        : "Review sample criteria";
+
+      $("fullName").value = name;
+      $("department").value = department;
+      $("institutionalEmail").value =
+        name.toLowerCase().replace(/\s+/g, ".") + "@dept.edu";
+
+      $("resumeName").textContent = `${name.replace(/\s+/g, "_")}_Resume_2024.pdf`;
+      renderAvatar();
+    }
+
+    function renderAvatar() {
+      const name = $("fullName").value.trim() || selectedStudent?.name || "Aanya Sharma";
+      const avatar = $("profileAvatar");
+      avatar.replaceChildren();
+
+      if (profileImageData) {
+        const image = document.createElement("img");
+        image.src = profileImageData;
+        image.alt = "Selected profile picture";
+        avatar.appendChild(image);
+      } else {
+        avatar.textContent = initials(name);
+      }
+    }
+
+    function updateCompletion() {
+      const hasName = $("fullName").value.trim().length > 0;
+      const hasEmail = $("personalEmail").validity.valid && $("personalEmail").value.trim();
+      const hasPhone = $("phone").value.trim().length >= 8;
+      const hasSkills = skills.length > 0;
+      const hasProjects = projects.some(project => project.title.trim());
+      const hasPhoto = Boolean(profileImageData);
+
+      const checks = [hasName, hasEmail, hasPhone, hasSkills, hasProjects, hasPhoto];
+      const completed = checks.filter(Boolean).length;
+      const percent = Math.round((completed / checks.length) * 100);
+
+      $("strengthPercent").textContent = `${percent}% Complete`;
+      $("strengthBar").style.width = `${percent}%`;
+      $("auditCompletion").textContent = `${percent}%`;
+      $("strengthHint").textContent = hasPhoto
+        ? "A profile image has been selected in this browser."
+        : "Profile picture missing. Upload one in My Documents.";
+
+      return percent;
+    }
+
+    function renderSkills() {
+      const container = $("skillContainer");
+      container.replaceChildren();
+
+      skills.forEach((skill, index) => {
+        const pill = document.createElement("span");
+        pill.className = "skill-pill";
+
+        const label = document.createElement("span");
+        label.textContent = skill;
+
+        const remove = document.createElement("button");
+        remove.type = "button";
+        remove.setAttribute("aria-label", `Remove skill ${skill}`);
+
+        const closeIcon = document.createElement("span");
+        closeIcon.className = "icon";
+        closeIcon.textContent = "close";
+        remove.appendChild(closeIcon);
+
+        remove.addEventListener("click", () => {
+          skills.splice(index, 1);
+          renderSkills();
+          updateCompletion();
+          setDirty();
+        });
+
+        pill.append(label, remove);
+        container.appendChild(pill);
+      });
+
+      $("skillCounter").textContent = `${skills.length} Skill${skills.length === 1 ? "" : "s"}`;
+    }
+
+    function addSkill() {
+      const input = $("newSkillInput");
+      const value = input.value.trim();
+
+      if (!value) {
+        showToast("Enter a skill before adding it.");
+        input.focus();
+        return;
+      }
+
+      if (skills.some(skill => skill.toLowerCase() === value.toLowerCase())) {
+        showToast("That skill is already in your list.");
+        input.focus();
+        return;
+      }
+
+      skills.push(value);
+      input.value = "";
+      renderSkills();
+      updateCompletion();
+      setDirty();
+      showToast(`${value} added to your skills.`);
+    }
+
+    function renderProjects() {
+      const container = $("projectsContainer");
+      container.replaceChildren();
+
+      projects.forEach((project, index) => {
+        const card = document.createElement("article");
+        card.className = "project";
+
+        const head = document.createElement("div");
+        head.className = "project-head";
+
+        const number = document.createElement("span");
+        number.className = "project-number";
+        number.textContent = `Project Record #${String(index + 1).padStart(2, "0")}`;
+
+        const remove = document.createElement("button");
+        remove.className = "project-remove";
+        remove.type = "button";
+
+        const removeIcon = document.createElement("span");
+        removeIcon.className = "icon";
+        removeIcon.textContent = "delete";
+
+        const removeText = document.createElement("span");
+        removeText.textContent = "Remove";
+
+        remove.append(removeIcon, removeText);
+        remove.addEventListener("click", () => {
+          projects.splice(index, 1);
+          renderProjects();
+          updateCompletion();
+          setDirty();
+          showToast("Project removed. Save to keep this change.");
+        });
+
+        head.append(number, remove);
+
+        const fields = document.createElement("div");
+        fields.className = "project-fields";
+
+        fields.append(
+          makeProjectField("Project Title", "title", project.title, index, "e.g. Distributed Task Orchestrator", true),
+          makeProjectField("Technologies Used", "technologies", project.technologies, index, "e.g. Python, AWS, Docker", false),
+          makeProjectField("Description & Impact", "description", project.description, index, "Describe your role, problem solved and impact.", false, true)
+        );
+
+        card.append(head, fields);
+        container.appendChild(card);
+      });
+
+      updateCompletion();
+    }
+
+    function makeProjectField(labelText, key, value, index, placeholder, required, multiline = false) {
+      const wrapper = document.createElement("div");
+      wrapper.className = "field";
+
+      const label = document.createElement("label");
+      label.textContent = labelText;
+
+      const control = multiline
+        ? document.createElement("textarea")
+        : document.createElement("input");
+
+      if (multiline) {
+        control.maxLength = 300;
+        control.rows = 3;
+      } else {
+        control.type = "text";
+      }
+
+      control.value = value || "";
+      control.placeholder = placeholder;
+
+      if (required) control.required = true;
+      control.setAttribute("aria-label", labelText);
+
+      control.addEventListener("input", () => {
+        projects[index][key] = control.value;
+        setDirty();
+
+        if (key === "title") updateCompletion();
+
+        if (multiline) {
+          counter.textContent = `${control.value.length} / 300 characters`;
+        }
+      });
+
+      label.appendChild(control);
+      wrapper.appendChild(label);
+
+      if (multiline) {
+        const counter = document.createElement("div");
+        counter.className = "char-counter";
+        counter.textContent = `${control.value.length} / 300 characters`;
+        wrapper.appendChild(counter);
+      }
+
+      return wrapper;
+    }
+
+    function addProject() {
+      projects.push({ title: "", technologies: "", description: "" });
+      renderProjects();
+      setDirty();
+
+      const fields = $("projectsContainer").lastElementChild;
+      const titleInput = fields.querySelector("input");
+      titleInput.focus();
+
+      showToast("New project entry added.");
+    }
+
+    function collectProfile() {
+      return {
+        name: $("fullName").value.trim(),
+        personalEmail: $("personalEmail").value.trim(),
+        phone: $("phone").value.trim(),
+        skills: [...skills],
+        projects: projects.map(project => ({ ...project })),
+        profileImageData,
+        updatedAt: new Date().toISOString()
+      };
+    }
+
+    function saveProfile() {
+      const form = $("profileForm");
+
+      if (!form.reportValidity()) {
+        showToast("Please check the required personal information fields.");
+        return;
+      }
+
+      const data = collectProfile();
+
+      try {
+        localStorage.setItem("placetrackMyProfile", JSON.stringify(data));
+
+        // Keep a compatible student record for the other prototype pages.
+        // The institutional fields remain demo values, not authoritative records.
+        const shared = {
+          ...(selectedStudent || {}),
+          name: data.name,
+          roll: selectedStudent?.roll || "21CS014",
+          department: selectedStudent?.department || "Computer Engineering",
+          cgpa: Number(selectedStudent?.cgpa ?? 8.7),
+          backlogs: Number(selectedStudent?.backlogs ?? 0),
+          skills: data.skills,
+          projects: data.projects
+        };
+
+        sessionStorage.setItem("placetrackSelectedStudent", JSON.stringify(shared));
+        sessionStorage.setItem("selectedStudent", JSON.stringify(shared));
+        sessionStorage.setItem("selectedStudentName", shared.name);
+        sessionStorage.setItem("selectedStudentRoll", shared.roll);
+
+        setDirty(false);
+        applyIdentity();
+        updateCompletion();
+
+        showBanner(
+          "Profile saved in this browser.",
+          "Changes were saved locally. They have not been sent to a university database or cloud service."
+        );
+        showToast("Profile saved locally.");
+      } catch (error) {
+        showToast("Browser storage is unavailable or full. Try removing the profile image.");
+      }
+    }
+
+    function loadSavedProfile() {
+      try {
+        const raw = localStorage.getItem("placetrackMyProfile");
+        if (!raw) return false;
+
+        const data = JSON.parse(raw);
+        if (!data || typeof data !== "object") return false;
+
+        if (typeof data.name === "string") $("fullName").value = data.name;
+        if (typeof data.personalEmail === "string") $("personalEmail").value = data.personalEmail;
+        if (typeof data.phone === "string") $("phone").value = data.phone;
+        if (Array.isArray(data.skills)) skills = data.skills.filter(skill => typeof skill === "string");
+        if (Array.isArray(data.projects)) {
+          projects = data.projects.map(project => ({
+            title: String(project.title || ""),
+            technologies: String(project.technologies || ""),
+            description: String(project.description || "")
+          }));
+        }
+
+        // Do not persist the actual image as base64 in localStorage.
+        // The photo input remains a prototype-only selection.
+        renderSkills();
+        renderProjects();
+        return true;
+      } catch (_) {
+        return false;
+      }
+    }
+
+    function discardChanges() {
+      if (!dirty) {
+        showToast("There are no unsaved changes.");
+        return;
+      }
+
+      if (!confirm("Discard unsaved changes and restore the last locally saved profile?")) {
+        return;
+      }
+
+      location.reload();
+    }
+
+    $("menuButton").addEventListener("click", () => {
+      $("sidebar").classList.toggle("open");
+    });
+
+    document.addEventListener("click", event => {
+      if (
+        window.innerWidth <= 760 &&
+        $("sidebar").classList.contains("open") &&
+        !$("sidebar").contains(event.target) &&
+        !$("menuButton").contains(event.target)
+      ) {
+        $("sidebar").classList.remove("open");
+      }
+    });
+
+    $("closeBanner").addEventListener("click", () => {
+      $("saveBanner").classList.remove("show");
+    });
+
+    $("addSkillButton").addEventListener("click", addSkill);
+    $("newSkillInput").addEventListener("keydown", event => {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        addSkill();
+      }
+    });
+
+    $("addProjectButton").addEventListener("click", addProject);
+    $("saveButton").addEventListener("click", saveProfile);
+    $("discardButton").addEventListener("click", discardChanges);
+
+    $("fullName").addEventListener("input", () => {
+      renderAvatar();
+      updateCompletion();
+      setDirty();
+    });
+
+    ["personalEmail", "phone"].forEach(id => {
+      $(id).addEventListener("input", () => {
+        updateCompletion();
+        setDirty();
+      });
+    });
+
+    $("notificationButton").addEventListener("click", () => {
+      showToast("No new notifications in this prototype.");
+    });
+
+    $("helpButton").addEventListener("click", () => {
+      showToast("For academic record corrections, contact your placement office.");
+    });
+
+    // The profile image selection is a local preview only.
+    // It is not uploaded to S3 or saved permanently.
+    const photoInput = document.createElement("input");
+    photoInput.type = "file";
+    photoInput.accept = "image/*";
+    photoInput.hidden = true;
+    document.body.appendChild(photoInput);
+
+    $("profileAvatar").title = "Click to select a profile picture";
+    $("profileAvatar").style.cursor = "pointer";
+    $("profileAvatar").addEventListener("click", () => photoInput.click());
+
+    photoInput.addEventListener("change", event => {
+      const file = event.target.files?.[0];
+      if (!file) return;
+
+      if (!file.type.startsWith("image/")) {
+        showToast("Please select a valid image.");
+        photoInput.value = "";
+        return;
+      }
+
+      if (file.size > 5 * 1024 * 1024) {
+        showToast("Choose an image smaller than 5 MB.");
+        photoInput.value = "";
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        profileImageData = String(reader.result || "");
+        renderAvatar();
+        updateCompletion();
+        setDirty();
+        showToast("Profile picture preview updated. Save the other details when ready.");
+      };
+      reader.onerror = () => showToast("Unable to preview this image.");
+      reader.readAsDataURL(file);
+    });
+
+    applyIdentity();
+    const loaded = loadSavedProfile();
+    applyIdentity();
+    renderSkills();
+    renderProjects();
+    updateCompletion();
+
+    if (loaded) {
+      setDirty(false);
+      $("saveStatusText").textContent = "Loaded the last locally saved profile.";
+    }
+
+    window.addEventListener("beforeunload", event => {
+      if (!dirty) return;
+      event.preventDefault();
+      event.returnValue = "";
+    });
+  </script>
+</body>
+</html>

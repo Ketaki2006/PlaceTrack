@@ -1,0 +1,1337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Documents | PlaceTrack</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ivory: #F7F5EF;
+      --white: #FFFFFF;
+      --forest: #244A3B;
+      --forest-dark: #18382D;
+      --sage: #78927A;
+      --sage-pale: #EDF2EA;
+      --terracotta: #D8B89A;
+      --text: #343832;
+      --muted: #777A73;
+      --border: #E6E2D9;
+      --warning: #95652F;
+      --warning-bg: #FBF1E3;
+      --danger: #A3443E;
+      --danger-bg: #F9ECE9;
+      --shadow: 0 4px 18px rgba(36, 74, 59, 0.05);
+      --radius: 12px;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, sans-serif;
+      background: var(--ivory);
+      color: var(--text);
+      font-size: 14px;
+    }
+    button, input, select { font: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    a { color: inherit; text-decoration: none; }
+    button { cursor: pointer; }
+    button:focus-visible, a:focus-visible, input:focus-visible,
+    select:focus-visible {
+      outline: 2px solid var(--sage);
+      outline-offset: 3px;
+    }
+
+    .sidebar {
+      position: fixed;
+      inset: 0 auto 0 0;
+      width: 248px;
+      background: var(--white);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      z-index: 20;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      height: 76px;
+      padding: 0 22px;
+      border-bottom: 1px solid var(--border);
+    }
+    .brand-mark {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      display: grid;
+      place-items: center;
+      background: var(--forest);
+      color: white;
+      font-size: 16px;
+      font-weight: 700;
+    }
+    .brand-name { color: var(--forest); font-size: 16px; font-weight: 700; }
+    .brand-subtitle {
+      color: var(--muted);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1.3px;
+      margin-top: 4px;
+    }
+    .nav-label {
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 25px 24px 10px;
+    }
+    .nav { padding: 0 12px; display: grid; gap: 5px; }
+    .nav a {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 13px;
+      border-radius: 8px;
+      color: var(--muted);
+      font-size: 13px;
+      transition: background .15s, color .15s;
+    }
+    .nav a:hover { background: var(--ivory); color: var(--forest); }
+    .nav a.active { background: var(--forest); color: white; font-weight: 600; }
+    .nav-icon { width: 20px; text-align: center; font-size: 16px; }
+    .sidebar-bottom { padding: 15px; border-top: 1px solid var(--border); }
+    .user-card {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 11px;
+      background: var(--ivory);
+      border-radius: 9px;
+    }
+    .avatar {
+      width: 36px;
+      height: 36px;
+      flex-shrink: 0;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      color: white;
+      background: var(--forest);
+      font-weight: 700;
+    }
+    .user-name { font-weight: 600; font-size: 12px; }
+    .user-meta { color: var(--muted); font-size: 10px; margin-top: 4px; }
+    .signout {
+      display: flex;
+      justify-content: space-between;
+      padding: 13px 9px 3px;
+      color: var(--muted);
+      font-size: 11px;
+    }
+    .signout a:hover { color: var(--danger); }
+
+    .main { margin-left: 248px; min-height: 100vh; }
+    .topbar {
+      position: sticky;
+      top: 0;
+      height: 66px;
+      padding: 0 30px;
+      background: rgba(255,255,255,.94);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      z-index: 10;
+      backdrop-filter: blur(12px);
+    }
+    .academic-year {
+      background: var(--sage-pale);
+      color: var(--forest);
+      padding: 8px 12px;
+      border-radius: 20px;
+      font-size: 10px;
+      letter-spacing: .8px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .top-search { position: relative; width: min(400px, 48%); }
+    .top-search input {
+      width: 100%;
+      padding: 10px 12px 10px 35px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--ivory);
+      outline: none;
+    }
+    .search-icon { position: absolute; top: 9px; left: 12px; color: var(--muted); }
+    .top-user { display: flex; align-items: center; gap: 10px; }
+    .top-user .avatar { width: 32px; height: 32px; }
+    .top-user-name { font-size: 12px; font-weight: 600; }
+    .top-user-id { color: var(--muted); font-size: 10px; margin-top: 3px; }
+
+    .content { max-width: 1500px; margin: auto; padding: 30px; }
+    .page-heading {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+    .eyebrow {
+      color: var(--sage);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-bottom: 9px;
+    }
+    h1 { color: var(--forest); font-size: 28px; letter-spacing: -1px; margin: 0; }
+    .subtitle { color: var(--muted); line-height: 1.6; margin: 9px 0 0; }
+    .btn {
+      border: 1px solid var(--border);
+      background: var(--white);
+      color: var(--text);
+      padding: 10px 15px;
+      border-radius: 8px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-weight: 600;
+      font-size: 12px;
+      transition: .15s;
+    }
+    .btn:hover { background: var(--ivory); }
+    .btn-primary { background: var(--forest); color: white; border-color: var(--forest); }
+    .btn-primary:hover { background: var(--forest-dark); }
+    .btn-danger { color: var(--danger); }
+    .btn-small { padding: 7px 10px; font-size: 11px; }
+    .btn:disabled { opacity: .5; cursor: not-allowed; }
+
+    .security-banner {
+      background: var(--sage-pale);
+      border: 1px solid #DDE7D9;
+      border-radius: var(--radius);
+      padding: 17px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      margin-bottom: 22px;
+    }
+    .security-left { display: flex; align-items: center; gap: 13px; }
+    .security-icon {
+      width: 38px; height: 38px; border-radius: 9px;
+      background: white; display: grid; place-items: center;
+      color: var(--forest); font-size: 18px; flex-shrink: 0;
+    }
+    .security-title { font-size: 12px; font-weight: 700; color: var(--forest); }
+    .security-text { color: var(--muted); font-size: 11px; line-height: 1.6; margin-top: 5px; }
+    .security-pills { display: flex; gap: 7px; flex-wrap: wrap; }
+    .pill {
+      padding: 7px 9px;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--muted);
+      font-size: 10px;
+      white-space: nowrap;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0,1fr));
+      gap: 15px;
+      margin-bottom: 22px;
+    }
+    .stat-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 17px 19px;
+    }
+    .stat-label { color: var(--muted); font-size: 11px; }
+    .stat-value { color: var(--forest); font-size: 24px; font-weight: 700; margin-top: 8px; }
+    .stat-note { color: var(--muted); font-size: 10px; margin-top: 6px; }
+
+    .document-panel {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+    .panel-top {
+      padding: 19px 22px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+    .panel-title { color: var(--forest); font-size: 15px; font-weight: 700; }
+    .panel-subtitle { color: var(--muted); font-size: 11px; margin-top: 5px; }
+    .tabs { display: flex; gap: 22px; padding: 20px 22px 0; border-bottom: 1px solid var(--border); overflow-x: auto; }
+    .tab {
+      padding: 0 0 13px;
+      border: 0;
+      background: transparent;
+      color: var(--muted);
+      border-bottom: 2px solid transparent;
+      font-size: 11px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .tab.active { color: var(--forest); border-bottom-color: var(--forest); }
+    .tab-count {
+      display: inline-grid; place-items: center; min-width: 20px;
+      height: 18px; padding: 0 5px; margin-left: 5px;
+      border-radius: 10px; background: var(--ivory); font-size: 10px;
+    }
+    .table-tools {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      padding: 15px 22px;
+      border-bottom: 1px solid var(--border);
+    }
+    .table-tools input, .table-tools select {
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      background: white;
+      padding: 9px 10px;
+      color: var(--text);
+      font-size: 11px;
+    }
+    .table-tools input { flex: 1; min-width: 160px; }
+    .table-wrap { width: 100%; overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; text-align: left; }
+    th {
+      background: #FAF9F5;
+      padding: 12px 16px;
+      color: var(--muted);
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: .8px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    td { padding: 15px 16px; border-bottom: 1px solid #F0EDE6; vertical-align: middle; }
+    tbody tr:last-child td { border-bottom: 0; }
+    tbody tr:hover { background: #FCFBF8; }
+    .doc-name-wrap { display: flex; align-items: center; gap: 11px; min-width: 215px; }
+    .file-icon {
+      width: 36px; height: 38px; border-radius: 8px;
+      display: grid; place-items: center; color: var(--forest);
+      background: var(--sage-pale); font-size: 15px; flex-shrink: 0;
+    }
+    .doc-name { font-size: 12px; font-weight: 600; overflow-wrap: anywhere; }
+    .doc-sub { color: var(--muted); font-size: 10px; margin-top: 5px; }
+    .category-name { font-size: 11px; font-weight: 600; white-space: nowrap; }
+    .category-sub { font-size: 10px; color: var(--muted); margin-top: 5px; }
+    .status {
+      display: inline-flex; align-items: center; gap: 6px;
+      border-radius: 20px; padding: 6px 9px;
+      font-size: 10px; font-weight: 600; white-space: nowrap;
+    }
+    .status::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+    .status-uploaded { color: var(--forest); background: var(--sage-pale); }
+    .status-pending { color: #8B672E; background: #FBF1E3; }
+    .status-missing { color: var(--danger); background: var(--danger-bg); }
+    .status-rejected { color: var(--danger); background: var(--danger-bg); }
+    .meta-main { font-size: 11px; white-space: nowrap; }
+    .meta-sub { color: var(--muted); font-size: 10px; margin-top: 5px; }
+    .actions { display: flex; align-items: center; justify-content: flex-end; gap: 5px; }
+    .action-btn {
+      border: 1px solid transparent; background: transparent;
+      padding: 7px 8px; border-radius: 6px; color: var(--muted);
+      font-size: 10px; font-weight: 600;
+    }
+    .action-btn:hover { background: var(--ivory); color: var(--forest); }
+    .action-btn.replace { color: var(--forest); }
+    .action-btn.delete:hover { color: var(--danger); background: var(--danger-bg); }
+    .missing-row { background: #FFFCF7; }
+    .empty-state { padding: 38px 15px; text-align: center; color: var(--muted); font-size: 12px; }
+    .panel-footer {
+      background: #FAF9F5;
+      border-top: 1px solid var(--border);
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .footer-meta { color: var(--muted); font-size: 10px; }
+    .footer-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
+    .privacy-card {
+      display: flex; align-items: flex-start; gap: 15px;
+      background: white; border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 20px; margin-top: 22px;
+    }
+    .privacy-icon {
+      width: 42px; height: 42px; display: grid; place-items: center;
+      background: var(--forest); color: white; border-radius: 10px;
+      font-size: 18px; flex-shrink: 0;
+    }
+    .privacy-title { color: var(--forest); font-size: 12px; font-weight: 700; }
+    .privacy-text { color: var(--muted); font-size: 11px; line-height: 1.7; margin-top: 7px; }
+    .prototype-note { color: var(--warning); font-size: 10px; margin-top: 8px; font-weight: 600; }
+
+    .modal-backdrop {
+      position: fixed; inset: 0; background: rgba(24, 40, 31, .48);
+      display: none; align-items: center; justify-content: center;
+      padding: 20px; z-index: 100;
+    }
+    .modal-backdrop.show { display: flex; }
+    .modal {
+      width: min(540px, 100%); max-height: 92vh; overflow-y: auto;
+      background: white; border-radius: 14px; box-shadow: 0 20px 70px rgba(0,0,0,.2);
+    }
+    .modal-header {
+      padding: 20px 22px; display: flex; justify-content: space-between;
+      align-items: center; border-bottom: 1px solid var(--border);
+    }
+    .modal-heading { color: var(--forest); font-weight: 700; font-size: 15px; }
+    .modal-close {
+      border: 0; background: var(--ivory); border-radius: 7px;
+      width: 31px; height: 31px; font-size: 18px; color: var(--muted);
+    }
+    .modal-body { padding: 22px; }
+    .field { margin-bottom: 18px; }
+    .field label { display: block; margin-bottom: 8px; font-size: 11px; font-weight: 700; }
+    .field select, .field input[type="file"] {
+      width: 100%; padding: 11px; border: 1px solid var(--border);
+      border-radius: 8px; background: white; font-size: 12px;
+    }
+    .file-hint { color: var(--muted); font-size: 10px; line-height: 1.6; margin-top: 7px; }
+    .file-preview {
+      display: none; padding: 12px; border-radius: 8px;
+      background: var(--sage-pale); color: var(--forest);
+      font-size: 11px; overflow-wrap: anywhere; margin-top: 10px;
+    }
+    .modal-footer {
+      display: flex; justify-content: flex-end; gap: 9px;
+      padding: 16px 22px; border-top: 1px solid var(--border);
+      background: #FAF9F5;
+    }
+    .toast {
+      position: fixed; bottom: 22px; right: 22px; z-index: 200;
+      max-width: min(420px, calc(100vw - 44px));
+      background: var(--forest-dark); color: white;
+      padding: 13px 17px; border-radius: 9px;
+      box-shadow: var(--shadow); font-size: 12px;
+      opacity: 0; transform: translateY(10px); pointer-events: none;
+      transition: .2s;
+    }
+    .toast.show { opacity: 1; transform: translateY(0); }
+
+    .mobile-menu { display: none; }
+    .bottom-nav {
+      display: none;
+      position: fixed; bottom: 0; left: 0; right: 0; z-index: 30;
+      background: white; border-top: 1px solid var(--border);
+      padding: 8px 5px calc(8px + env(safe-area-inset-bottom));
+      justify-content: space-around;
+    }
+    .bottom-nav a {
+      display: flex; flex-direction: column; align-items: center; gap: 4px;
+      padding: 5px; color: var(--muted); font-size: 9px;
+    }
+    .bottom-nav a.active { color: var(--forest); font-weight: 700; }
+
+    @media (max-width: 1050px) {
+      .sidebar { width: 215px; }
+      .main { margin-left: 215px; }
+      .topbar { padding: 0 20px; }
+      .content { padding: 24px 20px; }
+      .security-banner { align-items: flex-start; flex-direction: column; }
+      .stats { gap: 10px; }
+    }
+    @media (max-width: 760px) {
+      .sidebar { display: none; }
+      .main { margin-left: 0; }
+      .topbar { height: 60px; padding: 0 14px; gap: 10px; }
+      .academic-year { display: none; }
+      .top-search { width: 100%; }
+      .top-user > div:last-child { display: none; }
+      .content { padding: 22px 14px 90px; }
+      .page-heading { align-items: flex-start; flex-direction: column; }
+      .page-heading .btn { width: 100%; }
+      h1 { font-size: 25px; }
+      .stats { grid-template-columns: 1fr; }
+      .stat-card { padding: 14px 16px; }
+      .security-pills { gap: 5px; }
+      .panel-top { padding: 17px 15px 0; align-items: flex-start; }
+      .tabs { padding: 18px 15px 0; gap: 18px; }
+      .table-tools { padding: 13px 15px; }
+      .table-tools input { min-width: 100%; }
+      .table-wrap table { min-width: 790px; }
+      .panel-footer { padding: 14px 15px; }
+      .privacy-card { padding: 16px; }
+      .bottom-nav { display: flex; }
+    }
+  </style>
+</head>
+<body>
+  <aside class="sidebar">
+    <div>
+      <a class="brand" href="../Student Dashboard/code.html">
+        <div class="brand-mark">PT</div>
+        <div>
+          <div class="brand-name">PlaceTrack</div>
+          <div class="brand-subtitle">Student Portal</div>
+        </div>
+      </a>
+      <div class="nav-label">Workspace</div>
+      <nav class="nav">
+        <a href="../Student Dashboard/code.html"><span class="nav-icon">▦</span>Dashboard</a>
+        <a href="../My Profile/code.html"><span class="nav-icon">♙</span>My Profile</a>
+        <a class="active" aria-current="page" href="../My Documents/code.html"><span class="nav-icon">▤</span>My Documents</a>
+        <a href="../Settings/code.html"><span class="nav-icon">⚙</span>Settings</a>
+      </nav>
+    </div>
+    <div class="sidebar-bottom">
+      <div class="user-card">
+        <div class="avatar" id="sidebarAvatar">AS</div>
+        <div>
+          <div class="user-name" id="sidebarName">Aanya Sharma</div>
+          <div class="user-meta" id="sidebarMeta">21CS014 · Computer Engg.</div>
+        </div>
+      </div>
+      <div class="signout">
+        <a href="../Login/code.html">↗ Sign Out</a>
+        <span>Prototype</span>
+      </div>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <span class="academic-year">ACADEMIC YEAR 2024–25</span>
+      <div class="top-search">
+        <span class="search-icon">⌕</span>
+        <input id="globalSearch" type="search" placeholder="Search your documents..." aria-label="Search documents">
+      </div>
+      <div class="top-user">
+        <div class="avatar" id="topAvatar">AS</div>
+        <div>
+          <div class="top-user-name" id="topName">Aanya Sharma</div>
+          <div class="top-user-id" id="topId">21CS014</div>
+        </div>
+      </div>
+    </header>
+
+    <main class="content">
+      <section class="page-heading">
+        <div>
+          <div class="eyebrow">Institutional Archive · Student Workspace</div>
+          <h1>My Documents</h1>
+          <p class="subtitle">Manage your placement documents, review their status, and keep your records up to date.</p>
+        </div>
+        <button class="btn btn-primary" id="openUpload">＋ Upload Document</button>
+      </section>
+
+      <section class="security-banner">
+        <div class="security-left">
+          <div class="security-icon">✓</div>
+          <div>
+            <div class="security-title">Document records and verification</div>
+            <div class="security-text">Review your submitted documents and identify missing placement requirements.</div>
+          </div>
+        </div>
+        <div class="security-pills">
+          <span class="pill" id="resumePill">1 Resume</span>
+          <span class="pill" id="photoPill">1 Profile Photo</span>
+          <span class="pill">Multiple Certificates Permitted</span>
+        </div>
+      </section>
+
+      <section class="stats" aria-label="Document summary">
+        <div class="stat-card">
+          <div class="stat-label">Total Document Records</div>
+          <div class="stat-value" id="totalStat">5</div>
+          <div class="stat-note">Includes required document categories</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Uploaded</div>
+          <div class="stat-value" id="uploadedStat">4</div>
+          <div class="stat-note">Files present in the prototype record</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Missing Documents</div>
+          <div class="stat-value" id="missingStat">1</div>
+          <div class="stat-note">Review outstanding requirements</div>
+        </div>
+      </section>
+
+      <section class="document-panel">
+        <div class="panel-top">
+          <div>
+            <div class="panel-title">Document Registry</div>
+            <div class="panel-subtitle">Your placement records and their current status</div>
+          </div>
+          <button class="btn btn-small" id="exportButton">↓ Export Audit Log</button>
+        </div>
+
+        <div class="tabs" id="tabBar">
+          <button class="tab active" data-filter="all">All Documents <span class="tab-count" id="countAll">5</span></button>
+          <button class="tab" data-filter="uploaded">Uploaded <span class="tab-count" id="countUploaded">4</span></button>
+          <button class="tab" data-filter="pending">Pending <span class="tab-count" id="countPending">0</span></button>
+          <button class="tab" data-filter="missing">Missing Required <span class="tab-count" id="countMissing">1</span></button>
+        </div>
+
+        <div class="table-tools">
+          <input type="search" id="documentSearch" placeholder="Search by file name or category..." aria-label="Search document records">
+          <select id="categoryFilter" aria-label="Filter by category">
+            <option value="all">All categories</option>
+            <option value="Placement Resume">Placement Resume</option>
+            <option value="Internship Certificate">Internship Certificate</option>
+            <option value="Profile Picture">Profile Picture</option>
+          </select>
+          <button class="btn btn-small" id="clearFilters">Clear filters</button>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Document Name</th>
+                <th>Category</th>
+                <th>Status</th>
+                <th>Archive Metadata</th>
+                <th style="text-align:right">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="docsTableBody"></tbody>
+          </table>
+          <div class="empty-state" id="emptyState" hidden>No documents match your filters.</div>
+        </div>
+
+        <div class="panel-footer">
+          <div class="footer-meta" id="recordCount">Showing 5 records · Changes are local to this browser</div>
+          <div class="footer-actions">
+            <button class="btn btn-small" id="resetDemo">Reset demo data</button>
+            <button class="btn btn-small" id="exportButtonBottom">Export CSV ↓</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="privacy-card">
+        <div class="privacy-icon">⌑</div>
+        <div>
+          <div class="privacy-title">Institutional Storage &amp; Privacy</div>
+          <div class="privacy-text">
+            A production PlaceTrack deployment could store academic credentials and certificates in a private cloud storage bucket, with access restricted through authenticated permissions and verification workflows.
+          </div>
+          <div class="prototype-note">Prototype notice: this page does not connect to AWS S3, a database, or a verification service. Uploaded files and record changes remain in this browser only.</div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <nav class="bottom-nav" aria-label="Mobile navigation">
+    <a href="../Student Dashboard/code.html"><span>▦</span>Dashboard</a>
+    <a href="../My Profile/code.html"><span>♙</span>Profile</a>
+    <a class="active" href="../My Documents/code.html"><span>▤</span>Documents</a>
+    <a href="../Settings/code.html"><span>⚙</span>Settings</a>
+  </nav>
+
+  <div class="modal-backdrop" id="uploadModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal">
+      <div class="modal-header">
+        <div class="modal-heading" id="modalTitle">Upload Placement Document</div>
+        <button class="modal-close" id="closeModal" aria-label="Close dialog">×</button>
+      </div>
+      <form id="uploadForm">
+        <div class="modal-body">
+          <div class="field">
+            <label for="docCategory">Document Category</label>
+            <select id="docCategory" required>
+              <option value="Internship Certificate">Internship Certificate</option>
+              <option value="Placement Resume">Placement Resume</option>
+              <option value="Profile Picture">Profile Picture</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="docFile">Select File</label>
+            <input id="docFile" type="file" required>
+            <div class="file-hint" id="fileHint">PDF format · Maximum 5 MB for resumes and certificates. JPG/PNG · Maximum 2 MB for profile photos.</div>
+            <div class="file-preview" id="filePreview"></div>
+          </div>
+          <div class="field">
+            <label for="docDescription">Description (optional)</label>
+            <input id="docDescription" type="text" maxlength="120" placeholder="e.g. Summer internship certificate">
+          </div>
+          <div class="file-hint">Selecting a file adds a local prototype record. It does not upload the file to a server.</div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn" type="button" id="cancelUpload">Cancel</button>
+          <button class="btn btn-primary" type="submit" id="submitUpload">Add Document</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="previewModal" role="dialog" aria-modal="true" aria-labelledby="previewTitle">
+    <div class="modal">
+      <div class="modal-header">
+        <div class="modal-heading" id="previewTitle">Document Details</div>
+        <button class="modal-close" id="closePreview" aria-label="Close dialog">×</button>
+      </div>
+      <div class="modal-body" id="previewBody"></div>
+      <div class="modal-footer">
+        <button class="btn" id="closePreviewButton">Close</button>
+        <button class="btn btn-primary" id="downloadPreview">Download selected file</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    const STORAGE_KEY = "placetrackMyDocuments";
+    const AUDIT_KEY = "placetrackDocumentAudit";
+
+    const initialDocuments = [
+      {
+        id: "doc-resume",
+        name: "Resume.pdf",
+        category: "Placement Resume",
+        description: "Primary Academic Record",
+        status: "uploaded",
+        date: "Oct 12, 2024",
+        size: "240 KB",
+        type: "PDF",
+        demo: true
+      },
+      {
+        id: "doc-cert-1",
+        name: "Internship_Certificate_01.pdf",
+        category: "Internship Certificate",
+        description: "Google SWE Intern",
+        status: "uploaded",
+        date: "Oct 15, 2024",
+        size: "410 KB",
+        type: "PDF",
+        demo: true
+      },
+      {
+        id: "doc-cert-2",
+        name: "Internship_Certificate_02.pdf",
+        category: "Internship Certificate",
+        description: "IISc Research Fellowship",
+        status: "uploaded",
+        date: "Oct 18, 2024",
+        size: "325 KB",
+        type: "PDF",
+        demo: true
+      },
+      {
+        id: "doc-photo",
+        name: "Profile_Photo.jpg",
+        category: "Profile Picture",
+        description: "Official Badge Standard",
+        status: "uploaded",
+        date: "Sep 04, 2024",
+        size: "180 KB",
+        type: "JPG",
+        demo: true
+      },
+      {
+        id: "doc-cert-3",
+        name: "Internship_Certificate_03.pdf",
+        category: "Internship Certificate",
+        description: "Required for secondary specialization credit",
+        status: "missing",
+        date: "Not provided",
+        size: "—",
+        type: "PDF",
+        demo: true
+      }
+    ];
+
+    let documents = loadDocuments();
+    let activeFilter = "all";
+    let currentPreviewId = null;
+    let currentToastTimer = null;
+
+    function loadDocuments() {
+      try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          if (Array.isArray(parsed)) return parsed;
+        }
+      } catch (error) {
+        console.warn("Could not read saved document records.", error);
+      }
+      return initialDocuments.map(doc => ({ ...doc }));
+    }
+
+    function saveDocuments() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(documents));
+      } catch (error) {
+        showToast("Browser storage is unavailable. Changes may not persist.");
+      }
+    }
+
+    function loadStudentInfo() {
+      let name = "Aanya Sharma";
+      let roll = "21CS014";
+      let department = "Computer Engineering";
+
+      try {
+        const profile = JSON.parse(localStorage.getItem("placetrackMyProfile") || "null");
+        if (profile) {
+          name = profile.name || name;
+          roll = profile.roll || roll;
+          department = profile.department || department;
+        }
+
+        const selected = JSON.parse(sessionStorage.getItem("placetrackSelectedStudent") || "null");
+        if (selected) {
+          name = selected.name || selected.studentName || name;
+          roll = selected.roll || selected.rollNumber || roll;
+          department = selected.department || department;
+        }
+      } catch (error) {
+        // Use the default demo student if browser storage is unavailable.
+      }
+
+      const initials = name.split(/\s+/).filter(Boolean).slice(0, 2)
+        .map(part => part[0].toUpperCase()).join("") || "AS";
+
+      document.getElementById("sidebarAvatar").textContent = initials;
+      document.getElementById("topAvatar").textContent = initials;
+      document.getElementById("sidebarName").textContent = name;
+      document.getElementById("topName").textContent = name;
+      document.getElementById("sidebarMeta").textContent = `${roll} · ${department}`;
+      document.getElementById("topId").textContent = roll;
+    }
+
+    function escapeHTML(value) {
+      return String(value ?? "").replace(/[&<>"']/g, char => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+      })[char]);
+    }
+
+    function statusLabel(status) {
+      return ({
+        uploaded: "Uploaded",
+        pending: "Pending",
+        missing: "Missing",
+        rejected: "Needs update"
+      })[status] || "Uploaded";
+    }
+
+    function categoryDescription(category) {
+      return ({
+        "Placement Resume": "Primary placement record",
+        "Internship Certificate": "Internship / Research",
+        "Profile Picture": "ID card format"
+      })[category] || "Placement document";
+    }
+
+    function fileGlyph(doc) {
+      if (doc.category === "Profile Picture") return "▧";
+      if (doc.category === "Internship Certificate") return "◇";
+      return "▤";
+    }
+
+    function filteredDocuments() {
+      const query = (
+        document.getElementById("documentSearch").value + " " +
+        document.getElementById("globalSearch").value
+      ).trim().toLowerCase();
+      const category = document.getElementById("categoryFilter").value;
+
+      return documents.filter(doc => {
+        const matchesTab = activeFilter === "all" ||
+          (activeFilter === "uploaded" && doc.status === "uploaded") ||
+          (activeFilter === "pending" && doc.status === "pending") ||
+          (activeFilter === "missing" && doc.status === "missing");
+        const matchesCategory = category === "all" || doc.category === category;
+        const searchable = `${doc.name} ${doc.category} ${doc.description || ""} ${doc.status}`.toLowerCase();
+        return matchesTab && matchesCategory && (!query || searchable.includes(query));
+      });
+    }
+
+    function renderDocuments() {
+      const tbody = document.getElementById("docsTableBody");
+      const filtered = filteredDocuments();
+
+      tbody.innerHTML = filtered.map(doc => {
+        const statusClass = `status-${doc.status}`;
+        const isMissing = doc.status === "missing";
+        const sizeText = doc.size || "—";
+        const dateText = doc.date || "Not provided";
+
+        let actions = "";
+        if (isMissing) {
+          actions = `<button class="btn btn-small btn-primary" data-action="upload" data-id="${escapeHTML(doc.id)}">＋ Upload File</button>`;
+        } else {
+          actions = `
+            <button class="action-btn" title="View document details" data-action="view" data-id="${escapeHTML(doc.id)}">View</button>
+            <button class="action-btn" title="Download selected file" data-action="download" data-id="${escapeHTML(doc.id)}">↓</button>
+            <button class="action-btn replace" data-action="replace" data-id="${escapeHTML(doc.id)}">Replace</button>
+            <button class="action-btn delete" data-action="delete" data-id="${escapeHTML(doc.id)}">Delete</button>`;
+        }
+
+        return `
+          <tr class="${isMissing ? "missing-row" : ""}">
+            <td>
+              <div class="doc-name-wrap">
+                <div class="file-icon">${fileGlyph(doc)}</div>
+                <div>
+                  <div class="doc-name">${escapeHTML(doc.name)}</div>
+                  <div class="doc-sub">${escapeHTML(doc.description || "Placement document")}</div>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="category-name">${escapeHTML(doc.category)}</div>
+              <div class="category-sub">${escapeHTML(categoryDescription(doc.category))}</div>
+            </td>
+            <td><span class="status ${statusClass}">${statusLabel(doc.status)}</span></td>
+            <td>
+              <div class="meta-main">${escapeHTML(dateText)}</div>
+              <div class="meta-sub">${escapeHTML(doc.type || "File")} · ${escapeHTML(sizeText)}</div>
+            </td>
+            <td><div class="actions">${actions}</div></td>
+          </tr>`;
+      }).join("");
+
+      document.getElementById("emptyState").hidden = filtered.length !== 0;
+      document.getElementById("recordCount").textContent =
+        `Showing ${filtered.length} of ${documents.length} records · Local prototype`;
+      updateStats();
+    }
+
+    function updateStats() {
+      const total = documents.length;
+      const uploaded = documents.filter(doc => doc.status === "uploaded").length;
+      const pending = documents.filter(doc => doc.status === "pending").length;
+      const missing = documents.filter(doc => doc.status === "missing").length;
+
+      document.getElementById("totalStat").textContent = total;
+      document.getElementById("uploadedStat").textContent = uploaded;
+      document.getElementById("missingStat").textContent = missing;
+      document.getElementById("countAll").textContent = total;
+      document.getElementById("countUploaded").textContent = uploaded;
+      document.getElementById("countPending").textContent = pending;
+      document.getElementById("countMissing").textContent = missing;
+
+      document.getElementById("resumePill").textContent =
+        `${documents.filter(doc => doc.category === "Placement Resume" && doc.status === "uploaded").length} Current Resume`;
+      document.getElementById("photoPill").textContent =
+        `${documents.filter(doc => doc.category === "Profile Picture" && doc.status === "uploaded").length} Profile Photo`;
+    }
+
+    function setFilter(filter) {
+      activeFilter = filter;
+      document.querySelectorAll(".tab").forEach(tab => {
+        const isActive = tab.dataset.filter === filter;
+        tab.classList.toggle("active", isActive);
+        tab.setAttribute("aria-pressed", String(isActive));
+      });
+      renderDocuments();
+    }
+
+    function addAudit(action, doc, note = "") {
+      let audit = [];
+      try {
+        audit = JSON.parse(localStorage.getItem(AUDIT_KEY) || "[]");
+        if (!Array.isArray(audit)) audit = [];
+      } catch (error) {
+        audit = [];
+      }
+
+      audit.push({
+        action,
+        document: doc ? doc.name : "",
+        category: doc ? doc.category : "",
+        timestamp: new Date().toISOString(),
+        note
+      });
+
+      try {
+        localStorage.setItem(AUDIT_KEY, JSON.stringify(audit));
+      } catch (error) {
+        // Audit remains a local-only prototype feature.
+      }
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById("toast");
+      toast.textContent = message;
+      toast.classList.add("show");
+      clearTimeout(currentToastTimer);
+      currentToastTimer = setTimeout(() => toast.classList.remove("show"), 3000);
+    }
+
+    function openUpload(category = "Internship Certificate", replaceId = null) {
+      const modal = document.getElementById("uploadModal");
+      const form = document.getElementById("uploadForm");
+      form.reset();
+
+      document.getElementById("docCategory").value = category;
+      document.getElementById("filePreview").style.display = "none";
+      document.getElementById("filePreview").textContent = "";
+
+      document.getElementById("modalTitle").textContent =
+        replaceId ? "Replace Placement Document" : "Upload Placement Document";
+      document.getElementById("submitUpload").textContent =
+        replaceId ? "Replace Document" : "Add Document";
+
+      form.dataset.replaceId = replaceId || "";
+      modal.classList.add("show");
+      updateFileAccept();
+      document.getElementById("docFile").focus();
+    }
+
+    function closeUpload() {
+      document.getElementById("uploadModal").classList.remove("show");
+    }
+
+    function updateFileAccept() {
+      const category = document.getElementById("docCategory").value;
+      const fileInput = document.getElementById("docFile");
+      fileInput.accept = category === "Profile Picture"
+        ? ".jpg,.jpeg,.png,image/jpeg,image/png"
+        : ".pdf,application/pdf";
+      document.getElementById("fileHint").textContent =
+        category === "Profile Picture"
+          ? "Accepted: JPG or PNG image. Maximum file size: 2 MB."
+          : "Accepted: PDF document. Maximum file size: 5 MB.";
+    }
+
+    function formatSize(bytes) {
+      if (bytes < 1024) return `${bytes} B`;
+      if (bytes < 1024 * 1024) return `${Math.round(bytes / 1024)} KB`;
+      return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+    }
+
+    function validateFile(file, category) {
+      if (!file) return "Please choose a file first.";
+
+      const isPhoto = category === "Profile Picture";
+      const maxSize = isPhoto ? 2 * 1024 * 1024 : 5 * 1024 * 1024;
+      const extension = file.name.split(".").pop().toLowerCase();
+      const validType = isPhoto
+        ? ["jpg", "jpeg", "png"].includes(extension)
+        : extension === "pdf";
+
+      if (!validType) {
+        return isPhoto
+          ? "Please select a JPG or PNG image."
+          : "Please select a PDF document.";
+      }
+      if (file.size > maxSize) {
+        return `The selected file exceeds the ${isPhoto ? "2 MB" : "5 MB"} limit.`;
+      }
+      if (file.size === 0) return "The selected file is empty.";
+      return "";
+    }
+
+    function handleUpload(event) {
+      event.preventDefault();
+
+      const category = document.getElementById("docCategory").value;
+      const file = document.getElementById("docFile").files[0];
+      const description = document.getElementById("docDescription").value.trim();
+      const validationError = validateFile(file, category);
+
+      if (validationError) {
+        showToast(validationError);
+        return;
+      }
+
+      const replaceId = event.currentTarget.dataset.replaceId;
+      const oldDocument = replaceId ? documents.find(doc => doc.id === replaceId) : null;
+
+      if (category === "Placement Resume") {
+        documents = documents.filter(doc =>
+          doc.category !== "Placement Resume" || doc.id === replaceId
+        );
+      }
+      if (category === "Profile Picture") {
+        documents = documents.filter(doc =>
+          doc.category !== "Profile Picture" || doc.id === replaceId
+        );
+      }
+
+      if (replaceId) {
+        documents = documents.filter(doc => doc.id !== replaceId);
+      }
+
+      const now = new Date();
+      const newDoc = {
+        id: `doc-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+        name: file.name,
+        category,
+        description: description || categoryDescription(category),
+        status: "pending",
+        date: now.toLocaleDateString("en-US", { month: "short", day: "2-digit", year: "numeric" }),
+        size: formatSize(file.size),
+        type: file.name.split(".").pop().toUpperCase(),
+        demo: false,
+        localFileName: file.name,
+        localFileSize: file.size
+      };
+
+      // Save only metadata. Browser file data is not uploaded to a server.
+      documents.unshift(newDoc);
+      saveDocuments();
+      addAudit(oldDocument ? "Replaced" : "Added", newDoc,
+        "Prototype metadata only; no server upload.");
+      closeUpload();
+      setFilter("all");
+      showToast("Document record added locally and marked pending verification.");
+    }
+
+    function showPreview(id) {
+      const doc = documents.find(item => item.id === id);
+      if (!doc) return;
+      currentPreviewId = id;
+
+      document.getElementById("previewTitle").textContent = doc.name;
+      document.getElementById("previewBody").innerHTML = `
+        <div class="field">
+          <label>Document category</label>
+          <div>${escapeHTML(doc.category)}</div>
+        </div>
+        <div class="field">
+          <label>Status</label>
+          <div><span class="status status-${escapeHTML(doc.status)}">${statusLabel(doc.status)}</span></div>
+        </div>
+        <div class="field">
+          <label>Record date</label>
+          <div>${escapeHTML(doc.date || "Not provided")}</div>
+        </div>
+        <div class="field">
+          <label>File information</label>
+          <div>${escapeHTML(doc.type || "File")} · ${escapeHTML(doc.size || "—")}</div>
+        </div>
+        <div class="field">
+          <label>Description</label>
+          <div>${escapeHTML(doc.description || "No description provided")}</div>
+        </div>
+        <div class="file-hint">This prototype shows document metadata only. It does not provide a secure document preview.</div>`;
+      document.getElementById("previewModal").classList.add("show");
+    }
+
+    function closePreview() {
+      document.getElementById("previewModal").classList.remove("show");
+      currentPreviewId = null;
+    }
+
+    function downloadRecord(id) {
+      const doc = documents.find(item => item.id === id);
+      if (!doc) return;
+
+      const content = [
+        "PlaceTrack — Document Record",
+        `Name: ${doc.name}`,
+        `Category: ${doc.category}`,
+        `Status: ${statusLabel(doc.status)}`,
+        `Date: ${doc.date || "Not provided"}`,
+        `Size: ${doc.size || "—"}`,
+        `Description: ${doc.description || ""}`,
+        "",
+        "This is a prototype metadata record, not the original uploaded file."
+      ].join("\n");
+
+      const blob = new Blob([content], { type: "text/plain;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const anchor = document.createElement("a");
+      anchor.href = url;
+      anchor.download = `${doc.name.replace(/\.[^.]+$/, "")}-record.txt`;
+      document.body.appendChild(anchor);
+      anchor.click();
+      anchor.remove();
+      URL.revokeObjectURL(url);
+      addAudit("Downloaded record", doc);
+      showToast("Document metadata record downloaded.");
+    }
+
+    function deleteDocument(id) {
+      const doc = documents.find(item => item.id === id);
+      if (!doc) return;
+
+      const confirmed = window.confirm(`Remove "${doc.name}" from this local prototype?`);
+      if (!confirmed) return;
+
+      documents = documents.filter(item => item.id !== id);
+      saveDocuments();
+      addAudit("Deleted", doc);
+      renderDocuments();
+      showToast("Document record removed from this browser.");
+    }
+
+    function exportAuditLog() {
+      let audit = [];
+      try {
+        audit = JSON.parse(localStorage.getItem(AUDIT_KEY) || "[]");
+      } catch (error) {
+        audit = [];
+      }
+
+      const rows = [
+        ["Action", "Document", "Category", "Timestamp", "Note"],
+        ...audit.map(entry => [
+          entry.action, entry.document, entry.category, entry.timestamp, entry.note || ""
+        ])
+      ];
+
+      const csv = rows.map(row => row.map(value =>
+        `"${String(value ?? "").replace(/"/g, '""')}"`
+      ).join(",")).join("\r\n");
+
+      downloadBlob(csv, "placetrack-document-audit.csv", "text/csv;charset=utf-8");
+      showToast("Local audit log exported.");
+    }
+
+    function exportDocuments() {
+      const rows = [
+        ["Document Name", "Category", "Status", "Date", "Size", "Description"],
+        ...documents.map(doc => [
+          doc.name, doc.category, statusLabel(doc.status), doc.date || "",
+          doc.size || "", doc.description || ""
+        ])
+      ];
+
+      const csv = rows.map(row => row.map(value =>
+        `"${String(value ?? "").replace(/"/g, '""')}"`
+      ).join(",")).join("\r\n");
+
+      downloadBlob(csv, "placetrack-my-documents.csv", "text/csv;charset=utf-8");
+      showToast("Document list exported as CSV.");
+    }
+
+    function downloadBlob(content, filename, type) {
+      const blob = new Blob([content], { type });
+      const url = URL.createObjectURL(blob);
+      const anchor = document.createElement("a");
+      anchor.href = url;
+      anchor.download = filename;
+      document.body.appendChild(anchor);
+      anchor.click();
+      anchor.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    document.getElementById("openUpload").addEventListener("click", () => openUpload());
+    document.getElementById("closeModal").addEventListener("click", closeUpload);
+    document.getElementById("cancelUpload").addEventListener("click", closeUpload);
+    document.getElementById("uploadForm").addEventListener("submit", handleUpload);
+    document.getElementById("docCategory").addEventListener("change", updateFileAccept);
+
+    document.getElementById("docFile").addEventListener("change", event => {
+      const file = event.target.files[0];
+      const preview = document.getElementById("filePreview");
+      if (!file) {
+        preview.style.display = "none";
+        return;
+      }
+      preview.textContent = `${file.name} · ${formatSize(file.size)}`;
+      preview.style.display = "block";
+    });
+
+    document.querySelectorAll(".tab").forEach(tab => {
+      tab.addEventListener("click", () => setFilter(tab.dataset.filter));
+    });
+
+    document.getElementById("documentSearch").addEventListener("input", renderDocuments);
+    document.getElementById("globalSearch").addEventListener("input", () => {
+      document.getElementById("documentSearch").value =
+        document.getElementById("globalSearch").value;
+      renderDocuments();
+    });
+    document.getElementById("categoryFilter").addEventListener("change", renderDocuments);
+
+    document.getElementById("clearFilters").addEventListener("click", () => {
+      document.getElementById("documentSearch").value = "";
+      document.getElementById("globalSearch").value = "";
+      document.getElementById("categoryFilter").value = "all";
+      setFilter("all");
+    });
+
+    document.getElementById("docsTableBody").addEventListener("click", event => {
+      const button = event.target.closest("[data-action]");
+      if (!button) return;
+
+      const id = button.dataset.id;
+      switch (button.dataset.action) {
+        case "upload": {
+          const doc = documents.find(item => item.id === id);
+          openUpload(doc?.category || "Internship Certificate", id);
+          break;
+        }
+        case "view":
+          showPreview(id);
+          break;
+        case "download":
+          downloadRecord(id);
+          break;
+        case "replace": {
+          const doc = documents.find(item => item.id === id);
+          if (doc) openUpload(doc.category, id);
+          break;
+        }
+        case "delete":
+          deleteDocument(id);
+          break;
+      }
+    });
+
+    document.getElementById("exportButton").addEventListener("click", exportAuditLog);
+    document.getElementById("exportButtonBottom").addEventListener("click", exportDocuments);
+
+    document.getElementById("resetDemo").addEventListener("click", () => {
+      if (!window.confirm("Reset document records to the original demo data?")) return;
+      documents = initialDocuments.map(doc => ({ ...doc }));
+      saveDocuments();
+      setFilter("all");
+      showToast("Demo document records restored.");
+    });
+
+    document.getElementById("closePreview").addEventListener("click", closePreview);
+    document.getElementById("closePreviewButton").addEventListener("click", closePreview);
+    document.getElementById("downloadPreview").addEventListener("click", () => {
+      if (currentPreviewId) downloadRecord(currentPreviewId);
+      closePreview();
+    });
+
+    document.querySelectorAll(".modal-backdrop").forEach(backdrop => {
+      backdrop.addEventListener("click", event => {
+        if (event.target !== backdrop) return;
+        backdrop.classList.remove("show");
+      });
+    });
+
+    document.addEventListener("keydown", event => {
+      if (event.key === "Escape") {
+        closeUpload();
+        closePreview();
+      }
+    });
+
+    loadStudentInfo();
+    updateFileAccept();
+    renderDocuments();
+  </script>
+</body>
+</html>

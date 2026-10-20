@@ -1,0 +1,1105 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#F7F5EF">
+  <title>Student Dashboard | PlaceTrack</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+
+  <style>
+    :root {
+      --ivory: #F7F5EF;
+      --white: #FFFFFF;
+      --forest: #244A3B;
+      --forest-dark: #19372B;
+      --sage: #78927A;
+      --sage-pale: #EDF2EA;
+      --terracotta: #D8B89A;
+      --text: #343832;
+      --muted: #777A73;
+      --border: #E6E2D9;
+      --danger: #A4473F;
+      --danger-pale: #F8EAE7;
+      --shadow: 0 2px 10px rgba(52, 56, 50, 0.045);
+      --radius: 14px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--ivory);
+      color: var(--text);
+      font-family: Inter, sans-serif;
+      font-size: 14px;
+      line-height: 1.55;
+    }
+    button, input { font: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    a { color: inherit; text-decoration: none; }
+    button { cursor: pointer; }
+    .icon {
+      font-family: "Material Symbols Outlined";
+      font-weight: normal;
+      font-style: normal;
+      font-size: 21px;
+      line-height: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      white-space: nowrap;
+      -webkit-font-feature-settings: "liga";
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .sidebar {
+      position: fixed;
+      inset: 0 auto 0 0;
+      width: 250px;
+      z-index: 20;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background: var(--white);
+      border-right: 1px solid var(--border);
+      padding: 24px 16px 18px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      padding: 0 10px;
+      margin-bottom: 36px;
+    }
+    .brand-mark {
+      width: 40px;
+      height: 40px;
+      display: grid;
+      place-items: center;
+      border-radius: 12px;
+      background: var(--forest);
+      color: white;
+    }
+    .brand-name { font-size: 19px; font-weight: 700; letter-spacing: -0.7px; }
+    .brand-caption {
+      font-size: 10px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .nav-label {
+      margin: 0 12px 10px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .nav-list { display: grid; gap: 5px; }
+    .nav-link {
+      min-height: 44px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 13px;
+      border-radius: 9px;
+      color: #62675F;
+      font-weight: 500;
+      transition: background .18s, color .18s;
+    }
+    .nav-link:hover { background: var(--sage-pale); color: var(--forest); }
+    .nav-link.active { background: var(--forest); color: white; }
+    .nav-link .icon { font-size: 20px; }
+    .sidebar-bottom {
+      background: var(--ivory);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 13px;
+    }
+    .mini-profile { display: flex; gap: 10px; align-items: center; min-width: 0; }
+    .avatar {
+      width: 39px;
+      height: 39px;
+      border-radius: 50%;
+      background: var(--forest);
+      color: white;
+      display: grid;
+      place-items: center;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .mini-profile strong { display: block; font-size: 12px; }
+    .mini-profile small { color: var(--muted); font-size: 11px; }
+    .signout {
+      margin-top: 13px;
+      width: 100%;
+      border: 1px solid var(--border);
+      background: white;
+      border-radius: 8px;
+      padding: 9px;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+    }
+    .signout:hover { color: var(--danger); border-color: #D9B2AD; }
+
+    .main-shell { margin-left: 250px; min-height: 100vh; }
+    .topbar {
+      height: 68px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 0 34px;
+      background: rgba(247, 245, 239, .94);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .academic-year {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .year-chip {
+      background: var(--sage-pale);
+      color: var(--forest);
+      padding: 5px 9px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .top-actions { display: flex; align-items: center; gap: 13px; }
+    .icon-btn {
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      background: white;
+      color: var(--muted);
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      position: relative;
+    }
+    .icon-btn:hover { color: var(--forest); background: var(--sage-pale); }
+    .notification-dot {
+      position: absolute;
+      top: 7px;
+      right: 7px;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--danger);
+    }
+    .top-user { display: flex; align-items: center; gap: 9px; font-weight: 600; font-size: 12px; }
+    .top-user .avatar { width: 33px; height: 33px; font-size: 11px; }
+
+    main { max-width: 1500px; margin: 0 auto; padding: 30px 34px 50px; }
+    .greeting {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      margin-bottom: 25px;
+    }
+    .eyebrow {
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 1.4px;
+      font-size: 10px;
+      font-weight: 700;
+    }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 { font-size: clamp(25px, 3vw, 32px); letter-spacing: -1.1px; line-height: 1.25; margin: 7px 0 8px; }
+    h2 { font-size: 17px; letter-spacing: -.35px; margin-bottom: 3px; }
+    h3 { font-size: 14px; margin-bottom: 4px; }
+    .subtext { color: var(--muted); margin: 0; font-size: 13px; }
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: 1px solid transparent;
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 12px;
+      font-weight: 600;
+      transition: background .18s, transform .18s;
+    }
+    .button:hover { transform: translateY(-1px); }
+    .button-primary { background: var(--forest); color: white; }
+    .button-primary:hover { background: var(--forest-dark); }
+    .button-secondary { background: white; border-color: var(--border); color: var(--text); }
+    .button-secondary:hover { background: var(--sage-pale); color: var(--forest); }
+    .button-warm { background: #F2E7DA; color: #694D36; }
+    .button-small { padding: 7px 10px; font-size: 11px; }
+
+    .card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      min-width: 0;
+    }
+    .card-pad { padding: 22px; }
+    .card-heading {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+    .heading-icon {
+      width: 37px;
+      height: 37px;
+      flex-shrink: 0;
+      display: grid;
+      place-items: center;
+      border-radius: 10px;
+      background: var(--sage-pale);
+      color: var(--forest);
+    }
+
+    .readiness { margin-bottom: 22px; }
+    .readiness-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 20px;
+    }
+    .readiness-title {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 6px;
+    }
+    .readiness-title h2 { color: var(--forest); font-size: 20px; margin: 0; }
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 8px;
+      border-radius: 5px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .35px;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .status-good { background: #E4EFE2; color: #385C3E; }
+    .status-warn { background: #F5E9D9; color: #815D35; }
+    .status-missing { background: var(--danger-pale); color: var(--danger); }
+    .readiness-percent { color: var(--forest); font-size: 32px; font-weight: 700; letter-spacing: -1px; white-space: nowrap; }
+    .progress-track { height: 8px; overflow: hidden; background: #EAE9E2; border-radius: 20px; margin: 20px 0 8px; }
+    .progress-fill { height: 100%; background: var(--forest); border-radius: 20px; transition: width .3s; }
+    .progress-meta { display: flex; justify-content: space-between; gap: 12px; font-size: 11px; color: var(--muted); }
+    .checklist {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 9px;
+      margin-top: 19px;
+    }
+    .check-item {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      min-width: 0;
+      padding: 11px;
+      background: #F8F8F4;
+      border: 1px solid #EEEEE7;
+      border-radius: 9px;
+    }
+    .check-circle {
+      display: grid;
+      place-items: center;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      background: #E2EDE0;
+      color: var(--forest);
+    }
+    .check-circle .icon { font-size: 15px; }
+    .check-item.missing { background: #FFF8F6; border-color: #F0DFDC; }
+    .check-item.missing .check-circle { background: var(--danger-pale); color: var(--danger); }
+    .check-copy { min-width: 0; flex: 1; }
+    .check-copy strong { display: block; font-size: 11px; font-weight: 600; }
+    .check-copy small { display: block; color: var(--muted); font-size: 10px; }
+
+    .workspace {
+      display: grid;
+      grid-template-columns: minmax(0, 1.35fr) minmax(300px, .9fr);
+      gap: 22px;
+      align-items: start;
+    }
+    .column { display: grid; gap: 22px; min-width: 0; }
+    .metrics-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+    .metric {
+      background: #F8F8F4;
+      border: 1px solid #EFEEE8;
+      padding: 15px;
+      border-radius: 10px;
+      min-width: 0;
+    }
+    .metric-label { color: var(--muted); font-size: 10px; font-weight: 700; letter-spacing: .8px; text-transform: uppercase; }
+    .metric-value { font-size: 27px; color: var(--forest); font-weight: 700; letter-spacing: -.7px; margin: 5px 0 2px; }
+    .metric-foot { font-size: 10px; color: var(--muted); }
+    .metric-foot .icon { font-size: 13px; vertical-align: middle; margin-right: 3px; }
+    .metric-foot.positive { color: #4D7753; }
+    .academic-footer { display: flex; justify-content: flex-end; margin-top: 15px; }
+    .text-link { color: var(--forest); font-size: 12px; font-weight: 600; display: inline-flex; align-items: center; gap: 5px; }
+    .text-link:hover { text-decoration: underline; }
+    .text-link .icon { font-size: 17px; }
+
+    .document-list { display: grid; gap: 10px; }
+    .document-row {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      padding: 12px;
+      border-radius: 10px;
+      border: 1px solid #EFEEE8;
+      background: #FAFAF7;
+    }
+    .document-icon {
+      width: 39px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border-radius: 8px;
+      background: #E9EEE5;
+      color: var(--forest);
+      flex-shrink: 0;
+    }
+    .document-icon .icon { font-size: 22px; }
+    .document-copy { flex: 1; min-width: 0; }
+    .document-copy strong { display: block; font-size: 12px; overflow-wrap: anywhere; }
+    .document-copy small { display: block; color: var(--muted); font-size: 10px; margin-top: 2px; }
+    .document-action { flex-shrink: 0; }
+    .document-note {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      background: var(--sage-pale);
+      color: #526552;
+      padding: 11px;
+      border-radius: 8px;
+      font-size: 10px;
+      margin-top: 12px;
+    }
+    .document-note .icon { font-size: 16px; }
+
+    .standing-banner {
+      padding: 17px;
+      background: #EEF3EB;
+      border: 1px solid #DFE9DB;
+      border-radius: 10px;
+      margin-top: 12px;
+    }
+    .standing-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .standing-title { display: flex; align-items: center; gap: 8px; color: var(--forest); font-weight: 700; }
+    .standing-title .icon { font-size: 22px; }
+    .standing-banner p { margin: 9px 0 0; font-size: 12px; color: #566653; }
+    .standing-details { display: grid; gap: 11px; margin-top: 17px; }
+    .detail-line { display: flex; justify-content: space-between; gap: 12px; font-size: 11px; }
+    .detail-line span:first-child { color: var(--muted); }
+    .detail-line strong { text-align: right; font-weight: 600; }
+
+    .activity-list { display: grid; }
+    .activity-item { display: flex; gap: 12px; padding: 0 0 17px; position: relative; }
+    .activity-item:not(:last-child)::before {
+      content: "";
+      position: absolute;
+      left: 10px;
+      top: 24px;
+      bottom: 0;
+      width: 1px;
+      background: var(--border);
+    }
+    .activity-dot {
+      width: 21px;
+      height: 21px;
+      border: 1px solid #D9E5D5;
+      border-radius: 50%;
+      background: #EAF1E6;
+      color: var(--forest);
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+      z-index: 1;
+    }
+    .activity-dot .icon { font-size: 13px; }
+    .activity-copy { min-width: 0; }
+    .activity-copy strong { display: block; font-size: 11px; font-weight: 600; }
+    .activity-copy p { margin: 2px 0; font-size: 10px; color: var(--muted); overflow-wrap: anywhere; }
+    .activity-copy time { color: #8A8C85; font-size: 10px; }
+
+    .quick-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+    .quick-action {
+      border: 1px solid var(--border);
+      background: white;
+      border-radius: 10px;
+      padding: 14px;
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 9px;
+      transition: border .18s, background .18s;
+    }
+    .quick-action:hover { border-color: var(--sage); background: #FAFBF7; }
+    .quick-action .heading-icon { width: 33px; height: 33px; }
+    .quick-action strong { font-size: 11px; }
+    .quick-action small { color: var(--muted); font-size: 10px; }
+
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding-top: 25px;
+      margin-top: 26px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 10px;
+    }
+    .footer strong { color: var(--forest); }
+
+    .toast {
+      position: fixed;
+      right: 24px;
+      bottom: 24px;
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      max-width: min(420px, calc(100vw - 32px));
+      padding: 13px 17px;
+      color: white;
+      background: var(--forest);
+      border-radius: 10px;
+      box-shadow: 0 8px 28px rgba(0,0,0,.14);
+      opacity: 0;
+      transform: translateY(10px);
+      pointer-events: none;
+      transition: .2s ease;
+    }
+    .toast.show { opacity: 1; transform: translateY(0); }
+
+    .mobile-menu { display: none; }
+    .file-input { display: none; }
+
+    @media (max-width: 1120px) {
+      .sidebar { width: 220px; }
+      .main-shell { margin-left: 220px; }
+      .workspace { grid-template-columns: minmax(0, 1fr); }
+      .column-right { grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; }
+      .checklist { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .topbar { padding: 0 24px; }
+      main { padding: 26px 24px 40px; }
+    }
+    @media (max-width: 760px) {
+      .sidebar {
+        width: min(290px, 85vw);
+        transform: translateX(-102%);
+        transition: transform .22s ease;
+        box-shadow: none;
+      }
+      .sidebar.open { transform: translateX(0); box-shadow: 8px 0 30px rgba(0,0,0,.1); }
+      .main-shell { margin-left: 0; }
+      .topbar { height: 60px; padding: 0 16px; }
+      .mobile-menu { display: grid; }
+      .academic-year .year-label { display: none; }
+      .top-actions { gap: 8px; }
+      .top-user .user-name { display: none; }
+      main { padding: 22px 15px 35px; }
+      .greeting { align-items: flex-start; flex-direction: column; }
+      .greeting .button { width: 100%; }
+      .readiness-top { flex-direction: column; gap: 10px; }
+      .readiness-percent { font-size: 27px; }
+      .checklist { grid-template-columns: 1fr; }
+      .column-right { grid-template-columns: 1fr; }
+      .card-pad { padding: 17px; }
+      .document-row { align-items: flex-start; flex-wrap: wrap; }
+      .document-action { margin-left: 50px; }
+      .footer { flex-direction: column; }
+    }
+    @media (max-width: 420px) {
+      .metrics-grid { grid-template-columns: 1fr 1fr; }
+      .metric { padding: 11px; }
+      .metric-value { font-size: 23px; }
+      .quick-actions { grid-template-columns: 1fr 1fr; }
+      .progress-meta { font-size: 10px; }
+    }
+    @media print {
+      .sidebar, .topbar, .greeting .button, .quick-actions,
+      .document-action, .footer, .toast, .mobile-menu { display: none !important; }
+      .main-shell { margin: 0; }
+      main { padding: 0; }
+      body { background: white; }
+      .card { box-shadow: none; break-inside: avoid; }
+      .workspace { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+
+<body>
+  <aside class="sidebar" id="sidebar">
+    <div>
+      <a href="../Student Dashboard/code.html" class="brand" aria-label="PlaceTrack Student Dashboard">
+        <span class="brand-mark icon">apartment</span>
+        <span>
+          <span class="brand-name">PlaceTrack</span>
+          <span class="brand-caption" style="display:block">Student Portal</span>
+        </span>
+      </a>
+
+      <div class="nav-label">Workspace</div>
+      <nav class="nav-list" aria-label="Student navigation">
+        <a class="nav-link active" aria-current="page" href="../Student Dashboard/code.html">
+          <span class="icon">grid_view</span> Dashboard
+        </a>
+        <a class="nav-link" href="../My Profile/code.html">
+          <span class="icon">person</span> My Profile
+        </a>
+        <a class="nav-link" href="../My Documents/code.html">
+          <span class="icon">folder_open</span> My Documents
+        </a>
+        <a class="nav-link" href="../Settings/code.html">
+          <span class="icon">settings</span> Settings
+        </a>
+      </nav>
+    </div>
+
+    <div class="sidebar-bottom">
+      <div class="mini-profile">
+        <div class="avatar" id="sideAvatar">AS</div>
+        <div style="min-width:0">
+          <strong id="sideName">Aanya Sharma</strong>
+          <small id="sideRoll">21CS014 · Computer Engg.</small>
+        </div>
+      </div>
+      <a class="signout" href="../Login/code.html">
+        <span class="icon">logout</span> Sign Out
+      </a>
+    </div>
+  </aside>
+
+  <div class="main-shell">
+    <header class="topbar">
+      <div style="display:flex;align-items:center;gap:12px">
+        <button class="icon-btn mobile-menu" id="menuButton" aria-label="Open navigation">
+          <span class="icon">menu</span>
+        </button>
+        <div class="academic-year">
+          <span class="year-label">Academic Year</span>
+          <span class="year-chip">AY 2024–25</span>
+        </div>
+      </div>
+      <div class="top-actions">
+        <button class="icon-btn" id="notificationButton" aria-label="Notifications">
+          <span class="icon">notifications</span>
+          <span class="notification-dot"></span>
+        </button>
+        <button class="icon-btn" id="helpButton" aria-label="Help">
+          <span class="icon">help_outline</span>
+        </button>
+        <a href="../My Profile/code.html" class="top-user">
+          <span class="avatar" id="topAvatar">AS</span>
+          <span class="user-name" id="topName">Aanya Sharma</span>
+        </a>
+      </div>
+    </header>
+
+    <main>
+      <section class="greeting">
+        <div>
+          <div class="eyebrow">Student Portal Overview · <span id="studentRollLabel">ID: 21CS014</span></div>
+          <h1 id="welcomeTitle">Welcome back, Aanya</h1>
+          <p class="subtext">Keep your placement profile up to date for institutional verification and upcoming placement cycles.</p>
+        </div>
+        <a class="button button-primary" href="../My Profile/code.html">
+          <span class="icon">badge</span> Complete Profile
+        </a>
+      </section>
+
+      <section class="card card-pad readiness" aria-labelledby="readinessTitle">
+        <div class="readiness-top">
+          <div>
+            <div class="readiness-title">
+              <h2 id="readinessTitle">Profile Completion</h2>
+              <span class="status status-warn" id="completionStatus">Action Needed</span>
+            </div>
+            <p class="subtext" id="completionMessage">Your profile is almost complete. Upload your profile picture to improve verification readiness.</p>
+          </div>
+          <div class="readiness-percent" id="completionPercent">80%</div>
+        </div>
+
+        <div class="progress-track" role="progressbar" aria-label="Profile completion" aria-valuemin="0" aria-valuemax="100" aria-valuenow="80" id="completionProgress">
+          <div class="progress-fill" id="completionBar" style="width:80%"></div>
+        </div>
+        <div class="progress-meta">
+          <span id="criteriaText">5 of 6 verification criteria satisfied</span>
+          <span>Target: 100%</span>
+        </div>
+
+        <div class="checklist">
+          <div class="check-item">
+            <span class="check-circle"><span class="icon">check</span></span>
+            <span class="check-copy"><strong>Personal Information</strong><small>Complete</small></span>
+            <span class="status status-good">Done</span>
+          </div>
+          <div class="check-item">
+            <span class="check-circle"><span class="icon">check</span></span>
+            <span class="check-copy"><strong>Academic Information</strong><small>Complete</small></span>
+            <span class="status status-good">Done</span>
+          </div>
+          <div class="check-item">
+            <span class="check-circle"><span class="icon">check</span></span>
+            <span class="check-copy"><strong>Technical Skills</strong><small>Complete</small></span>
+            <span class="status status-good">Done</span>
+          </div>
+          <div class="check-item">
+            <span class="check-circle"><span class="icon">check</span></span>
+            <span class="check-copy"><strong>Resume PDF</strong><small>Uploaded</small></span>
+            <span class="status status-good">Done</span>
+          </div>
+          <div class="check-item missing">
+            <span class="check-circle"><span class="icon">priority_high</span></span>
+            <span class="check-copy"><strong>Profile Picture</strong><small>Required for verification</small></span>
+            <button class="button button-small button-warm" id="uploadAvatarButton">Upload</button>
+          </div>
+          <div class="check-item">
+            <span class="check-circle"><span class="icon">check</span></span>
+            <span class="check-copy"><strong>Internship Proofs</strong><small>2 uploaded</small></span>
+            <span class="status status-good">Done</span>
+          </div>
+        </div>
+        <input class="file-input" type="file" id="avatarInput" accept="image/*">
+      </section>
+
+      <div class="workspace">
+        <div class="column">
+          <section class="card card-pad">
+            <div class="card-heading">
+              <div>
+                <h2>Academic Summary</h2>
+                <p class="subtext">Your current academic standing</p>
+              </div>
+              <span class="heading-icon icon">school</span>
+            </div>
+
+            <div class="metrics-grid">
+              <div class="metric">
+                <div class="metric-label">Cumulative GPA</div>
+                <div class="metric-value" id="studentCgpa">8.70</div>
+                <div class="metric-foot positive"><span class="icon">workspace_premium</span>Strong academic record</div>
+              </div>
+              <div class="metric">
+                <div class="metric-label">Department</div>
+                <div class="metric-value" style="font-size:19px;letter-spacing:-.4px" id="studentDepartment">Computer Engg.</div>
+                <div class="metric-foot">Faculty of Technology</div>
+              </div>
+              <div class="metric">
+                <div class="metric-label">Academic Cohort</div>
+                <div class="metric-value" style="font-size:20px;letter-spacing:-.5px">2024–25</div>
+                <div class="metric-foot">Graduating class of 2025</div>
+              </div>
+              <div class="metric">
+                <div class="metric-label">Active Backlogs</div>
+                <div class="metric-value" id="studentBacklogs">0</div>
+                <div class="metric-foot positive" id="backlogFoot"><span class="icon">verified</span>Clear academic history</div>
+              </div>
+            </div>
+
+            <div class="academic-footer">
+              <a class="text-link" href="../My Profile/code.html">View academic history <span class="icon">arrow_forward</span></a>
+            </div>
+          </section>
+
+          <section class="card card-pad">
+            <div class="card-heading">
+              <div>
+                <h2>My Documents</h2>
+                <p class="subtext">Placement documents and verification status</p>
+              </div>
+              <a href="../My Documents/code.html" class="text-link">View all <span class="icon">arrow_forward</span></a>
+            </div>
+
+            <div class="document-list">
+              <div class="document-row">
+                <div class="document-icon"><span class="icon">description</span></div>
+                <div class="document-copy">
+                  <strong id="resumeFilename">Aanya_Sharma_Resume_2024.pdf</strong>
+                  <small>Resume · PDF · Uploaded Oct 12, 2024</small>
+                </div>
+                <span class="status status-good">Uploaded</span>
+              </div>
+
+              <div class="document-row">
+                <div class="document-icon"><span class="icon">workspace_premium</span></div>
+                <div class="document-copy">
+                  <strong>Internship Certificates</strong>
+                  <small>2 certificate records on file</small>
+                </div>
+                <span class="status status-good">Verified</span>
+              </div>
+
+              <div class="document-row">
+                <div class="document-icon" style="background:#F5E9E6;color:#A4473F"><span class="icon">account_circle</span></div>
+                <div class="document-copy">
+                  <strong>Profile Picture</strong>
+                  <small id="photoStatusText">No photograph on record</small>
+                </div>
+                <button class="button button-small button-primary document-action" id="uploadDocumentPhoto">Upload</button>
+              </div>
+            </div>
+
+            <div class="document-note">
+              <span class="icon">lock</span>
+              <span>Your documents are intended to be stored in private cloud storage and accessible only to authorized users. This prototype does not upload files to a server.</span>
+            </div>
+          </section>
+
+          <section class="card card-pad">
+            <div class="card-heading">
+              <div>
+                <h2>Quick Actions</h2>
+                <p class="subtext">Keep your placement information up to date</p>
+              </div>
+            </div>
+            <div class="quick-actions">
+              <a class="quick-action" href="../My Profile/code.html">
+                <span class="heading-icon icon">edit_document</span>
+                <strong>Edit My Profile</strong>
+                <small>Review personal and academic details</small>
+              </a>
+              <a class="quick-action" href="../My Documents/code.html">
+                <span class="heading-icon icon">upload_file</span>
+                <strong>Manage Documents</strong>
+                <small>Review your uploaded files</small>
+              </a>
+              <a class="quick-action" href="../Settings/code.html">
+                <span class="heading-icon icon">tune</span>
+                <strong>Account Settings</strong>
+                <small>Manage account preferences</small>
+              </a>
+              <button class="quick-action" id="printButton" type="button">
+                <span class="heading-icon icon">print</span>
+                <strong>Print Dashboard</strong>
+                <small>Print a summary of this page</small>
+              </button>
+            </div>
+          </section>
+        </div>
+
+        <div class="column column-right">
+          <section class="card card-pad">
+            <div class="card-heading" style="margin-bottom:8px">
+              <div>
+                <h2>Placement Standing</h2>
+                <p class="subtext">Eligibility overview</p>
+              </div>
+              <span class="heading-icon icon">verified_user</span>
+            </div>
+
+            <div class="standing-banner">
+              <div class="standing-top">
+                <div class="standing-title"><span class="icon" id="standingIcon">verified</span><span id="standingTitle">Eligible</span></div>
+                <span class="status status-good" id="standingBadge">On Track</span>
+              </div>
+              <p id="standingMessage">Your academic record meets the demo criteria of CGPA 7.0 or above and zero active backlogs.</p>
+            </div>
+
+            <div class="standing-details">
+              <div class="detail-line"><span>Student ID</span><strong id="standingRoll">21CS014</strong></div>
+              <div class="detail-line"><span>CGPA</span><strong id="standingCgpa">8.70 / 10.0</strong></div>
+              <div class="detail-line"><span>Active Backlogs</span><strong id="standingBacklogs">0</strong></div>
+              <div class="detail-line"><span>Profile Completion</span><strong id="standingCompletion">80%</strong></div>
+            </div>
+            <p class="subtext" style="font-size:10px;margin:16px 0 0">Demo eligibility is illustrative. Actual placement rules are determined by the institution and each recruiter.</p>
+          </section>
+
+          <section class="card card-pad">
+            <div class="card-heading">
+              <div>
+                <h2>Recent Activity</h2>
+                <p class="subtext">Recent profile and document updates</p>
+              </div>
+              <span class="heading-icon icon">history</span>
+            </div>
+
+            <div class="activity-list">
+              <div class="activity-item">
+                <span class="activity-dot"><span class="icon">upload_file</span></span>
+                <div class="activity-copy">
+                  <strong>Internship certificate recorded</strong>
+                  <p>Research Fellowship certificate</p>
+                  <time>Oct 18, 2024 · 2:45 PM</time>
+                </div>
+              </div>
+              <div class="activity-item">
+                <span class="activity-dot"><span class="icon">upload_file</span></span>
+                <div class="activity-copy">
+                  <strong>Certificate added</strong>
+                  <p>Software engineering internship</p>
+                  <time>Oct 15, 2024 · 11:20 AM</time>
+                </div>
+              </div>
+              <div class="activity-item">
+                <span class="activity-dot"><span class="icon">description</span></span>
+                <div class="activity-copy">
+                  <strong>Resume updated</strong>
+                  <p>Resume version 2024</p>
+                  <time>Oct 12, 2024 · 4:10 PM</time>
+                </div>
+              </div>
+              <div class="activity-item">
+                <span class="activity-dot"><span class="icon">code</span></span>
+                <div class="activity-copy">
+                  <strong>Technical skills updated</strong>
+                  <p>AWS S3 and Docker added</p>
+                  <time>Oct 08, 2024 · 9:30 AM</time>
+                </div>
+              </div>
+              <div class="activity-item">
+                <span class="activity-dot"><span class="icon">school</span></span>
+                <div class="activity-copy">
+                  <strong>Academic record synced</strong>
+                  <p>Semester VII grade updated</p>
+                  <time>Sep 28, 2024 · 10:15 AM</time>
+                </div>
+              </div>
+            </div>
+            <div class="document-note">
+              <span class="icon">fact_check</span>
+              <span>Profile changes and verification events should be recorded in the production audit log.</span>
+            </div>
+          </section>
+        </div>
+      </div>
+
+      <footer class="footer">
+        <span><strong>PlaceTrack</strong> · Student Placement Data Management System</span>
+        <span>Academic Year 2024–25 · Demonstration Prototype</span>
+      </footer>
+    </main>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite">
+    <span class="icon">check_circle</span>
+    <span id="toastMessage">Action completed.</span>
+  </div>
+
+  <script>
+    // Demo records shared with the other PlaceTrack prototype pages.
+    const demoStudents = {
+      "21CS014": {
+        name: "Aanya Sharma",
+        roll: "21CS014",
+        department: "Computer Engg.",
+        cgpa: 8.7,
+        backlogs: 0
+      },
+      "21IT022": {
+        name: "Rohan Mehta",
+        roll: "21IT022",
+        department: "Information Technology",
+        cgpa: 7.9,
+        backlogs: 1
+      },
+      "21CS031": {
+        name: "Isha Patel",
+        roll: "21CS031",
+        department: "Computer Engg.",
+        cgpa: 8.4,
+        backlogs: 0
+      },
+      "21EC018": {
+        name: "Arjun Nair",
+        roll: "21EC018",
+        department: "Electronics Engg.",
+        cgpa: 7.2,
+        backlogs: 2
+      }
+    };
+
+    const $ = (id) => document.getElementById(id);
+    let toastTimeout;
+
+    function showToast(message) {
+      $("toastMessage").textContent = message;
+      $("toast").classList.add("show");
+      clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => $("toast").classList.remove("show"), 3000);
+    }
+
+    function getSelectedStudent() {
+      let selected = null;
+
+      // Support the keys used by Student Directory and Student Detail.
+      for (const key of ["placetrackSelectedStudent", "selectedStudent"]) {
+        try {
+          const raw = sessionStorage.getItem(key);
+          if (!raw) continue;
+
+          const value = JSON.parse(raw);
+          if (value && typeof value === "object") {
+            selected = value;
+            break;
+          }
+        } catch (_) {
+          // Some prototype pages may store a plain text value.
+          const raw = sessionStorage.getItem(key);
+          if (raw && demoStudents[raw]) {
+            selected = demoStudents[raw];
+            break;
+          }
+        }
+      }
+
+      const name = sessionStorage.getItem("selectedStudentName");
+      const roll = sessionStorage.getItem("selectedStudentRoll");
+
+      if (!selected && roll && demoStudents[roll]) {
+        selected = { ...demoStudents[roll] };
+      }
+
+      if (!selected && name) {
+        selected = Object.values(demoStudents).find(
+          student => student.name.toLowerCase() === name.toLowerCase()
+        ) || null;
+      }
+
+      if (!selected) return { ...demoStudents["21CS014"] };
+
+      const resolvedRoll = selected.roll || selected.rollNumber || selected.studentId || roll;
+      const matchingRecord = resolvedRoll ? demoStudents[resolvedRoll] : null;
+
+      return {
+        ...(matchingRecord || demoStudents["21CS014"]),
+        ...selected,
+        name: selected.name || selected.fullName || name || "Aanya Sharma",
+        roll: resolvedRoll || "21CS014",
+        department: selected.department || selected.branch || selected.program || "Computer Engg.",
+        cgpa: Number(selected.cgpa ?? selected.CGPA ?? selected.gpa ?? matchingRecord?.cgpa ?? 8.7),
+        backlogs: Number(selected.backlogs ?? selected.activeBacklogs ?? matchingRecord?.backlogs ?? 0)
+      };
+    }
+
+    function initials(name) {
+      return name.trim().split(/\s+/).slice(0, 2).map(part => part[0]).join("").toUpperCase();
+    }
+
+    function renderStudent() {
+      const student = getSelectedStudent();
+      const firstName = student.name.trim().split(/\s+/)[0];
+      const clearBacklogs = student.backlogs === 0;
+      const meetsDemoCriteria = student.cgpa >= 7 && clearBacklogs;
+      const avatarText = initials(student.name);
+
+      $("sideAvatar").textContent = avatarText;
+      $("topAvatar").textContent = avatarText;
+      $("sideName").textContent = student.name;
+      $("topName").textContent = student.name;
+      $("sideRoll").textContent = `${student.roll} · ${student.department}`;
+      $("studentRollLabel").textContent = `ID: ${student.roll}`;
+      $("welcomeTitle").textContent = `Welcome back, ${firstName}`;
+      $("studentCgpa").textContent = student.cgpa.toFixed(2);
+      $("studentDepartment").textContent = student.department;
+      $("studentBacklogs").textContent = String(student.backlogs);
+      $("standingRoll").textContent = student.roll;
+      $("standingCgpa").textContent = `${student.cgpa.toFixed(2)} / 10.0`;
+      $("standingBacklogs").textContent = String(student.backlogs);
+
+      $("backlogFoot").innerHTML = clearBacklogs
+        ? '<span class="icon">verified</span>Clear academic history'
+        : '<span class="icon">warning</span>Review academic record';
+      $("backlogFoot").classList.toggle("positive", clearBacklogs);
+
+      $("standingTitle").textContent = meetsDemoCriteria ? "Eligible" : "Needs Review";
+      $("standingBadge").textContent = meetsDemoCriteria ? "On Track" : "Review";
+      $("standingBadge").className = `status ${meetsDemoCriteria ? "status-good" : "status-warn"}`;
+      $("standingIcon").textContent = meetsDemoCriteria ? "verified" : "info";
+      $("standingMessage").textContent = meetsDemoCriteria
+        ? "Your academic record meets the demo criteria of CGPA 7.0 or above and zero active backlogs."
+        : "Your current academic details may not meet the demo placement criteria. Review the requirements with your placement office.";
+
+      // The dashboard completion checklist remains a demo value until
+      // the profile and document pages are connected to shared persistence.
+      $("standingCompletion").textContent = "80%";
+
+      const resumeName = student.name.replace(/\s+/g, "_");
+      $("resumeFilename").textContent = `${resumeName}_Resume_2024.pdf`;
+    }
+
+    $("menuButton").addEventListener("click", () => {
+      $("sidebar").classList.toggle("open");
+    });
+
+    document.addEventListener("click", (event) => {
+      const sidebar = $("sidebar");
+      if (
+        window.innerWidth <= 760 &&
+        sidebar.classList.contains("open") &&
+        !sidebar.contains(event.target) &&
+        !$("menuButton").contains(event.target)
+      ) {
+        sidebar.classList.remove("open");
+      }
+    });
+
+    $("uploadAvatarButton").addEventListener("click", () => $("avatarInput").click());
+    $("uploadDocumentPhoto").addEventListener("click", () => $("avatarInput").click());
+
+    $("avatarInput").addEventListener("change", (event) => {
+      const file = event.target.files && event.target.files[0];
+      if (!file) return;
+
+      if (!file.type.startsWith("image/")) {
+        showToast("Please select an image file.");
+        event.target.value = "";
+        return;
+      }
+
+      $("photoStatusText").textContent = `${file.name} · Selected in this browser`;
+      $("uploadDocumentPhoto").textContent = "Selected";
+      $("uploadDocumentPhoto").className = "button button-small button-secondary document-action";
+
+      // This is only a local prototype interaction. It does not upload
+      // the image to a server or persist it between browser sessions.
+      $("completionPercent").textContent = "100%";
+      $("completionBar").style.width = "100%";
+      $("completionProgress").setAttribute("aria-valuenow", "100");
+      $("criteriaText").textContent = "6 of 6 verification criteria selected";
+      $("completionStatus").textContent = "Ready for Review";
+      $("completionStatus").className = "status status-good";
+      $("completionMessage").textContent = "Image selected locally. A production version must upload and verify the image before confirming completion.";
+      $("standingCompletion").textContent = "100%";
+      showToast("Image selected locally. No server upload was performed.");
+    });
+
+    $("notificationButton").addEventListener("click", () => {
+      showToast("You are viewing the latest demo activity on this dashboard.");
+    });
+
+    $("helpButton").addEventListener("click", () => {
+      showToast("For placement support, contact your institution's placement office.");
+    });
+
+    $("printButton").addEventListener("click", () => window.print());
+
+    renderStudent();
+  </script>
+</body>
+</html>

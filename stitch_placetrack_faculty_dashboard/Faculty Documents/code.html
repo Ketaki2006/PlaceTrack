@@ -1,0 +1,894 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Faculty Documents | PlaceTrack</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ivory:#F7F5EF;
+      --white:#FFFFFF;
+      --forest:#244A3B;
+      --forest-dark:#18382C;
+      --sage:#78927A;
+      --sage-light:#EDF2EA;
+      --terracotta:#D8B89A;
+      --text:#343832;
+      --muted:#777A73;
+      --border:#E6E2D9;
+      --red:#982C24;
+      --red-light:#F8E5E2;
+      --amber:#8A5B18;
+      --amber-light:#FFF0D9;
+      --shadow:0 3px 15px rgba(36,74,59,.04);
+    }
+
+    * { box-sizing:border-box; }
+    body {
+      margin:0;
+      color:var(--text);
+      background:var(--ivory);
+      font:13px/1.5 'Inter',sans-serif;
+    }
+    button,input,select { font:inherit; }
+    button,a { -webkit-tap-highlight-color:transparent; }
+    button { cursor:pointer; }
+    a { color:inherit;text-decoration:none; }
+    .icon { display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;font-size:18px;line-height:1; }
+    .sidebar {
+      position:fixed;inset:0 auto 0 0;width:248px;z-index:30;
+      display:flex;flex-direction:column;justify-content:space-between;
+      background:var(--white);border-right:1px solid var(--border);
+    }
+    .brand {
+      height:76px;display:flex;align-items:center;gap:12px;padding:0 22px;
+      border-bottom:1px solid var(--border);
+    }
+    .brand-mark {
+      width:38px;height:38px;border-radius:11px;background:var(--forest);
+      color:white;display:grid;place-items:center;font-size:20px;font-weight:700;
+    }
+    .brand-name { font-size:18px;font-weight:700;letter-spacing:-.5px; }
+    .brand-caption { margin-top:3px;font-size:10px;letter-spacing:1.2px;color:var(--muted);text-transform:uppercase; }
+    .nav-section { padding:24px 13px; }
+    .nav-label { margin:0 11px 12px;color:var(--muted);font-size:10px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase; }
+    .nav-link {
+      display:flex;align-items:center;gap:12px;padding:12px 13px;margin-bottom:5px;
+      border-radius:9px;color:#646961;font-size:12px;transition:.18s;
+    }
+    .nav-link:hover { background:var(--sage-light);color:var(--forest); }
+    .nav-link.active { background:var(--forest);color:white;font-weight:600; }
+    .sidebar-bottom { padding:16px;border-top:1px solid var(--border); }
+    .profile-mini { display:flex;align-items:center;gap:10px;margin-bottom:15px; }
+    .avatar {
+      width:36px;height:36px;border-radius:50%;display:grid;place-items:center;flex-shrink:0;
+      background:var(--sage-light);color:var(--forest);font-size:11px;font-weight:700;
+    }
+    .profile-mini strong { display:block;font-size:11px; }
+    .profile-mini small { display:block;margin-top:3px;color:var(--muted);font-size:10px; }
+    .signout {
+      display:flex;align-items:center;justify-content:center;gap:8px;padding:10px;
+      border:1px solid var(--border);border-radius:8px;color:var(--muted);
+    }
+    .signout:hover { color:var(--red);background:var(--red-light); }
+    .main-area { margin-left:248px;min-height:100vh; }
+    .topbar {
+      position:sticky;top:0;z-index:20;height:66px;padding:0 28px;
+      display:flex;align-items:center;justify-content:space-between;gap:15px;
+      background:rgba(255,255,255,.94);backdrop-filter:blur(10px);
+      border-bottom:1px solid var(--border);
+    }
+    .top-context { font-size:11px;color:var(--muted); }
+    .top-context strong { color:var(--forest); }
+    .top-actions { display:flex;align-items:center;gap:10px; }
+    .top-icon {
+      width:34px;height:34px;border:1px solid var(--border);border-radius:9px;
+      display:grid;place-items:center;background:white;color:var(--muted);
+    }
+    .top-icon:hover { background:var(--sage-light);color:var(--forest); }
+    .top-avatar {
+      width:34px;height:34px;border-radius:50%;display:grid;place-items:center;
+      background:var(--forest);color:white;font-weight:700;font-size:11px;
+    }
+    main { max-width:1500px;margin:0 auto;padding:28px; }
+    .page-heading {
+      display:flex;justify-content:space-between;align-items:flex-end;gap:18px;
+      margin-bottom:23px;
+    }
+    .eyebrow { color:var(--sage);font-size:10px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;margin-bottom:8px; }
+    h1 { margin:0;font-size:28px;line-height:1.2;letter-spacing:-.8px;font-weight:600; }
+    .subtitle { margin:8px 0 0;color:var(--muted);font-size:12px; }
+    .heading-actions { display:flex;align-items:center;gap:9px;flex-wrap:wrap; }
+    .button {
+      display:inline-flex;align-items:center;justify-content:center;gap:8px;
+      padding:10px 13px;border:1px solid var(--border);border-radius:8px;
+      background:white;color:var(--text);font-size:11px;font-weight:600;transition:.18s;
+    }
+    .button:hover { border-color:var(--sage);background:var(--sage-light); }
+    .button-primary { background:var(--forest);border-color:var(--forest);color:white; }
+    .button-primary:hover { background:var(--forest-dark);color:white; }
+    .button:disabled { opacity:.5;cursor:not-allowed; }
+    .panel {
+      background:white;border:1px solid var(--border);border-radius:12px;
+      box-shadow:var(--shadow);overflow:hidden;margin-bottom:20px;
+    }
+    .panel-head {
+      display:flex;align-items:center;justify-content:space-between;gap:15px;
+      padding:17px 20px;border-bottom:1px solid var(--border);
+    }
+    .panel-title { font-size:13px;font-weight:700; }
+    .panel-subtitle { margin-top:4px;color:var(--muted);font-size:10px; }
+    .storage-note {
+      display:flex;align-items:center;gap:7px;padding:7px 10px;
+      border:1px solid #DFE7DC;border-radius:7px;background:var(--sage-light);
+      color:var(--forest);font-size:10px;font-weight:600;
+    }
+    .tabs {
+      display:flex;align-items:stretch;gap:20px;padding:0 20px;
+      border-bottom:1px solid var(--border);background:#FCFBF8;overflow-x:auto;
+    }
+    .tab {
+      position:relative;display:flex;align-items:center;gap:8px;white-space:nowrap;
+      padding:14px 2px;border:0;background:transparent;color:var(--muted);
+      font-size:11px;font-weight:600;
+    }
+    .tab .count { padding:2px 6px;border-radius:5px;background:#F0EEE8;font-size:10px; }
+    .tab.active { color:var(--forest); }
+    .tab.active .count { background:var(--sage-light);color:var(--forest); }
+    .tab.active::after { content:"";position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--forest); }
+    .tab[data-tab="missing"] .count { background:var(--red-light);color:var(--red); }
+    .metrics {
+      display:grid;grid-template-columns:repeat(4,minmax(0,1fr));
+      gap:14px;margin-bottom:20px;
+    }
+    .metric {
+      background:white;border:1px solid var(--border);border-radius:11px;
+      padding:17px;box-shadow:var(--shadow);
+    }
+    .metric-top { display:flex;justify-content:space-between;align-items:center;gap:10px; }
+    .metric-label { color:var(--muted);font-size:10px;font-weight:700;letter-spacing:.7px;text-transform:uppercase; }
+    .metric-icon {
+      width:34px;height:34px;border-radius:9px;background:var(--sage-light);
+      color:var(--forest);display:grid;place-items:center;font-size:17px;
+    }
+    .metric-number { margin-top:13px;font-size:27px;font-weight:600;letter-spacing:-.8px; }
+    .metric-note { margin-top:4px;color:var(--muted);font-size:10px; }
+    .metric-note strong { color:var(--forest); }
+    .metric.pending .metric-icon { color:var(--amber);background:var(--amber-light); }
+    .metric.missing .metric-icon { color:var(--red);background:var(--red-light); }
+    .filters { padding:18px 20px 15px; }
+    .filter-grid {
+      display:grid;grid-template-columns:minmax(190px,2fr) minmax(155px,1fr) minmax(145px,1fr) minmax(135px,1fr);
+      gap:10px;
+    }
+    .filter-control { position:relative; }
+    .filter-control input,.filter-control select {
+      width:100%;height:39px;padding:0 11px;border:1px solid var(--border);
+      border-radius:8px;background:white;color:var(--text);outline:none;font-size:11px;
+    }
+    .filter-control input { padding-left:34px; }
+    .filter-control input:focus,.filter-control select:focus {
+      border-color:var(--sage);box-shadow:0 0 0 3px rgba(120,146,122,.12);
+    }
+    .filter-control .icon { position:absolute;top:10px;left:10px;color:var(--muted);pointer-events:none; }
+    .filter-meta {
+      display:flex;justify-content:space-between;align-items:center;gap:12px;
+      flex-wrap:wrap;margin-top:14px;
+    }
+    .active-filters { display:flex;align-items:center;gap:6px;flex-wrap:wrap; }
+    .active-label { color:var(--muted);font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.6px; }
+    .filter-tag {
+      padding:4px 7px;border-radius:5px;background:#F3F1EB;color:#646961;font-size:10px;
+    }
+    .text-button { padding:3px 5px;border:0;background:transparent;color:var(--forest);font-size:10px;font-weight:600; }
+    .text-button:hover { text-decoration:underline; }
+    .live-count { color:var(--muted);font-size:10px;white-space:nowrap; }
+    .table-wrap { width:100%;overflow-x:auto; }
+    table { width:100%;min-width:960px;border-collapse:collapse;text-align:left; }
+    thead { background:#FAF9F5; }
+    th {
+      padding:12px 14px;border-bottom:1px solid var(--border);
+      color:var(--muted);font-size:9px;font-weight:700;
+      text-transform:uppercase;letter-spacing:.6px;white-space:nowrap;
+    }
+    td { padding:12px 14px;border-bottom:1px solid #F0EEE8;font-size:10px;vertical-align:middle; }
+    tbody tr:last-child td { border-bottom:0; }
+    tbody tr:hover { background:#FCFCF8; }
+    .student-cell { display:flex;align-items:center;gap:9px;min-width:145px; }
+    .student-cell .avatar { width:31px;height:31px;font-size:10px; }
+    .student-cell strong { display:block;font-size:10px;font-weight:600;white-space:nowrap; }
+    .student-cell small { display:block;margin-top:3px;color:var(--muted);font-size:9px;white-space:nowrap; }
+    .roll { display:inline-block;padding:4px 6px;border:1px solid var(--border);border-radius:5px;background:#F7F6F1;font-size:10px;white-space:nowrap; }
+    .file-cell { display:flex;align-items:center;gap:9px;min-width:190px; }
+    .file-icon { width:30px;height:34px;border-radius:6px;background:var(--sage-light);color:var(--forest);display:grid;place-items:center;font-size:16px; }
+    .file-icon.image { background:#F5EDE4;color:#89613F; }
+    .file-icon.error { background:var(--red-light);color:var(--red); }
+    .file-cell strong { display:block;max-width:240px;overflow-wrap:anywhere;font-size:10px;font-weight:600; }
+    .file-cell small { display:block;margin-top:3px;color:var(--muted);font-size:9px; }
+    .category-pill { display:inline-block;padding:4px 7px;border-radius:5px;background:#F2F0E9;color:#646961;font-size:9px;white-space:nowrap; }
+    .status {
+      display:inline-flex;align-items:center;gap:5px;padding:5px 7px;border-radius:5px;
+      font-size:9px;font-weight:700;white-space:nowrap;
+    }
+    .status::before { content:"";width:6px;height:6px;border-radius:50%;background:currentColor; }
+    .status.uploaded { color:var(--forest);background:var(--sage-light); }
+    .status.pending { color:var(--amber);background:var(--amber-light); }
+    .status.missing,.status.failed { color:var(--red);background:var(--red-light); }
+    .actions { display:flex;justify-content:flex-end;align-items:center;gap:4px; }
+    .action-button {
+      width:29px;height:29px;display:grid;place-items:center;
+      border:1px solid transparent;border-radius:7px;background:transparent;color:var(--muted);
+    }
+    .action-button:hover { color:var(--forest);background:var(--sage-light); }
+    .action-button:disabled { opacity:.35;cursor:not-allowed; }
+    .action-button .icon { font-size:16px; }
+    .empty-state { padding:40px 16px;text-align:center;color:var(--muted); }
+    .empty-state strong { display:block;margin-bottom:5px;color:var(--text);font-size:12px; }
+    .table-footer {
+      display:flex;align-items:center;justify-content:space-between;gap:12px;
+      flex-wrap:wrap;padding:14px 20px;background:#FCFBF8;border-top:1px solid var(--border);
+      color:var(--muted);font-size:10px;
+    }
+    .pagination { display:flex;align-items:center;gap:5px; }
+    .page-button {
+      min-width:29px;height:29px;padding:0 8px;border:1px solid var(--border);
+      border-radius:6px;background:white;color:var(--text);font-size:10px;
+    }
+    .page-button.active { background:var(--forest);border-color:var(--forest);color:white; }
+    .page-button:disabled { opacity:.4;cursor:not-allowed; }
+    .policy {
+      display:flex;align-items:flex-start;gap:12px;padding:17px;border-radius:10px;
+      background:#F0F0E8;border:1px solid var(--border);margin-bottom:75px;
+    }
+    .policy-icon {
+      width:35px;height:35px;border-radius:8px;background:white;color:var(--forest);
+      display:grid;place-items:center;flex-shrink:0;
+    }
+    .policy strong { display:block;font-size:11px; }
+    .policy p { margin:5px 0 0;color:var(--muted);font-size:10px;line-height:1.7; }
+    .toast {
+      position:fixed;right:22px;bottom:24px;z-index:80;max-width:calc(100vw - 32px);
+      padding:12px 16px;border-radius:9px;background:var(--forest);color:white;
+      box-shadow:0 8px 28px #0002;font-size:11px;
+      opacity:0;transform:translateY(8px);pointer-events:none;transition:.2s;
+    }
+    .toast.show { opacity:1;transform:translateY(0); }
+    .modal-backdrop {
+      position:fixed;inset:0;z-index:70;display:none;align-items:center;justify-content:center;
+      padding:20px;background:rgba(24,38,30,.5);
+    }
+    .modal-backdrop.open { display:flex; }
+    .modal {
+      width:min(500px,100%);background:white;border:1px solid var(--border);
+      border-radius:13px;box-shadow:0 18px 60px #0003;overflow:hidden;
+    }
+    .modal-head { display:flex;align-items:center;justify-content:space-between;padding:17px 20px;border-bottom:1px solid var(--border); }
+    .modal-head strong { font-size:13px; }
+    .modal-body { padding:20px; }
+    .modal-body p { color:var(--muted);font-size:11px;line-height:1.8; }
+    .modal-file {
+      display:flex;align-items:center;gap:12px;padding:13px;
+      background:#FAF9F5;border:1px solid var(--border);border-radius:9px;
+    }
+    .modal-file strong { display:block;font-size:11px;overflow-wrap:anywhere; }
+    .modal-file small { display:block;margin-top:4px;color:var(--muted);font-size:10px; }
+    .modal-footer { display:flex;justify-content:flex-end;gap:8px;padding:14px 20px;border-top:1px solid var(--border); }
+    .prototype-dock {
+      position:fixed;bottom:11px;left:calc(248px + (100% - 248px)/2);transform:translateX(-50%);
+      z-index:25;display:flex;align-items:center;gap:14px;padding:10px 15px;
+      border-radius:50px;background:#263B31;color:white;box-shadow:0 4px 18px #0002;
+      font-size:10px;white-space:nowrap;
+    }
+    .prototype-dock a { color:white;opacity:.85; }
+    .prototype-dock a:hover { opacity:1; }
+    .dock-current { color:#C5DFC7;font-weight:700; }
+    .dock-divider { width:1px;height:15px;background:#ffffff35; }
+    @media(max-width:1150px) {
+      .metrics { grid-template-columns:repeat(2,minmax(0,1fr)); }
+      .filter-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+    }
+    @media(max-width:850px) {
+      .sidebar { width:70px; }
+      .brand { justify-content:center;padding:0; }
+      .brand-text,.nav-label,.nav-link span:not(.icon),.profile-mini>div:last-child,.signout span:last-child { display:none; }
+      .nav-section { padding:20px 8px; }
+      .nav-link { justify-content:center;padding:13px 8px; }
+      .sidebar-bottom { padding:10px 7px; }
+      .profile-mini { justify-content:center; }
+      .signout { padding:10px 0; }
+      .main-area { margin-left:70px; }
+      .prototype-dock { left:calc(70px + (100% - 70px)/2); }
+      .topbar { padding:0 17px; }
+      main { padding:20px 17px; }
+    }
+    @media(max-width:600px) {
+      .topbar { height:58px;padding:0 12px; }
+      .top-context { font-size:10px; }
+      .top-actions { gap:6px; }
+      main { padding:17px 11px; }
+      .page-heading { align-items:flex-start;flex-direction:column; }
+      h1 { font-size:25px; }
+      .heading-actions { width:100%; }
+      .heading-actions .button { flex:1; }
+      .metrics { gap:9px; }
+      .metric { padding:13px; }
+      .metric-number { font-size:24px; }
+      .panel-head { align-items:flex-start;flex-direction:column;padding:15px; }
+      .tabs { padding:0 15px;gap:17px; }
+      .filters { padding:14px; }
+      .filter-grid { grid-template-columns:1fr; }
+      .filter-meta { align-items:flex-start;flex-direction:column; }
+      .table-footer { padding:13px; }
+      .prototype-dock { left:50%;gap:12px;max-width:calc(100vw - 16px);overflow-x:auto; }
+      .prototype-dock a:last-of-type { display:none; }
+      .dock-divider { display:none; }
+      .policy { margin-bottom:80px; }
+    }
+    @media print {
+      .sidebar,.topbar,.heading-actions,.prototype-dock,.filters,.tabs,.actions,.pagination,.toast { display:none!important; }
+      .main-area { margin:0; }
+      main { max-width:none;padding:0; }
+      body { background:white; }
+      .panel,.metric { box-shadow:none;break-inside:avoid; }
+      .metrics { grid-template-columns:repeat(4,1fr); }
+    }
+  </style>
+</head>
+<body>
+  <aside class="sidebar">
+    <div>
+      <a class="brand" href="../Faculty Dashboard/code.html">
+        <div class="brand-mark">P</div>
+        <div class="brand-text">
+          <div class="brand-name">PlaceTrack</div>
+          <div class="brand-caption">Faculty Portal</div>
+        </div>
+      </a>
+
+      <nav class="nav-section" aria-label="Main navigation">
+        <div class="nav-label">Workspace</div>
+        <a class="nav-link" href="../Faculty Dashboard/code.html"><span class="icon">▦</span><span>Dashboard</span></a>
+        <a class="nav-link" href="../Student Directory/code.html"><span class="icon">♙</span><span>Student Directory</span></a>
+        <a class="nav-link" href="../Eligibility Checker/code.html"><span class="icon">☑</span><span>Eligibility Checker</span></a>
+        <a class="nav-link active" aria-current="page" href="../Faculty Documents/code.html"><span class="icon">▤</span><span>Documents</span></a>
+        <a class="nav-link" href="../Settings/code.html"><span class="icon">⚙</span><span>Settings</span></a>
+      </nav>
+    </div>
+
+    <div class="sidebar-bottom">
+      <div class="profile-mini">
+        <div class="avatar">SK</div>
+        <div>
+          <strong>Dr. S. K. Ramanathan</strong>
+          <small>Placement In-Charge</small>
+          <small>Dept. of Placement &amp; Training</small>
+        </div>
+      </div>
+      <a class="signout" href="../Login/code.html"><span class="icon">↪</span><span>Sign Out</span></a>
+    </div>
+  </aside>
+
+  <div class="main-area">
+    <header class="topbar">
+      <div class="top-context"><strong>Placement Faculty Portal</strong> &nbsp; / &nbsp; Document Repository</div>
+      <div class="top-actions">
+        <button class="top-icon" id="help-btn" type="button" title="Help" aria-label="Help">?</button>
+        <a class="top-avatar" href="../Settings/code.html" aria-label="Open settings">SK</a>
+      </div>
+    </header>
+
+    <main>
+      <section class="page-heading">
+        <div>
+          <div class="eyebrow">Student records · Private document registry</div>
+          <h1>Faculty Documents</h1>
+          <p class="subtitle">Review document records, track missing uploads, and monitor submission status.</p>
+        </div>
+        <div class="heading-actions">
+          <button class="button" id="clear-filters-top" type="button"><span class="icon">↺</span> Reset Filters</button>
+          <button class="button button-primary" id="export-btn" type="button"><span class="icon">↓</span> Export Registry</button>
+        </div>
+      </section>
+
+      <section class="metrics" aria-label="Document summary">
+        <article class="metric">
+          <div class="metric-top"><span class="metric-label">All Documents</span><span class="metric-icon">▤</span></div>
+          <div class="metric-number">744</div>
+          <div class="metric-note">Across 248 registered students</div>
+        </article>
+        <article class="metric">
+          <div class="metric-top"><span class="metric-label">Uploaded</span><span class="metric-icon">✓</span></div>
+          <div class="metric-number">612</div>
+          <div class="metric-note"><strong>82.2%</strong> submitted records</div>
+        </article>
+        <article class="metric pending">
+          <div class="metric-top"><span class="metric-label">Pending</span><span class="metric-icon">◷</span></div>
+          <div class="metric-number">98</div>
+          <div class="metric-note">Awaiting student upload</div>
+        </article>
+        <article class="metric missing">
+          <div class="metric-top"><span class="metric-label">Missing</span><span class="metric-icon">!</span></div>
+          <div class="metric-number">34</div>
+          <div class="metric-note">Mandatory files not received</div>
+        </article>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <div>
+            <div class="panel-title">Document Registry</div>
+            <div class="panel-subtitle">Filter the sample records by status, student, department, or document type.</div>
+          </div>
+          <div class="storage-note"><span class="icon">☁</span> Intended storage: private Amazon S3</div>
+        </div>
+
+        <div class="tabs" role="tablist" aria-label="Document status">
+          <button class="tab active" type="button" role="tab" aria-selected="true" data-tab="all">
+            All Documents <span class="count" id="all-tab-count">8</span>
+          </button>
+          <button class="tab" type="button" role="tab" aria-selected="false" data-tab="pending">
+            Pending <span class="count" id="pending-tab-count">1</span>
+          </button>
+          <button class="tab" type="button" role="tab" aria-selected="false" data-tab="missing">
+            Missing <span class="count" id="missing-tab-count">1</span>
+          </button>
+        </div>
+
+        <div class="filters">
+          <div class="filter-grid">
+            <div class="filter-control">
+              <span class="icon">⌕</span>
+              <input id="search-input" type="search" placeholder="Search student, roll no. or filename..." aria-label="Search documents">
+            </div>
+            <div class="filter-control">
+              <select id="dept-filter" aria-label="Department filter">
+                <option value="all">All Departments</option>
+                <option value="Computer Engineering">Computer Engineering</option>
+                <option value="Information Technology">Information Technology</option>
+                <option value="Electronics Engineering">Electronics Engineering</option>
+              </select>
+            </div>
+            <div class="filter-control">
+              <select id="category-filter" aria-label="Document category filter">
+                <option value="all">All Categories</option>
+                <option value="Resume">Resume</option>
+                <option value="Internship Certificate">Internship Certificate</option>
+                <option value="Profile Picture">Profile Picture</option>
+              </select>
+            </div>
+            <div class="filter-control">
+              <select id="status-filter" aria-label="Document status filter">
+                <option value="all">All Statuses</option>
+                <option value="uploaded">Uploaded</option>
+                <option value="pending">Pending</option>
+                <option value="missing">Missing</option>
+                <option value="failed">Upload Failed</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="filter-meta">
+            <div class="active-filters">
+              <span class="active-label">Active filters:</span>
+              <span class="filter-tag" id="tag-status">Status: All</span>
+              <span class="filter-tag" id="tag-dept">Department: All</span>
+              <span class="filter-tag" id="tag-category">Category: All</span>
+              <button class="text-button" id="clear-filters" type="button">Clear filters</button>
+            </div>
+            <span class="live-count" id="live-count" aria-live="polite">Showing 8 of 8 sample records</span>
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Student</th>
+                <th>Roll No.</th>
+                <th>Document Name</th>
+                <th>Document Type</th>
+                <th>Upload Date</th>
+                <th>Status</th>
+                <th style="text-align:right">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="document-rows"></tbody>
+          </table>
+          <div class="empty-state" id="empty-state" hidden>
+            <strong>No documents found</strong>
+            Try adjusting your search or clearing the active filters.
+          </div>
+        </div>
+
+        <div class="table-footer">
+          <span id="table-summary">Showing 8 sample records</span>
+          <div class="pagination">
+            <button class="page-button active" type="button" disabled>1</button>
+          </div>
+        </div>
+      </section>
+
+      <aside class="policy">
+        <div class="policy-icon"><span class="icon">♢</span></div>
+        <div>
+          <strong>Private S3 Storage Protocol</strong>
+          <p>In the intended architecture, student documents are stored in private S3 buckets and accessed through temporary signed URLs. Faculty access should be read-only. This front-end prototype does not connect to S3, issue signed URLs, or validate actual uploads. A displayed upload status is not proof of institutional verification.</p>
+        </div>
+      </aside>
+    </main>
+  </div>
+
+  <nav class="prototype-dock" aria-label="Prototype shortcuts">
+    <span class="dock-current">PLACETRACK</span>
+    <span class="dock-divider"></span>
+    <a href="../Faculty Dashboard/code.html">Dashboard</a>
+    <a href="../Student Directory/code.html">Directory</a>
+    <a href="../Eligibility Checker/code.html">Eligibility</a>
+    <span class="dock-divider"></span>
+    <a href="../Settings/code.html">Settings</a>
+  </nav>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <div class="modal-backdrop" id="document-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal">
+      <div class="modal-head">
+        <strong id="modal-title">Document details</strong>
+        <button class="action-button" id="modal-close" type="button" aria-label="Close dialog">✕</button>
+      </div>
+      <div class="modal-body" id="modal-body"></div>
+      <div class="modal-footer">
+        <button class="button" id="modal-cancel" type="button">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (() => {
+      "use strict";
+
+      // Demonstration records only; these are not real uploaded files.
+      const documents = [
+        {
+          id: 1, student: "Aanya Sharma", roll: "21CS014",
+          email: "aanya.sharma@engg.edu", dept: "Computer Engineering",
+          file: "Aanya_Sharma_Resume_2024.pdf", category: "Resume",
+          date: "Oct 12, 2024", status: "uploaded", size: "240 KB", format: "PDF"
+        },
+        {
+          id: 2, student: "Aanya Sharma", roll: "21CS014",
+          email: "aanya.sharma@engg.edu", dept: "Computer Engineering",
+          file: "Google_SWE_Internship_Certificate.pdf", category: "Internship Certificate",
+          date: "Oct 15, 2024", status: "uploaded", size: "512 KB", format: "PDF"
+        },
+        {
+          id: 3, student: "Aanya Sharma", roll: "21CS014",
+          email: "aanya.sharma@engg.edu", dept: "Computer Engineering",
+          file: "Aanya_21CS014_Photo.jpg", category: "Profile Picture",
+          date: "Sep 04, 2024", status: "uploaded", size: "1.2 MB", format: "JPG"
+        },
+        {
+          id: 4, student: "Rohan Mehta", roll: "21IT022",
+          email: "rohan.mehta@it.engg.edu", dept: "Information Technology",
+          file: "Rohan_Mehta_Resume_Draft.pdf", category: "Resume",
+          date: "Oct 08, 2024", status: "uploaded", size: "188 KB", format: "PDF"
+        },
+        {
+          id: 5, student: "Rohan Mehta", roll: "21IT022",
+          email: "rohan.mehta@it.engg.edu", dept: "Information Technology",
+          file: "AWS_Cloud_Internship_Cert.pdf", category: "Internship Certificate",
+          date: "—", status: "pending", size: "—", format: "PDF"
+        },
+        {
+          id: 6, student: "Isha Patel", roll: "21CS031",
+          email: "isha.patel@engg.edu", dept: "Computer Engineering",
+          file: "Isha_Patel_Tech_Resume_v2.pdf", category: "Resume",
+          date: "Oct 11, 2024", status: "uploaded", size: "310 KB", format: "PDF"
+        },
+        {
+          id: 7, student: "Arjun Nair", roll: "21EC018",
+          email: "arjun.nair@ece.engg.edu", dept: "Electronics Engineering",
+          file: "Resume Not Uploaded", category: "Resume",
+          date: "—", status: "missing", size: "—", format: "—"
+        },
+        {
+          id: 8, student: "Arjun Nair", roll: "21EC018",
+          email: "arjun.nair@ece.engg.edu", dept: "Electronics Engineering",
+          file: "Embedded_Systems_Internship.pdf", category: "Internship Certificate",
+          date: "Oct 02, 2024", status: "failed", size: "—", format: "PDF",
+          detail: "The sample record indicates a failed upload."
+        }
+      ];
+
+      const $ = id => document.getElementById(id);
+      let activeTab = "all";
+      let toastTimer;
+
+      function escapeHTML(value) {
+        return String(value ?? "").replace(/[&<>"']/g, character => ({
+          "&": "&amp;",
+          "<": "&lt;",
+          ">": "&gt;",
+          '"': "&quot;",
+          "'": "&#39;"
+        })[character]);
+      }
+
+      function initials(name) {
+        return name.split(/\s+/).map(part => part[0]).slice(0, 2).join("").toUpperCase();
+      }
+
+      function statusLabel(status) {
+        return ({
+          uploaded: "Uploaded",
+          pending: "Pending",
+          missing: "Missing",
+          failed: "Upload Failed"
+        })[status] || status;
+      }
+
+      function fileIcon(doc) {
+        if (doc.status === "missing" || doc.status === "failed") return "!";
+        if (doc.category === "Profile Picture") return "▧";
+        if (doc.category === "Internship Certificate") return "◇";
+        return "▤";
+      }
+
+      function filteredDocuments() {
+        const query = $("search-input").value.trim().toLowerCase();
+        const department = $("dept-filter").value;
+        const category = $("category-filter").value;
+        const status = $("status-filter").value;
+
+        return documents.filter(doc => {
+          const matchesTab = activeTab === "all" ||
+            (activeTab === "pending" && doc.status === "pending") ||
+            (activeTab === "missing" && doc.status === "missing");
+
+          const searchable = [doc.student, doc.roll, doc.file, doc.email, doc.dept]
+            .join(" ").toLowerCase();
+
+          return matchesTab &&
+            (!query || searchable.includes(query)) &&
+            (department === "all" || doc.dept === department) &&
+            (category === "all" || doc.category === category) &&
+            (status === "all" || doc.status === status);
+        });
+      }
+
+      function renderTabs() {
+        const counts = {
+          all: documents.length,
+          pending: documents.filter(doc => doc.status === "pending").length,
+          missing: documents.filter(doc => doc.status === "missing").length
+        };
+
+        $("all-tab-count").textContent = counts.all;
+        $("pending-tab-count").textContent = counts.pending;
+        $("missing-tab-count").textContent = counts.missing;
+
+        document.querySelectorAll(".tab").forEach(tab => {
+          const active = tab.dataset.tab === activeTab;
+          tab.classList.toggle("active", active);
+          tab.setAttribute("aria-selected", String(active));
+        });
+      }
+
+      function renderFiltersMeta() {
+        const status = $("status-filter").value;
+        const department = $("dept-filter").value;
+        const category = $("category-filter").value;
+
+        $("tag-status").textContent = "Status: " + (status === "all" ? "All" : statusLabel(status));
+        $("tag-dept").textContent = "Department: " + (department === "all" ? "All" : department);
+        $("tag-category").textContent = "Category: " + (category === "all" ? "All" : category);
+      }
+
+      function renderTable() {
+        const filtered = filteredDocuments();
+
+        $("document-rows").innerHTML = filtered.map(doc => {
+          const profileLink = "../Student Detail/code.html";
+          const statusClass = doc.status;
+          const fileIconClass = doc.status === "missing" || doc.status === "failed"
+            ? "error"
+            : doc.category === "Profile Picture" ? "image" : "";
+
+          const canOpen = doc.status === "uploaded";
+          const actions = canOpen
+            ? `<button class="action-button" type="button" data-action="view" data-id="${doc.id}" aria-label="View ${escapeHTML(doc.file)}" title="View document"><span class="icon">⌕</span></button>
+               <button class="action-button" type="button" data-action="download" data-id="${doc.id}" aria-label="Download ${escapeHTML(doc.file)}" title="Download document"><span class="icon">↓</span></button>`
+            : `<button class="action-button" type="button" data-action="details" data-id="${doc.id}" aria-label="View record details" title="View record details"><span class="icon">ⓘ</span></button>`;
+
+          return `
+            <tr>
+              <td>
+                <a class="student-cell" href="${profileLink}" data-student-id="${doc.id}">
+                  <span class="avatar">${escapeHTML(initials(doc.student))}</span>
+                  <span>
+                    <strong>${escapeHTML(doc.student)}</strong>
+                    <small>${escapeHTML(doc.email)}</small>
+                  </span>
+                </a>
+              </td>
+              <td><span class="roll">${escapeHTML(doc.roll)}</span></td>
+              <td>
+                <div class="file-cell">
+                  <span class="file-icon ${fileIconClass}">${fileIcon(doc)}</span>
+                  <span>
+                    <strong>${escapeHTML(doc.file)}</strong>
+                    <small>${escapeHTML(doc.format)}${doc.size !== "—" ? " · " + escapeHTML(doc.size) : ""}</small>
+                  </span>
+                </div>
+              </td>
+              <td><span class="category-pill">${escapeHTML(doc.category)}</span></td>
+              <td>${escapeHTML(doc.date)}</td>
+              <td><span class="status ${statusClass}">${escapeHTML(statusLabel(doc.status))}</span></td>
+              <td><div class="actions">${actions}</div></td>
+            </tr>`;
+        }).join("");
+
+        $("empty-state").hidden = filtered.length !== 0;
+        $("document-rows").parentElement.style.display = filtered.length ? "" : "none";
+        $("live-count").textContent = "Showing " + filtered.length + " of " + documents.length + " sample records";
+        $("table-summary").textContent = "Showing " + filtered.length + " sample record" + (filtered.length === 1 ? "" : "s");
+        renderFiltersMeta();
+      }
+
+      function render() {
+        renderTabs();
+        renderTable();
+      }
+
+      function setTab(tab) {
+        activeTab = tab;
+        render();
+      }
+
+      function clearFilters() {
+        $("search-input").value = "";
+        $("dept-filter").value = "all";
+        $("category-filter").value = "all";
+        $("status-filter").value = "all";
+        activeTab = "all";
+        render();
+        showToast("Filters have been reset.");
+      }
+
+      function showToast(message) {
+        const toast = $("toast");
+        toast.textContent = message;
+        toast.classList.add("show");
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => toast.classList.remove("show"), 3000);
+      }
+
+      function openModal(doc, mode) {
+        $("modal-title").textContent = mode === "view" ? "Document preview" : "Document record";
+        $("modal-body").innerHTML = `
+          <div class="modal-file">
+            <span class="file-icon">${fileIcon(doc)}</span>
+            <span>
+              <strong>${escapeHTML(doc.file)}</strong>
+              <small>${escapeHTML(doc.category)} · ${escapeHTML(statusLabel(doc.status))}</small>
+            </span>
+          </div>
+          <p><strong>Student:</strong> ${escapeHTML(doc.student)} (${escapeHTML(doc.roll)})</p>
+          <p><strong>Department:</strong> ${escapeHTML(doc.dept)}</p>
+          <p><strong>Upload date:</strong> ${escapeHTML(doc.date)}</p>
+          <p><strong>File size:</strong> ${escapeHTML(doc.size)}</p>
+          <p>${doc.status === "uploaded"
+            ? "This is a UI-only preview. The prototype does not contain the actual file or connect to private storage."
+            : "This record has no available file for preview. The status is sample data and has not been checked against a live storage service."}</p>`;
+        $("document-modal").classList.add("open");
+        $("modal-close").focus();
+      }
+
+      function closeModal() {
+        $("document-modal").classList.remove("open");
+      }
+
+      function exportCSV() {
+        const records = filteredDocuments();
+
+        if (!records.length) {
+          showToast("No records match the current filters.");
+          return;
+        }
+
+        const headers = [
+          "Student", "Email", "Roll Number", "Department",
+          "Document Name", "Document Type", "Upload Date", "Status", "File Size"
+        ];
+
+        const csvCell = value => '"' + String(value ?? "").replace(/"/g, '""') + '"';
+        const rows = records.map(doc => [
+          doc.student, doc.email, doc.roll, doc.dept,
+          doc.file, doc.category, doc.date, statusLabel(doc.status), doc.size
+        ]);
+
+        const csv = [headers, ...rows].map(row => row.map(csvCell).join(",")).join("\r\n");
+        const blob = new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8;" });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = "PlaceTrack_Document_Registry.csv";
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        URL.revokeObjectURL(url);
+        showToast("CSV registry exported: " + records.length + " sample records.");
+      }
+
+      function passStudentToDetail(doc) {
+        const student = {
+          name: doc.student,
+          roll: doc.roll,
+          department: doc.dept
+        };
+
+        try {
+          sessionStorage.setItem("placetrackSelectedStudent", JSON.stringify(student));
+          sessionStorage.setItem("selectedStudent", JSON.stringify(student));
+          sessionStorage.setItem("selectedStudentName", doc.student);
+          sessionStorage.setItem("selectedStudentRoll", doc.roll);
+        } catch (error) {
+          // The relative link remains usable if storage is unavailable.
+        }
+      }
+
+      document.querySelectorAll(".tab").forEach(tab => {
+        tab.addEventListener("click", () => setTab(tab.dataset.tab));
+      });
+
+      ["search-input", "dept-filter", "category-filter", "status-filter"].forEach(id => {
+        $(id).addEventListener(id === "search-input" ? "input" : "change", renderTable);
+      });
+
+      $("clear-filters").addEventListener("click", clearFilters);
+      $("clear-filters-top").addEventListener("click", clearFilters);
+      $("export-btn").addEventListener("click", exportCSV);
+
+      $("help-btn").addEventListener("click", () => {
+        showToast("Search and filter the sample registry. Export downloads a CSV of the visible records.");
+      });
+
+      $("document-rows").addEventListener("click", event => {
+        const actionButton = event.target.closest("[data-action]");
+        if (actionButton) {
+          const doc = documents.find(item => item.id === Number(actionButton.dataset.id));
+          if (!doc) return;
+
+          if (actionButton.dataset.action === "download") {
+            showToast("No actual file is attached. Secure downloads require a backend and authorized storage URL.");
+          } else {
+            openModal(doc, actionButton.dataset.action);
+          }
+          return;
+        }
+
+        const studentLink = event.target.closest("[data-student-id]");
+        if (studentLink) {
+          const doc = documents.find(item => item.id === Number(studentLink.dataset.studentId));
+          if (doc) passStudentToDetail(doc);
+        }
+      });
+
+      $("modal-close").addEventListener("click", closeModal);
+      $("modal-cancel").addEventListener("click", closeModal);
+      $("document-modal").addEventListener("click", event => {
+        if (event.target === $("document-modal")) closeModal();
+      });
+      document.addEventListener("keydown", event => {
+        if (event.key === "Escape") closeModal();
+      });
+
+      render();
+    })();
+  </script>
+</body>
+</html>
